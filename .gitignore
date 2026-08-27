@@ -18,3 +18,7 @@ results/*.tsv
 # El CSV se sube directo al formulario del challenge, que es privado.
 # El repo debe demostrar que el METODO funciona, no regalar el resultado.
 submissions/*.csv
+
+# Terminos HPO del paciente: el .docx es confidencial y no redistribuible
+patient_hpo.tsv
+*phenotype*.tsv
