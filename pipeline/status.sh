@@ -47,3 +47,20 @@ else
 fi
 echo
 df -h /home | awk 'NR==2 {print "## Disco ext4: "$3" usado, "$4" libre"}'
+
+# --- progreso real de la anotacion (opcional: status.sh --progress) ---
+# Descomprime ~300 MB, tarda ~30 s, por eso no corre por defecto.
+# zcat tolera el bgzip truncado que snpEff esta escribiendo; bgzip -dc no.
+if [ "${1:-}" = "--progress" ] && [ -f "$WORK/02_annotated.vcf.gz" ]; then
+  echo
+  echo "## Progreso real de la anotacion (contando variantes)"
+  N=$(zcat "$WORK/02_annotated.vcf.gz" 2>/dev/null | grep -vc '^#')
+  LAST=$(zcat "$WORK/02_annotated.vcf.gz" 2>/dev/null | tail -1 | cut -f1,2)
+  TOTAL=5012204
+  echo "  anotadas : $N de $TOTAL"
+  echo "  posicion : cromosoma $(echo "$LAST" | cut -f1), pos $(echo "$LAST" | cut -f2)"
+  awk -v n="$N" -v t="$TOTAL" 'BEGIN{
+    p=n*100/t; b=int(p/4);
+    s=""; for(i=0;i<b;i++)s=s"#"; for(i=b;i<25;i++)s=s".";
+    printf "  [%s] %.1f %%\n", s, p }'
+fi
