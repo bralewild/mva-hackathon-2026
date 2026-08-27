@@ -1,0 +1,20 @@
+# NUNCA versionar datos del paciente (obligacion del Data Use Agreement)
+*.vcf
+*.vcf.gz
+*.vcf.gz.tbi
+*.bam
+*.cram
+*.fastq
+*.fastq.gz
+*.docx
+data/
+work/
+
+# resultados espejados que contienen coordenadas del paciente
+results/*.csv
+results/*.tsv
+
+# Las predicciones NO van al repo publico hasta despues del cierre (24 oct 2026).
+# El CSV se sube directo al formulario del challenge, que es privado.
+# El repo debe demostrar que el METODO funciona, no regalar el resultado.
+submissions/*.csv

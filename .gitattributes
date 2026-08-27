@@ -1,0 +1,10 @@
+# Forzar LF en todo el codigo: los scripts corren dentro de WSL/Linux y un
+# archivo con CRLF falla con "bad interpreter: /usr/bin/env bash^M".
+# Sin esto, el repo se rompe al clonarlo en Linux.
+* text=auto eol=lf
+*.sh   text eol=lf
+*.py   text eol=lf
+*.md   text eol=lf
+*.csv  text eol=lf
+*.tsv  text eol=lf
+*.lnk  binary

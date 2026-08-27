@@ -1,0 +1,59 @@
+==============================================================================
+ INVENTARIO DE FUENTES DE DATOS — 2026-08-27T18:37:07-04:00
+==============================================================================
+
+###############################################################
+# A) DATOS DEL PACIENTE  — SUJETOS AL DUA, BORRAR AL TERMINAR  #
+###############################################################
+
+  [303M]  /home/user/mva/data/raw    (descargado de HuggingFace, gated)
+             17K  Challenge_Clinical_Phenotype_1.docx
+            5.0K  README.md
+            301M  WGS_EX2312012_HGWCNDSX7.vcf.gz
+            2.3M  WGS_EX2312012_HGWCNDSX7.vcf.gz.tbi
+
+  [180K]  /home/user/mva/work    (intermedios derivados del VCF)
+            172K  01_header.txt
+              28  02_annotated.vcf.gz
+
+  [16K]  /home/user/mva/results    (resultados; contienen coordenadas del paciente)
+            1.5K  01_qc_baseline.txt
+             894  99_data_inventory.txt
+             787  track1_bub1b_compound_het.csv
+
+  ORIGEN REMOTO: https://huggingface.co/datasets/SageBio/mva-hackathon-2026-data
+                 (gated; 11 archivos, ~85 GB. Descargamos solo 4, ~318 MB)
+  NO DESCARGADO: los 8 FASTQ (~84 GB) siguen solo en HuggingFace.
+
+###############################################################
+# B) RECURSOS PUBLICOS  — sin datos del paciente, NO borrar    #
+###############################################################
+
+  LOCALES (en disco):
+    [-]  /home/user/micromamba/envs/bio/share/snpeff-5.4.0c-0/data
+    [4.0K]  /home/user/mva/data/ref    (referencia genomica, si se descarga)
+    [4.0K]  /home/user/mva/data/annot    (anotaciones adicionales)
+    [2.8G]  /home/user/micromamba    (entorno de software)
+
+  REMOTOS (APIs, no se almacena nada):
+    Ensembl REST   https://rest.ensembl.org           coordenadas de genes
+    Ensembl VEP    https://rest.ensembl.org/vep/...   consecuencia, CADD, gnomAD
+    NCBI ClinVar   https://eutils.ncbi.nlm.nih.gov    significancia clinica
+    snpEff DBs     https://snpeff-public.s3.amazonaws.com
+
+###############################################################
+# C) CODIGO  — sin datos del paciente, versionable             #
+###############################################################
+
+    /mnt/c/Users/user/Documents/real-kid-mva-hackathon
+      .gitignore bloquea: *.vcf* *.bam *.cram *.fastq* *.docx data/ work/
+
+###############################################################
+# D) COMANDO DE BORRADO (DUA)                                  #
+###############################################################
+
+    rm -rf /home/user/mva/data/raw /home/user/mva/work /home/user/mva/results
+    # luego notificar a MVAHackathon2026@synapse.org
+
+## Espacio total en ext4
+    usado: 6.1G   libre: 950G
