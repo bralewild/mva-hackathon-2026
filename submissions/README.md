@@ -51,7 +51,12 @@ The source VCF uses Ensembl contig naming (`15`), while the evaluator's own
 fallback and the submission documentation use `chr15`. **A correct answer in the
 wrong naming convention scores zero.**
 
-The submission therefore prepends `chr`, with a second row in the VCF-native
-naming at a lower EPCR as insurance. The hedge is free: extra rows do not reduce
-the automated score, and F-max takes the maximum across confidence thresholds,
-so the top row alone determines it when correct.
+The submission therefore prepends `chr`. Three independent sources confirm that
+convention: the field description in `tabs/submit_track1.py` (*"e.g. chr15"*),
+the `_LOCAL_FALLBACK` in `groundtruth.py` (`("chr2", ...)`, `("chr15", ...)`),
+and the official `track1_submission_template.csv` (`chr1`, `chr7`).
+
+An earlier draft carried a second row repeating the pair in VCF-native naming as
+a hedge. It was dropped: with six attempts and instant scoring, a resubmission is
+better insurance than an in-file duplicate, and a single confident row reads
+better than one that signals uncertainty about the format.
