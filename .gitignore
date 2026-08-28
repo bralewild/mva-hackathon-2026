@@ -22,3 +22,7 @@ submissions/*.csv
 # Terminos HPO del paciente: el .docx es confidencial y no redistribuible
 patient_hpo.tsv
 *phenotype*.tsv
+
+# Acceso directo local a los datos en WSL: es comodidad de esta maquina,
+# no codigo del proyecto. Para quien clone el repo seria una ruta rota.
+DATOS-EN-WSL.lnk
