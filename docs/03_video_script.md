@@ -1,8 +1,8 @@
 # 3-Minute Pitch Video — script and slides
 
 **Deliverable:** required for Track 2, recommended for Track 1 ([02_compliance.md](02_compliance.md) §7).
-**Runtime:** 3:04 at 150 wpm — never let it pass 3:00.
-**Script length:** 458 spoken words. Slide timings below are derived from the
+**Runtime:** 2:58 at 150 wpm — never let it pass 3:00.
+**Script length:** 443 spoken words. Slide timings below are derived from the
 per-slide counts, not estimated.
 
 The panel scores **rigour 35 % · impact 25 % · innovation 25 % · scalability 15 %**.
@@ -69,7 +69,7 @@ worth more than any diagram.
 
 ---
 
-## Slide 3 — The funnel · 0:38–1:01
+## Slide 3 — The funnel · 0:38–0:56
 
 > `5,012,204` → `9,145` → `179 rare` → `140 genes ranked`
 > **BUB1B — rank 1 · margin 22.8 % · 5 of 5 convergence criteria**
@@ -79,19 +79,17 @@ worth more than any diagram.
 
 **Say:**
 
-> Four filters, and a ranking by semantic similarity to the child's phenotype.
->
 > BUB1B came out first, by a twenty-three percent margin, with a compound
 > heterozygous pair — a stop codon and a missense. The disease-name check ran
 > only *after* the ranking was closed, so it could not have steered it.
 >
 > It scored one hundred out of one hundred.
 
-*(57 words · 23 s)*
+*(45 words · 18 s)*
 
 ---
 
-## Slide 4 — The pipeline caught itself · 1:01–1:31
+## Slide 4 — The pipeline caught itself · 0:56–1:26
 
 > **First pass:** eight autosomes "mosaic" at 5–7 % — a plausible, exciting finding
 > **The discriminator:** a real whole-chromosome event is *uniform*; an artefact *concentrates*
@@ -117,7 +115,7 @@ worth more than any diagram.
 
 ---
 
-## Slide 5 — Track 2: the search · 1:31–1:53
+## Slide 5 — Track 2: the search · 1:26–1:48
 
 > **52 targets** — checkpoint complex, APC/C, and the ribosome
 > **424** drug–gene associations · **41 approved** — *all single-source*
@@ -139,7 +137,7 @@ worth more than any diagram.
 
 ---
 
-## Slide 6 — Three searches, all pointing the wrong way · 1:53–2:20
+## Slide 6 — Three searches, all pointing the wrong way · 1:48–2:14
 
 > Oncology develops checkpoint inhibitors **precisely to force missegregation**
 > and kill dividing cells. **That is this disease, deliberately induced.**
@@ -159,13 +157,13 @@ worth more than any diagram.
 > all. It returned vincristine — a spindle poison already in his chemotherapy —
 > as a therapy for his spindle defect.
 >
-> Three independent searches. Every one of them aimed the wrong way.
+> Three independent searches. All aimed the wrong way.
 
-*(67 words · 27 s)*
+*(64 words · 26 s)*
 
 ---
 
-## Slide 7 — So the proposal comes from the variant class · 2:20–2:42
+## Slide 7 — So the proposal comes from the variant class · 2:14–2:36
 
 > One allele is a **premature stop codon** — addressable at the ribosome, not the gene
 >
@@ -189,7 +187,7 @@ worth more than any diagram.
 
 ---
 
-## Slide 8 — What generalises · 2:42–3:04
+## Slide 8 — What generalises · 2:36–2:58
 
 > **Direction filter** — drops drugs that would worsen a loss-of-function disease
 > **Phenotype screen** — needs only the HPO file every rare-disease case already has
@@ -217,17 +215,17 @@ worth more than any diagram.
 |---|---:|---:|---|
 | 1 Title | 23 | 9 | — |
 | 2 Blind design | 73 | 29 | innovation, scalability |
-| 3 Result | 57 | 23 | rigour, impact |
+| 3 Result | 45 | 18 | rigour, impact |
 | 4 Self-caught error | 76 | 30 | **rigour** |
 | 5 Track 2 search | 54 | 22 | rigour, innovation |
-| 6 Three searches converge | 67 | 27 | **innovation** |
+| 6 Three searches converge | 64 | 26 | **innovation** |
 | 7 Phenotype screen | 54 | 22 | innovation, impact |
 | 8 Generalises + close | 54 | 22 | **scalability**, impact |
-| **Total** | **458** | **184** | |
+| **Total** | **443** | **178** | |
 
-**458 words → 3:04 at 150 wpm.** These counts and every slide timing above are derived from the script blocks, not typed by hand. If you edit a line, re-derive them.
+**443 words → 2:58 at 150 wpm**, inside the 3:00 limit with margin. These counts and every slide timing above are derived from the script blocks, not typed by hand. If you edit a line, re-derive them.
 
-If you run long on the day, cut slide 3's *"Four filters"* line. **Never cut slides 4, 6 or 7** — they carry rigour and innovation, which are 60 % of the score.
+**Never cut slides 4, 6 or 7** — they carry rigour and innovation, which are 60 % of the score.
 
 ---
 
