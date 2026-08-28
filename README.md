@@ -64,23 +64,50 @@ defence in depth; `.gitignore` is the second line, not the first.
 
 ## Pipeline
 
+```mermaid
+flowchart TD
+    VCF["<b>Proband WGS VCF</b><br/>5,012,204 variants<br/>GRCh38 · GATK 4.2.4.0 · singleton"]
+    HPO["<b>Clinical document</b><br/>8 HPO terms<br/><i>confidential — never committed</i>"]
+
+    VCF --> S01["<b>01</b> · QC baseline<br/><i>build, caller, contig naming</i>"]
+    HPO --> S00b["<b>00b</b> · Extract HPO terms"]
+
+    S01 --> S02["<b>02</b> · Genome-wide annotation<br/>snpEff GRCh38.115<br/><i>no target regions, no gene list</i>"]
+    S02 --> S03["<b>03</b> · Quality · VAF coherence<br/>Impact · Inheritance model"]
+    S03 --> N1(["<b>9,145</b> candidate variants<br/>1,338 compound-het genes"])
+
+    N1 --> S04["<b>04</b> · Population frequency<br/>gnomAD · ClinVar · CADD · MANE<br/><i>Ensembl VEP REST</i>"]
+    S04 --> N2(["<b>179</b> rare variants<br/>AF &lt; 0.01"])
+
+    N2 --> S05["<b>05</b> · Phenotype ranking<br/><i>Resnik similarity over HPO</i>"]
+    S00b --> S05
+    S05 --> N3(["<b>140</b> genes ranked"])
+
+    N3 --> S06{"<b>06</b> · Convergence gate<br/><i>5 criteria, applied<br/>after ranking is closed</i>"}
+    S06 -->|"5/5 · margin 22.8%"| RES["<b>BUB1B</b> — rank 1<br/>compound heterozygous<br/>p.Leu737Ter + p.Asn1002Lys"]
+    S06 -->|"fails"| REV["Revise thresholds<br/>widen inheritance models"]
+
+    N3 --> S07["<b>07</b> · Secondary findings<br/><i>ACMG SF v3.2 cross-check</i>"]
+    S07 --> NEG(["none reportable"])
+
+    classDef data fill:#1a202c,stroke:#4a5568,color:#fff
+    classDef step fill:#2c5282,stroke:#2b6cb0,color:#fff
+    classDef count fill:#2d3748,stroke:#718096,color:#fff
+    classDef gate fill:#744210,stroke:#975a16,color:#fff
+    classDef good fill:#22543d,stroke:#276749,color:#fff
+    classDef muted fill:#4a5568,stroke:#718096,color:#fff
+
+    class VCF,HPO data
+    class S01,S00b,S02,S03,S04,S05,S07 step
+    class N1,N2,N3 count
+    class S06 gate
+    class RES good
+    class REV,NEG muted
 ```
-5,012,204 variants
-     │  01  QC baseline — build, caller, contig naming, FORMAT fields
-     │  00b HPO terms extracted from the confidential clinical document
-     │
-     │  02  snpEff GRCh38.115 — genome-wide, no target regions
-     ▼
-     │  03  quality + genotype/VAF coherence + impact + inheritance model
-     ▼  9,145
-     │  04  gnomAD AF, ClinVar, CADD, MANE HGVS (Ensembl VEP REST)
-     ▼  179 rare
-     │  05  Resnik semantic similarity over the HPO ontology
-     ▼  140 genes ranked
-     │  06  convergence gate — 5 criteria, applied post-ranking
-     │  07  secondary findings — ACMG SF v3.2 cross-check
-     ▼  BUB1B
-```
+
+**Blind stages: 01 → 05.** No gene list, no disease name, no inheritance hint.
+Stage 06 applies the compound-heterozygous expectation **only after** the
+ranking is final.
 
 | Script | Purpose |
 |---|---|
