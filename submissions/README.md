@@ -18,7 +18,7 @@ Deliverables uploaded to the challenge submission forms.
 
 | File | Size | Purpose |
 |---|---|---|
-| `bralewild_track2_report.md` | 33.9 KB | mechanism → candidate report (659 lines) |
+| `bralewild_track2_report.md` | 39.5 KB | mechanism → candidate report (756 lines) |
 
 Supporting evidence for Track 2 is in [../results/track2_evidence/](../results/track2_evidence/)
 so the negative result can be audited rather than taken on trust.
