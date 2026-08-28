@@ -294,7 +294,77 @@ had to go outward to network neighbours, and nothing here proves the gate would
 recognise a good drug two nodes away. The control bounds the claim; it does not
 remove it.
 
-### 3.6 What this negative does and does not establish
+### 3.6 Signature-based repurposing — the gap this report named
+
+An earlier version of this analysis stated that Connectivity Map was *"the
+field's standard approach when no target is druggable"* and that not running it
+was *"the largest gap in this analysis."* Leaving that sentence in place while
+resting the whole report on a negative would have been indefensible. It was run.
+
+The logic requires no druggable target, which is the point — BubR1 has none.
+Take the transcriptional consequence of losing the gene, and look for compounds
+whose own signature reverses it.
+
+| | |
+|---|---|
+| Query signature | LINCS L1000 **CRISPR knockout consensus** for *BUB1B* |
+| | 247 UP genes, 244 DOWN genes |
+| **Internal control** | *BUB1B* itself is present in its own DOWN set — the stage aborts if not |
+| Reproducibility | the 8 independent shRNA knockdown signatures (A375, A549, HA1E, HCC515, HEPG2, HT29, MCF7, PC3), queried separately |
+| Engine | L1000CDS², `aggravate: false` — reversers, not mimics |
+
+**The signature is biologically coherent, and that is the problem.** Classified
+against declared gene sets, its UP half contains **18 type-I interferon genes**
+(IFI6, IRF7, MX1, ISG15, IFIT1/3, IFIH1 …) and **5 p53 targets** (CDKN1A, GDF15,
+BAX, ZMAT3, XPC); its DOWN half contains the proliferation programme, including
+*TRIP13* — itself one of the three known MVA genes. That is exactly what
+BubR1 loss should produce: missegregation makes micronuclei, micronuclei
+activate cGAS–STING, and mitotic stress activates p53.
+
+**But interferon induction and p21 are the cell's defence against aneuploidy,
+not the lesion.** Connectivity Map's founding assumption is that reversing a
+disease signature is therapeutic. Here, reversing it means suppressing that
+defence and pushing the proliferation programme back up — in a child with a
+cancer predisposition syndrome.
+
+The returned compounds are what that predicts:
+
+| Liability | Hits | Classes |
+|---|---:|---|
+| **Antiproliferative** | 178 | CDK/mitotic kinase inhibitors, other kinase inhibitors, topoisomerase poisons, HDAC and HSP90 inhibitors, tubulin agents, cardiac glycosides, protein-synthesis and proteasome inhibitors |
+| **Immunosuppressive** | 16 | corticosteroids, cyclosporine, NF-κB inhibitors |
+| **Contraindicated, total** | **194 of 382 (51 %)** | |
+| Unclassified | 188 (49 %) | keyword taxonomy — so 51 % is a **lower bound** |
+
+The immunosuppressive column matters beyond its size: it is the **same liability
+class that demoted amlexanox** against `HP:0002859` in the safety screen,
+reached here by a completely independent route. And **vincristine appears among
+the hits** — a spindle poison already in this child's rhabdomyosarcoma protocol,
+surfaced as a therapeutic "hit" for a spindle-checkpoint deficiency. No clearer
+demonstration exists that signature reversal cannot be read as a recommendation
+without a direction-of-effect argument.
+
+Reproducibility across the eight cell lines is modest — the best compound recurs
+in 4 of 8 — which is itself worth stating rather than burying.
+
+**Two things this section cannot conclude.** Forty-nine percent of hits are
+unclassified, so every percentage above is a floor rather than a partition. And
+the taxonomy declares no *beneficial* class, because no approved compound class
+restores a spindle checkpoint — so the absence of a helpful hit here is partly
+**by construction**. That conclusion rests on §3.2–§3.3, which searched
+drug–target space directly, not on this stage.
+
+**Three independent search directions have now converged**, and they fail for
+different reasons, which is what makes the convergence informative rather than
+repetitive:
+
+| | Approach | Outcome |
+|---|---|---|
+| §3.2–§3.3 | drug–target databases | 0 compensatory; the well-evidenced pharmacology is all inhibitors |
+| §4 | variant class — the ribosome | 1 proposable candidate, small expected effect |
+| §3.6 | signature reversal | 51 % of hits contraindicated by class; 0 helpful |
+
+### 3.7 What this negative does and does not establish
 
 It establishes that **DGIdb contains no well-evidenced, directionally useful,
 approved drug for this network**, and that the well-evidenced pharmacology it
@@ -305,9 +375,8 @@ that no drug could help. Specifically not run:
   AURKB and CDK1 inhibitors of §3.3 were excluded by that filter, and — on the
   direction argument — rightly so;
 - **only DGIdb** was queried; ChEMBL and Open Targets `knownDrugs` were not;
-- **signature-based repurposing was not run at all** — LINCS / Connectivity Map
-  is the field's standard approach when no target is druggable, and its absence
-  is the largest gap in this analysis;
+- **signature-based repurposing WAS run** (§3.6) and did not rescue the negative;
+  its own limitations are stated there;
 - **aneuploidy-selective compounds** (Tang et al., *Cell* 2011 — AICAR, 17-AAG,
   chloroquine) are a live hypothesis for the cancer-risk arm and were not
   pursued.
@@ -493,13 +562,18 @@ open.
 6. **The class's clinical record is poor** (§4.4).
 7. **Phase was never proven**; if *cis*, this collapses.
 8. **The search was partial**: DGIdb only, approved drugs only, no
-   signature-based repurposing, no aneuploidy-selective compounds (§3.6). The
+   signature-based repurposing, no aneuploidy-selective compounds (§3.7). The
    positive control (§3.5) shows the gate works on the mutated gene; it does not
    show it would work two nodes out, which is what BUB1B required.
 9. **DGIdb does not carry biologics.** Enzyme replacement therapy for Gaucher
    is absent from it entirely — a systematic blind spot of any repurposing
    search built on drug–target interaction databases.
-10. **The mosaicism screen is inconclusive**, not negative (§2.3).
+10. **The signature analysis has its own limits** (§3.6): LINCS knockdown in
+   immortalised, mostly p53-mutant, already-aneuploid cancer lines is not a
+   child's biallelic hypomorphic state; a 96 h knockdown models chronic partial
+   loss poorly; reproducibility across cell lines peaks at 4 of 8; and the
+   compound taxonomy is keyword-based, so its percentages are floors.
+11. **The mosaicism screen is inconclusive**, not negative (§2.3).
 
 ---
 
@@ -513,7 +587,8 @@ open.
 *Automated*: the 52-target network; all 424 drug–gene associations; the evidence,
 direction and safety-class filters; the PTC sequence context from the Ensembl
 MANE CDS; the phenotype screen that reads the HPO file and reorders candidates;
-the positive and negative controls of §3.5; the zero-candidate result.
+the positive and negative controls of §3.5; the LINCS signature retrieval,
+reversal query and compound classification of §3.6; the zero-candidate result.
 *Manual*: the literature identifying readthrough as a variant-class strategy;
 the curated candidate set; the direction classifications
 in `t2_03`. **No database query returns escin or amlexanox as readthrough agents
@@ -587,6 +662,19 @@ this patient. Including the ribosome in the network matters too: the search
 independently recovers ataluren and ELX-02, confirming it can see the class of
 answer eventually proposed, and neither is marketed.
 
+Because drug–target space could be the wrong place to look, the standard
+alternative was run too. Connectivity Map asks which compounds *reverse* a
+disease signature, and needs no druggable target. The *BUB1B* knockout signature
+turns out to carry 18 type-I interferon genes and 5 p53 targets in its UP half —
+coherent, because missegregation makes micronuclei and micronuclei activate
+cGAS–STING. **But those genes are the cell's defence against aneuploidy, not the
+lesion.** Reversing them means suppressing that defence: 51 % of the returned
+hits are contraindicated by class (178 antiproliferative, 16 immunosuppressive
+of 382, and that figure is a lower bound), vincristine among them — a spindle
+poison already in this child's protocol, offered as a therapy for his spindle
+defect. Connectivity Map's founding assumption does not hold for a chromosomal
+instability syndrome.
+
 The proposal is therefore **escin**, a marketed triterpene saponin identified as
 a readthrough inducer in an unbiased screen of ~1,600 approved compounds against
 CFTR premature termination codons. It is the only candidate that is
@@ -601,9 +689,12 @@ marketed product since 2019.
 gate admits the CFTR modulators and sapropterin from their own annotations while
 rejecting all 91 AURKB associations, so the BUB1B zero is a statement about
 BUB1B rather than about the filters — and it is a shaped negative rather than an
-empty one. The direction filter and the phenotype screen each address a failure
-mode naive repurposing walks into, and each changed the answer here rather than
-sitting unexercised. Putting the ribosome in the network gives the search a way
+empty one. Three independent search directions — drug–target
+databases, the variant class, and signature reversal — converge, and they fail
+for different reasons rather than restating one failure three times. The
+direction filter and the phenotype screen each address a failure mode naive
+repurposing walks into, and each changed the answer here rather than sitting
+unexercised. Putting the ribosome in the network gives the search a way
 to see the class of answer being proposed, which it demonstrates by recovering
 ataluren and ELX-02 unprompted. The whole pipeline runs in under two minutes at
 zero cost.
@@ -659,7 +750,7 @@ Protocol approved by **WCG IRB #20252010**. Released under **CC BY 4.0**.
 - Loughran G. *et al.* Evidence of efficient stop codon readthrough in four
   mammalian genes. *Nucleic Acids Res* 2014.
 - Tang Y.-C. *et al.* Identification of aneuploidy-selective antiproliferation
-  compounds. *Cell* 2011 — cited, and not pursued (§3.6).
+  compounds. *Cell* 2011 — cited, and not pursued (§3.7).
 - EMA / CHMP public assessment record, Translarna (ataluren), 2024.
 - German Commission E monograph, *Aesculus hippocastanum* seed extract, 1984 /
   1994.

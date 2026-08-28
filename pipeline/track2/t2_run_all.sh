@@ -27,6 +27,9 @@ python3 "$D/t2_04_readthrough_branch.py" > /dev/null
 log "===== T2-05 positive control ====="
 python3 "$D/t2_05_positive_control.py" > /dev/null
 
+log "===== T2-06 signature repurposing (LINCS/CMap) ====="
+python3 "$D/t2_06_signature_repurposing.py" > /dev/null
+
 log "===== mirroring results ====="
 bash "$D/../sync_results.sh" > /dev/null
 

@@ -253,6 +253,38 @@ Two of three pass and the negative control rejects, so **BUB1B's zero is a
 statement about BUB1B, not about the filters**. Ivacaftor is admitted on its own
 annotation, with the pipeline never told what cystic fibrosis is.
 
+### Signature-based repurposing: the standard alternative also fails
+
+When no target is druggable, the field reaches for Connectivity Map — find
+compounds whose transcriptional signature *reverses* the disease signature. It
+was run (`t2_06`) against the LINCS L1000 CRISPR knockout consensus for *BUB1B*,
+with the eight independent shRNA cell lines as a reproducibility check and
+*BUB1B*'s presence in its own DOWN set as an internal control.
+
+**The signature turns out to be largely the cell's defence, not the lesion.** Its
+UP half carries 18 type-I interferon genes and 5 p53 targets — exactly what
+missegregation should produce, since micronuclei activate cGAS–STING. Reversing
+that means suppressing it:
+
+| Liability | Hits | |
+|---|---:|---|
+| Antiproliferative | 178 | kinase, HDAC, HSP90, topoisomerase, tubulin, cardiac glycosides |
+| Immunosuppressive | 16 | corticosteroids, cyclosporine, NF-κB inhibitors |
+| **Contraindicated** | **194 of 382 (51 %)** | 49 % unclassified — so 51 % is a **lower bound** |
+
+**Vincristine is among the hits** — a spindle poison already in this child's
+rhabdomyosarcoma protocol, returned as a therapy for his spindle defect. Nothing
+demonstrates more plainly that signature reversal cannot be read as a
+recommendation without a direction-of-effect argument.
+
+Three independent directions now converge, failing for **different** reasons:
+
+```
+ t2_03  drug-target databases   ->  0 compensatory; all well-evidenced drugs are inhibitors
+ t2_04  variant class, ribosome ->  1 proposable candidate, small expected effect
+ t2_06  signature reversal      ->  51% of hits contraindicated by class; 0 helpful
+```
+
 ### Two components worth reusing
 
 * **Direction filter** — drops inhibitors that would worsen a loss-of-function
@@ -271,6 +303,7 @@ annotation, with the pipeline never told what cystic fibrosis is.
 | `track2/t2_03_mechanism_filter.py` | evidence gate, direction of effect, safety class |
 | `track2/t2_04_readthrough_branch.py` | PTC context from the MANE CDS + HPO safety screen |
 | `track2/t2_05_positive_control.py` | does the gate admit a real drug when one exists? |
+| `track2/t2_06_signature_repurposing.py` | LINCS / Connectivity Map signature reversal |
 
 Evidence tables: [results/track2_evidence/](results/track2_evidence/) — committed
 so the negative can be audited.

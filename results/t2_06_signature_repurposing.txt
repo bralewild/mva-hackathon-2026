@@ -1,0 +1,144 @@
+========================================================================================
+ T2-06 - SIGNATURE-BASED REPURPOSING (Connectivity Map)
+========================================================================================
+
+t2_03 searched drug-TARGET databases and found nothing, and named this
+omission as the largest gap in the analysis. This stage closes it.
+
+Method: take the transcriptional consequence of losing BUB1B, and look for
+compounds whose own signature REVERSES it. Requires no druggable target.
+
+## The query signature
+
+  source                 LINCS L1000 CRISPR KO consensus (LINCS_L1000_CRISPR_KO_Consensus_Sigs)
+  UP genes               247
+  DOWN genes             244
+  internal control       BUB1B present in its own DOWN set: True
+  cell-line replicates   8 of 8 shRNA knockdown signatures retrieved
+
+## What the signature actually contains
+
+  UP, type-I interferon genes     18   HERC5, IFI44, IFI44L, IFI6, IFIH1, IFIT1, IFIT3, IFITM1, IRF7, ISG15 ...
+  UP, p53 target genes             5   BAX, CDKN1A, GDF15, XPC, ZMAT3
+  DOWN, proliferation genes       15   ASPM, BUB1, BUB1B, CCNA2, CCNB1, CCNB2, CDC20, KIF20A, KIF23, MCM3 ...
+
+  This is mechanistically coherent. Missegregation produces micronuclei,
+  micronuclei activate cGAS-STING, and mitotic stress activates p53. The
+  signature is capturing real consequences of losing BubR1.
+
+  IT IS ALSO THE PROBLEM. Those 18 interferon genes and 5 p53 targets are
+  the cell's DEFENCE against aneuploidy, not the lesion. Connectivity Map
+  assumes reversing a disease signature is therapeutic. Reversing THIS
+  signature means suppressing interferon and p21 and pushing proliferation
+  genes back up - in a child with a cancer predisposition syndrome.
+
+## What the search returned
+
+  total hits across 9 runs      382
+  distinct compounds             224
+
+  by compound class:
+
+    CLASS                                   N      %   LIABILITY HERE
+    unclassified                          188    49%   -
+    mitotic / CDK kinase inhibitor         43    11%   antiproliferative
+    other kinase inhibitor                 39    10%   antiproliferative
+    topoisomerase / DNA damage             21     5%   antiproliferative
+    HDAC inhibitor                         18     5%   antiproliferative
+    HSP90 inhibitor                        16     4%   antiproliferative
+    antimitotic / tubulin                  16     4%   antiproliferative
+    protein synthesis inhibitor            12     3%   antiproliferative
+    cardiac glycoside                      11     3%   antiproliferative
+    NF-kB / innate immune inhibitor         8     2%   immunosuppressive
+    corticosteroid / immunosuppressant      8     2%   immunosuppressive
+    proteasome inhibitor                    2     1%   antiproliferative
+
+  classified                       194  (51%)
+  CONTRAINDICATED for this child   194  (51%)
+     antiproliferative             178
+     immunosuppressive              16
+  unclassified                     188  (49%)
+
+## Reproducibility across independent cell lines
+
+  A compound recovered in one cell line is noise. These are the
+  compounds recovered in the most of the 8 shRNA knockdown runs:
+
+    COMPOUND                            RUNS  CLASS
+    CGP-60474                          4/8    mitotic / CDK kinase inhibitor
+    528116.cdx                         4/8    unclassified
+    Parthenolide                       4/8    NF-kB / innate immune inhibitor
+    vorinostat                         4/8    HDAC inhibitor
+    wortmannin                         4/8    other kinase inhibitor
+    linifanib                          3/8    other kinase inhibitor
+    BMS-387032                         3/8    mitotic / CDK kinase inhibitor
+    trichostatin A                     3/8    HDAC inhibitor
+    DOXORUBICIN                        3/8    topoisomerase / DNA damage
+    AG14361                            3/8    topoisomerase / DNA damage
+    AS605240                           2/8    other kinase inhibitor
+    AS-605240                          2/8    other kinase inhibitor
+    selumetinib                        2/8    other kinase inhibitor
+    vincristine                        2/8    antimitotic / tubulin
+    QUINACRINE HYDROCHLORIDE           2/8    unclassified
+
+  Best reproducibility: 4 of 8 cell lines.
+
+========================================================================================
+ VERDICT
+========================================================================================
+
+  51% of the hits (194 of 382) belong to a class that is contraindicated
+  for this patient, on one of two grounds computed above:
+
+     178 antiproliferative  - they act on the axis the disease already
+         compromises, and several are checkpoint inhibitors outright
+      16 immunosuppressive  - the same liability that demoted amlexanox
+         against HP:0002859 in t2_04, arrived at independently here
+
+  Connectivity Map returns exactly what it is designed to return, and
+  what it returns is unusable. The reason is mechanistic rather than
+  incidental: 18 of the UP genes are type-I interferon and 5 are p53
+  targets, so a large part of this 'disease signature' is the cell's
+  DEFENCE against aneuploidy. Reversing it means suppressing that
+  defence, and the most efficient way to reverse a mitotic-stress
+  response is to arrest or kill the cell.
+
+  CMap's founding assumption - that reversing a disease signature is
+  therapeutic - does not hold for a chromosomal instability syndrome.
+
+  134 distinct compounds remain unclassified. They are listed in the TSV.
+  The taxonomy is keyword-based and therefore incomplete by construction;
+  the percentages above are lower bounds, not exact partitions.
+
+  Note that vincristine appears among the hits. It is already in this
+  child's rhabdomyosarcoma protocol - a spindle poison given to a patient
+  whose spindle checkpoint is deficient. The method surfacing it as a
+  'hit' shows why signature reversal cannot be read as a therapeutic
+  recommendation without a direction-of-effect argument.
+
+  THIS IS THE THIRD INDEPENDENT SEARCH DIRECTION TO CONVERGE:
+
+    t2_03  drug-target databases   -> 0 compensatory, all inhibitors
+    t2_04  variant-class branch    -> 1 proposable, small expected effect
+    t2_06  signature reversal      -> 51% of hits contraindicated by class
+
+  None of the three finds an approved drug that helps. They fail for
+  different reasons, which is what makes the convergence informative
+  rather than repetitive.
+
+## Limitations of this stage specifically
+
+  - LINCS knockdown in immortalised cancer cell lines is not a child's
+    biallelic hypomorphic state. Most L1000 lines are p53-mutant and
+    already aneuploid, which is precisely the axis under study.
+  - Signature reversal identifies compounds that oppose a transcriptional
+    CONSEQUENCE. It cannot identify a compound that restores BubR1, which
+    is what the disease actually requires.
+  - CMap scores are similarity measures, not efficacy estimates.
+  - A 96 h knockdown models chronic partial loss poorly.
+  - The class taxonomy declares no BENEFICIAL category, because no approved
+    compound class restores a spindle checkpoint. The absence of a helpful
+    hit here is therefore partly by construction; that conclusion rests on
+    t2_03, which searched drug-target space directly, not on this stage.
+
+  -> C:/Users/user/AppData/Local/Temp/claude/c--Users-user-Documents-real-kid-mva-hackathon/e2bbbb4e-7b37-4f7c-b1c3-f49b80045020/scratchpad/t2check\work\t2_06_signature_hits.tsv
