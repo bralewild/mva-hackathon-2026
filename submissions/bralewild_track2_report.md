@@ -131,8 +131,9 @@ clean, and the report says so:
 mosaicism is absent. Nor is blood the wrong tissue: MVA is routinely diagnosed by
 karyotype on cultured peripheral blood lymphocytes. What defeats bulk WGS here is
 *averaging* — a karyotype scores one cell at a time, so a variegated mosaic is
-counted cell by cell rather than diluted into a population mean. Ex vivo work should use fibroblasts for
-reasons of assay control, not because blood is uninformative.
+counted cell by cell rather than diluted into a population mean. Ex vivo work
+should use fibroblasts for reasons of assay control, not because blood is
+uninformative.
 
 ---
 
@@ -468,9 +469,10 @@ CFTR, PAH and GBA1. That part ports to any loss-of-function gene as written.
 
 **An honest scope statement for the rest**: the code is not gene-agnostic.
 `t2_01`'s curated core, `t2_03`'s network direction sets and `t2_04`'s candidate
-list are specific to this pathway and this variant class. What generalises is the *pattern*; porting it to
-another gene means rewriting those three knowledge bases. Any broader claim
-would be contradicted by the files a reviewer can open.
+list are specific to this pathway and this variant class. What generalises is
+the *pattern*; porting it to another gene means rewriting those three knowledge
+bases. Any broader claim would be contradicted by the files a reviewer can
+open.
 
 ---
 
@@ -511,8 +513,9 @@ would be contradicted by the files a reviewer can open.
 *Automated*: the 52-target network; all 424 drug–gene associations; the evidence,
 direction and safety-class filters; the PTC sequence context from the Ensembl
 MANE CDS; the phenotype screen that reads the HPO file and reorders candidates;
-the positive and negative controls of §3.5; the zero-candidate result. *Manual*: the literature identifying readthrough as a
-variant-class strategy; the curated candidate set; the direction classifications
+the positive and negative controls of §3.5; the zero-candidate result.
+*Manual*: the literature identifying readthrough as a variant-class strategy;
+the curated candidate set; the direction classifications
 in `t2_03`. **No database query returns escin or amlexanox as readthrough agents
 — their activity is a primary-literature property, not a drug–target
 annotation.** The corrected pipeline searched the right biology, recovered
@@ -581,8 +584,8 @@ develops checkpoint inhibitors precisely to force missegregation and kill
 dividing cells, which is this disease deliberately induced. The pharmacology for
 this pathway is well developed and aimed in exactly the direction that would harm
 this patient. Including the ribosome in the network matters too: the search
-independently recovers ataluren and ELX-02, confirming it can see readthrough
-biology, and neither is marketed.
+independently recovers ataluren and ELX-02, confirming it can see the class of
+answer eventually proposed, and neither is marketed.
 
 The proposal is therefore **escin**, a marketed triterpene saponin identified as
 a readthrough inducer in an unbiased screen of ~1,600 approved compounds against
@@ -594,14 +597,16 @@ conflicts with nephrocalcinosis, and amlexanox, whose TBK1/IKKε inhibition
 conflicts with an active cancer predisposition — and which has, in any case, no
 marketed product since 2019.
 
-**Strengths.** The negative is computed, auditable and **controlled**: the same
+**Strengths.** The negative is computed, auditable and **controlled**. The same
 gate admits the CFTR modulators and sapropterin from their own annotations while
 rejecting all 91 AURKB associations, so the BUB1B zero is a statement about
-BUB1B rather than about the filters. It is a shaped negative rather than an
-empty one. The direction
-filter and the phenotype screen address failure modes naive repurposing does not,
-and both changed the answer here rather than sitting unexercised. The pipeline runs in under two minutes at zero cost,
-and adding the variant-class machinery gives it a working positive control.
+BUB1B rather than about the filters — and it is a shaped negative rather than an
+empty one. The direction filter and the phenotype screen each address a failure
+mode naive repurposing walks into, and each changed the answer here rather than
+sitting unexercised. Putting the ribosome in the network gives the search a way
+to see the class of answer being proposed, which it demonstrates by recovering
+ataluren and ELX-02 unprompted. The whole pipeline runs in under two minutes at
+zero cost.
 
 **Limitations, stated plainly.** No readthrough agent has been tested on *BUB1B*.
 The expected effect is small: single-digit readthrough against a deficit of an
