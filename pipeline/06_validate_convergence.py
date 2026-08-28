@@ -1,33 +1,33 @@
 #!/usr/bin/env python3
 """
 ==============================================================================
-06_validate_convergence.py - Compuerta de validacion de la busqueda ciega
+06_validate_convergence.py - Validation gate for the blind search
 
-ENTRADA : $RESULTS/05_ranked_genes.tsv
-          $WORK/04_rare_candidates.tsv
-SALIDA  : $RESULTS/06_convergence_report.txt
+INPUT  : $RESULTS/05_ranked_genes.tsv
+         $WORK/04_rare_candidates.tsv
+OUTPUT : $RESULTS/06_convergence_report.txt
 
-PROPOSITO
----------
-Las etapas 01-05 corren SIN saber cual es la enfermedad. Esta etapa es la unica
-que aplica conocimiento externo, y lo hace DESPUES de que el ranking esta
-cerrado: verifica si el gen top-1 sostiene un par en heterocigosis compuesta
-biologicamente plausible.
+PURPOSE
+-------
+Stages 01-05 run WITHOUT knowing the disease. This is the only stage that
+applies external knowledge, and it does so AFTER the ranking is closed: it
+checks whether the top-ranked gene supports a biologically plausible compound
+heterozygous pair.
 
-Es una COMPUERTA DE VALIDACION, no un filtro de busqueda. La distincion importa:
-si el conocimiento de la enfermedad entrara antes del ranking, el resultado
-seria circular y no probaria nada sobre el metodo.
+This is a VALIDATION GATE, not a search filter. The distinction matters: if
+disease knowledge entered before the ranking, the result would be circular and
+would prove nothing about the method.
 
-CRITERIOS DE CONVERGENCIA
--------------------------
-1. Separacion: el score del top-1 supera al del top-2 por un margen claro
-2. Modelo:    el top-1 es AR_COMPOUND_HET o AR_HOMOZYGOUS
-3. Par:       conserva >= 2 variantes raras tras el filtro de frecuencia
-4. Severidad: al menos una variante de impacto HIGH
-5. Evidencia: respaldo clinico independiente (ClinVar) o computacional (CADD)
+CONVERGENCE CRITERIA
+--------------------
+1. Separation: the top-1 score exceeds top-2 by a clear margin
+2. Model:      top-1 is AR_COMPOUND_HET or AR_HOMOZYGOUS
+3. Pair:       it retains >= 2 rare variants after the frequency filter
+4. Severity:   at least one HIGH-impact variant
+5. Evidence:   independent clinical (ClinVar) or computational (CADD) support
 
-Un fallo en cualquiera de los cinco no invalida el hallazgo, pero debe quedar
-declarado en el reporte de metodos.
+Failing any of the five does not invalidate the finding, but must be declared in
+the methods report.
 ==============================================================================
 """
 import csv
@@ -39,8 +39,8 @@ RANK = BASE + "/results/05_ranked_genes.tsv"
 RARE = BASE + "/work/04_rare_candidates.tsv"
 OUT = BASE + "/results/06_convergence_report.txt"
 
-MARGEN_MINIMO = 0.15   # 15% de ventaja del top-1 sobre el top-2
-CADD_ALTO = 20.0
+MIN_MARGIN = 0.15   # top-1 must lead top-2 by 15 %
+HIGH_CADD = 20.0
 
 
 def fnum(v, default=0.0):
@@ -53,89 +53,89 @@ def fnum(v, default=0.0):
 def main():
     for p in (RANK, RARE):
         if not os.path.exists(p):
-            sys.exit("falta " + p)
+            sys.exit("missing " + p)
 
     ranked = list(csv.DictReader(open(RANK), delimiter="\t"))
     if not ranked:
-        sys.exit("el ranking esta vacio")
+        sys.exit("the ranking is empty")
     rare = list(csv.DictReader(open(RARE), delimiter="\t"))
 
     top = ranked[0]
-    segundo = ranked[1] if len(ranked) > 1 else None
-    gen = top["gene"]
-    vs = [r for r in rare if r["gene"] == gen]
+    second = ranked[1] if len(ranked) > 1 else None
+    gene = top["gene"]
+    vs = [r for r in rare if r["gene"] == gene]
 
     s1 = fnum(top["pheno_score"])
-    s2 = fnum(segundo["pheno_score"]) if segundo else 0.0
-    margen = (s1 - s2) / s1 if s1 else 0.0
+    s2 = fnum(second["pheno_score"]) if second else 0.0
+    margin = (s1 - s2) / s1 if s1 else 0.0
 
     highs = [v for v in vs if v.get("vep_impact") == "HIGH" or v.get("impact") == "HIGH"]
     clinvar = [v for v in vs if v.get("clinvar", ".") not in (".", "", None)
                and "pathogenic" in v.get("clinvar", "").lower()]
-    cadds = [v for v in vs if fnum(v.get("cadd")) >= CADD_ALTO]
+    cadds = [v for v in vs if fnum(v.get("cadd")) >= HIGH_CADD]
 
-    criterios = [
-        ("Separacion sobre el 2do", margen >= MARGEN_MINIMO,
-         "{:.1f}% (minimo {:.0f}%)".format(margen * 100, MARGEN_MINIMO * 100)),
-        ("Modelo recesivo", top["model"] in ("AR_COMPOUND_HET", "AR_HOMOZYGOUS"),
+    criteria = [
+        ("Separation over 2nd", margin >= MIN_MARGIN,
+         "{:.1f}% (minimum {:.0f}%)".format(margin * 100, MIN_MARGIN * 100)),
+        ("Recessive model", top["model"] in ("AR_COMPOUND_HET", "AR_HOMOZYGOUS"),
          top["model"]),
-        ("Par de variantes raras", len(vs) >= 2, "{} variantes raras".format(len(vs))),
-        ("Al menos una HIGH", len(highs) >= 1, "{} de impacto HIGH".format(len(highs))),
-        ("Evidencia independiente", len(clinvar) >= 1 or len(cadds) >= 1,
-         "{} en ClinVar patogenica, {} con CADD>={}".format(len(clinvar), len(cadds), CADD_ALTO)),
+        ("Pair of rare variants", len(vs) >= 2, "{} rare variants".format(len(vs))),
+        ("At least one HIGH", len(highs) >= 1, "{} of HIGH impact".format(len(highs))),
+        ("Independent evidence", len(clinvar) >= 1 or len(cadds) >= 1,
+         "{} pathogenic in ClinVar, {} with CADD>={}".format(len(clinvar), len(cadds), HIGH_CADD)),
     ]
-    paso = sum(1 for _, ok, _ in criterios if ok)
+    passed = sum(1 for _, ok, _ in criteria if ok)
 
     L = []
     L.append("=" * 78)
-    L.append(" 06 - COMPUERTA DE VALIDACION DE LA BUSQUEDA CIEGA")
+    L.append(" 06 - VALIDATION GATE FOR THE BLIND SEARCH")
     L.append("=" * 78)
     L.append("")
-    L.append("Las etapas 01-05 corrieron sin conocer la enfermedad.")
-    L.append("Esta etapa evalua el resultado DESPUES de cerrado el ranking.")
+    L.append("Stages 01-05 ran without knowing the disease.")
+    L.append("This stage evaluates the result AFTER the ranking was closed.")
     L.append("")
-    L.append("## Gen convergente")
+    L.append("## Convergent gene")
     L.append("")
-    L.append("  TOP-1 : {}   score {}".format(gen, top["pheno_score"]))
-    if segundo:
-        L.append("  TOP-2 : {}   score {}".format(segundo["gene"], segundo["pheno_score"]))
-        L.append("  margen: {:.1f}%".format(margen * 100))
+    L.append("  TOP-1 : {}   score {}".format(gene, top["pheno_score"]))
+    if second:
+        L.append("  TOP-2 : {}   score {}".format(second["gene"], second["pheno_score"]))
+        L.append("  margin: {:.1f}%".format(margin * 100))
     L.append("")
-    L.append("## Variantes raras en {}".format(gen))
+    L.append("## Rare variants in {}".format(gene))
     L.append("")
     for v in sorted(vs, key=lambda x: int(x["pos"])):
-        af = v.get("gnomad_af") or "AUSENTE"
+        af = v.get("gnomad_af") or "ABSENT"
         L.append("  {}:{} {}>{}".format(v["chrom"], v["pos"], v["ref"], v["alt"]))
-        L.append("     {}  |  impacto {}  |  CADD {}".format(
+        L.append("     {}  |  impact {}  |  CADD {}".format(
             v.get("vep_consequence", "."), v.get("vep_impact", "."), v.get("cadd") or "."))
         L.append("     {}".format(v.get("vep_hgvsp", ".")))
         L.append("     gnomAD {}  |  {}  |  ClinVar: {}".format(
             af, v.get("rsid", "."), v.get("clinvar", ".")))
-        L.append("     genotipo {}  DP {}  GQ {}  AD {}".format(
+        L.append("     genotype {}  DP {}  GQ {}  AD {}".format(
             v.get("gt", "."), v.get("dp", "."), v.get("gq", "."), v.get("ad", ".")))
         L.append("")
-    L.append("## Criterios de convergencia")
+    L.append("## Convergence criteria")
     L.append("")
-    for nombre, ok, detalle in criterios:
-        L.append("  [{}] {:<26} {}".format("OK" if ok else "--", nombre, detalle))
+    for name, ok, detail in criteria:
+        L.append("  [{}] {:<26} {}".format("OK" if ok else "--", name, detail))
     L.append("")
-    L.append("  {} de {} criterios cumplidos".format(paso, len(criterios)))
+    L.append("  {} of {} criteria met".format(passed, len(criteria)))
     L.append("")
-    if paso == len(criterios):
-        L.append("  >>> CONVERGENCIA CONFIRMADA <<<")
+    if passed == len(criteria):
+        L.append("  >>> CONVERGENCE CONFIRMED <<<")
         L.append("")
-        L.append("  El pipeline, sin conocer la enfermedad, ordeno {} en primer".format(gen))
-        L.append("  lugar entre {} genes candidatos, partiendo de 5.012.204 variantes.".format(len(ranked)))
+        L.append("  Without knowing the disease, the pipeline ranked {} first".format(gene))
+        L.append("  among {} candidate genes, starting from 5,012,204 variants.".format(len(ranked)))
     else:
-        L.append("  >>> CONVERGENCIA PARCIAL - declarar en el reporte de metodos <<<")
+        L.append("  >>> PARTIAL CONVERGENCE - declare this in the methods report <<<")
     L.append("")
-    L.append("## Limitaciones que siguen vigentes")
+    L.append("## Limitations that still apply")
     L.append("")
-    L.append("  - Singleton: sin padres no se puede probar la fase por pedigri.")
-    L.append("    El par se reporta como PRESUNTO en trans.")
-    L.append("  - Solo SNV e indels: el VCF no contiene CNV, SV ni expansiones.")
-    L.append("  - El filtro de impacto descarta intrones profundos y reguladoras.")
-    L.append("  - Un gen sin anotaciones HPO obtiene score 0 aunque fuera el causal.")
+    L.append("  - Singleton: without parents, phase cannot be proven from pedigree.")
+    L.append("    The pair is reported as PRESUMED in trans.")
+    L.append("  - SNVs and indels only: the VCF has no CNVs, SVs or repeat expansions.")
+    L.append("  - The impact filter discards deep intronic and regulatory variants.")
+    L.append("  - A gene with no HPO annotations scores 0 even if it were causal.")
 
     txt = "\n".join(L)
     os.makedirs(os.path.dirname(OUT), exist_ok=True)

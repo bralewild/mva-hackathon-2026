@@ -1,39 +1,40 @@
 #!/usr/bin/env python3
 """
 ==============================================================================
-04_frequency_clinical.py - Frecuencia poblacional y evidencia clinica
+04_frequency_clinical.py - Population frequency and clinical evidence
 
-ENTRADA : $WORK/03_candidates.tsv
-SALIDA  : $WORK/04_annotated_candidates.tsv   (todas, con anotacion)
-          $WORK/04_rare_candidates.tsv        (las que pasan el filtro)
-          $WORK/04_vep_cache.jsonl            (cache incremental, permite reanudar)
-          $RESULTS/04_frequency_summary.txt
+INPUT  : $WORK/03_candidates.tsv
+OUTPUT : $WORK/04_annotated_candidates.tsv   (all, annotated)
+         $WORK/04_rare_candidates.tsv        (those passing the frequency filter)
+         $WORK/04_vep_cache.jsonl            (incremental cache, enables resume)
+         $RESULTS/04_frequency_summary.txt
 
-PROPOSITO
----------
-Una enfermedad ultra-rara (<50 personas en el mundo) no puede estar causada por
-una variante frecuente en la poblacion general. Este paso aplica ese principio.
+PURPOSE
+-------
+An ultra-rare disease (<50 people worldwide) cannot be caused by a variant that
+is common in the general population: a 1 % allele frequency implies roughly
+80 million carriers. This stage applies that principle.
 
-Umbral: gnomAD AF < 0.01 para modelos recesivos.
-La ausencia total de gnomAD se registra como evidencia PM2 de ACMG.
+Threshold: gnomAD AF < 0.01 for recessive models.
+Complete absence from gnomAD is recorded as ACMG PM2 evidence.
 
-FUENTE: Ensembl VEP REST (POST /vep/human/region), lotes de 200 variantes.
-No se guarda ninguna base de datos local: la anotacion queda siempre al dia y
-evitamos descargar decenas de GB de cache para unos pocos miles de variantes.
-Devuelve ademas transcrito MANE, HGVSc/HGVSp, CADD, rsID y ClinVar.
+SOURCE: Ensembl VEP REST (POST /vep/human/region), batches of 200 variants.
+No local database is stored: annotation stays current and we avoid downloading
+tens of gigabytes of cache for a few thousand variants. The same call also
+returns the MANE transcript, HGVSc/HGVSp, CADD, rsID and ClinVar.
 
-REANUDACION (leccion aprendida)
--------------------------------
-La primera version escribia resultados solo al final: 15 minutos sin ninguna
-senal, y si se cortaba la red habia que empezar de cero. Un pipeline que hay
-que rearrancar entero por un timeout no es reproducible en la practica.
+RESUMABILITY (lesson learned)
+-----------------------------
+The first version wrote results only at the end: fifteen minutes with no signal,
+and a dropped connection meant starting over. A pipeline that must be restarted
+from scratch by one timeout is not reproducible in practice.
 
-Ahora cada lote se persiste en $WORK/04_vep_cache.jsonl apenas llega. Si el
-script se corta, al volver a correrlo saltea todo lo ya cacheado. El progreso
-se imprime lote a lote con flush inmediato.
+Each batch is now persisted to $WORK/04_vep_cache.jsonl as soon as it arrives.
+If the script is interrupted, re-running it skips everything already cached.
+Progress prints per batch with an explicit flush.
 
-LIMITES DE LA API: ~15 req/s y 55.000 req/h. Usamos ~3 req/s con reintento
-exponencial ante HTTP 429/503.
+API LIMITS: ~15 req/s and 55,000 req/h. We use ~3 req/s with exponential
+backoff on HTTP 429/503.
 ==============================================================================
 """
 import collections
@@ -62,12 +63,12 @@ AF_MAX_RECESSIVE = 0.01
 
 
 def log(msg):
-    """Progreso con flush inmediato: sin esto no se ve nada hasta el final."""
+    """Progress with an immediate flush: without it nothing appears until the end."""
     print(msg, file=sys.stderr, flush=True)
 
 
 def vep_batch(variants):
-    """POST de un lote a VEP REST con reintento exponencial."""
+    """POST one batch to VEP REST with exponential backoff."""
     body = json.dumps({"variants": variants}).encode()
     for attempt in range(MAX_RETRY):
         req = urllib.request.Request(VEP_URL, data=body, headers={
@@ -80,21 +81,21 @@ def vep_batch(variants):
         except urllib.error.HTTPError as e:
             if e.code in (429, 503):
                 wait = 2 ** attempt
-                log("    HTTP {} - reintento en {}s".format(e.code, wait))
+                log("    HTTP {} - retrying in {}s".format(e.code, wait))
                 time.sleep(wait)
                 continue
             log("    HTTP {}: {}".format(e.code, e.read()[:200]))
             return []
         except Exception as e:
             wait = 2 ** attempt
-            log("    {}: {} - reintento en {}s".format(type(e).__name__, e, wait))
+            log("    {}: {} - retrying in {}s".format(type(e).__name__, e, wait))
             time.sleep(wait)
-    log("    lote abandonado tras {} intentos".format(MAX_RETRY))
+    log("    batch abandoned after {} attempts".format(MAX_RETRY))
     return []
 
 
 def extract(rec):
-    """Frecuencia gnomAD, rsID, ClinVar y el transcrito MANE de un registro VEP."""
+    """Pull gnomAD frequency, rsID, ClinVar and the MANE transcript from a VEP record."""
     out = {
         "gnomad_af": None, "rsid": ".", "clinvar": ".", "mane": ".",
         "hgvsc": ".", "hgvsp": ".", "cadd": None,
@@ -139,7 +140,7 @@ def key_of(rec_input):
 
 
 def load_cache():
-    """Lee el cache incremental para poder reanudar tras un corte."""
+    """Read the incremental cache so an interrupted run can resume."""
     ann = {}
     if not os.path.exists(CACHE):
         return ann
@@ -155,10 +156,10 @@ def load_cache():
 
 def main():
     if not os.path.exists(IN_TSV):
-        sys.exit("falta " + IN_TSV + " - corre antes 03_inheritance_models.py")
+        sys.exit("missing " + IN_TSV + " - run 03_inheritance_models.py first")
 
     rows = list(csv.DictReader(open(IN_TSV), delimiter="\t"))
-    log("candidatas de entrada: {:,}".format(len(rows)))
+    log("input candidates: {:,}".format(len(rows)))
 
     order, seen = [], set()
     for r in rows:
@@ -167,15 +168,15 @@ def main():
         if kk not in seen:
             seen.add(kk)
             order.append(k)
-    log("variantes unicas: {:,}".format(len(order)))
+    log("unique variants: {:,}".format(len(order)))
 
     ann = load_cache()
     if ann:
-        log("cache: {:,} variantes ya anotadas, se saltean".format(len(ann)))
+        log("cache: {:,} variants already annotated, skipping".format(len(ann)))
 
     pending = [k for k in order if key_of(k) not in ann]
     nb = (len(pending) + BATCH - 1) // BATCH
-    log("lotes pendientes: {}".format(nb))
+    log("pending batches: {}".format(nb))
 
     t0 = time.time()
     with open(CACHE, "a", encoding="utf-8") as cf:
@@ -191,7 +192,7 @@ def main():
             cf.flush()
             el = time.time() - t0
             eta = (el / n) * (nb - n) if n else 0
-            log("  lote {}/{}  ({:,} anotadas)  ETA {:.0f} min".format(
+            log("  batch {}/{}  ({:,} annotated)  ETA {:.0f} min".format(
                 n, nb, len(ann), eta / 60))
             time.sleep(SLEEP)
 
@@ -223,25 +224,25 @@ def main():
             wa.writerow(out)
             stats["total"] += 1
             if not a:
-                stats["sin_respuesta_vep"] += 1
+                stats["no_vep_response"] += 1
             if af is None:
-                stats["ausente_gnomad"] += 1
+                stats["absent_from_gnomad"] += 1
             if af is None or af < AF_MAX_RECESSIVE:
                 wr.writerow(out)
-                stats["raras"] += 1
+                stats["rare"] += 1
             else:
-                stats["comunes_descartadas"] += 1
+                stats["common_discarded"] += 1
 
     txt = "\n".join([
         "=" * 66,
-        " 04 - FRECUENCIA POBLACIONAL Y EVIDENCIA CLINICA",
+        " 04 - POPULATION FREQUENCY AND CLINICAL EVIDENCE",
         "=" * 66,
         "",
-        "  variantes evaluadas        {:>10,}".format(stats["total"]),
-        "  sin respuesta de VEP       {:>10,}".format(stats["sin_respuesta_vep"]),
-        "  ausentes de gnomAD (PM2)   {:>10,}".format(stats["ausente_gnomad"]),
-        "  raras (AF < {})        {:>10,}".format(AF_MAX_RECESSIVE, stats["raras"]),
-        "  comunes descartadas        {:>10,}".format(stats["comunes_descartadas"]),
+        "  variants evaluated          {:>10,}".format(stats["total"]),
+        "  no response from VEP        {:>10,}".format(stats["no_vep_response"]),
+        "  absent from gnomAD (PM2)    {:>10,}".format(stats["absent_from_gnomad"]),
+        "  rare (AF < {})         {:>10,}".format(AF_MAX_RECESSIVE, stats["rare"]),
+        "  common, discarded           {:>10,}".format(stats["common_discarded"]),
         "",
         "  -> " + OUT_RARE,
     ])

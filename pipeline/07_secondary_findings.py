@@ -1,42 +1,42 @@
 #!/usr/bin/env python3
 """
 ==============================================================================
-07_secondary_findings.py - Hallazgos secundarios clinicamente accionables
+07_secondary_findings.py - Clinically actionable secondary findings
 
-ENTRADA : $WORK/04_rare_candidates.tsv
-          $RESULTS/05_ranked_genes.tsv
-SALIDA  : $RESULTS/07_secondary_findings.txt
-          $WORK/07_secondary_candidates.tsv
+INPUT  : $WORK/04_rare_candidates.tsv
+         $RESULTS/05_ranked_genes.tsv
+OUTPUT : $RESULTS/07_secondary_findings.txt
+         $WORK/07_secondary_candidates.tsv
 
-PROPOSITO
----------
-El FAQ del challenge aclara que los hallazgos secundarios NO afectan el score
-automatico y se apartan para revision cualitativa del panel de jueces. Es una
-via de evaluacion adicional sin riesgo.
+PURPOSE
+-------
+The challenge FAQ states that secondary findings do not affect the automated
+score and are set aside for qualitative review by the judging panel. It is a
+risk-free additional evaluation route.
 
-Independientemente del concurso, reportar hallazgos secundarios accionables es
-practica clinica estandar: si en el genoma de un paciente aparece una variante
-patogenica en un gen donde existe intervencion medica disponible, corresponde
-señalarlo aunque no explique el cuadro que motivo el estudio.
+Independently of the competition, reporting actionable secondary findings is
+standard clinical practice: if a pathogenic variant appears in a gene with an
+available medical intervention, it should be flagged even when it does not
+explain the presenting phenotype.
 
-CRITERIOS
----------
-Se marca como hallazgo secundario candidato una variante que:
-  1. Este en un gen de la lista ACMG SF v3.2 (genes accionables consensuados)
-     o en un gen con enfermedad tratable de la lista curada de abajo
-  2. NO sea el gen causal primario (el top-1 del ranking fenotipico)
-  3. Tenga impacto HIGH, o MODERATE con CADD >= 20
-  4. Sea rara (ya garantizado por la etapa 04)
+CRITERIA
+--------
+A variant is flagged as a candidate secondary finding when it:
+  1. lies in an ACMG SF v3.2 gene (international consensus list), or in a gene
+     from the curated treatable-disease list below
+  2. is NOT the primary causal gene (top-1 of the phenotype ranking)
+  3. has HIGH impact, or MODERATE impact with CADD >= 20
+  4. is rare (already guaranteed by stage 04)
 
-IMPORTANTE - LIMITE DECLARADO
------------------------------
-Esto NO es un reporte clinico. Es una lista de candidatos para revision humana.
-Un hallazgo secundario real exige confirmacion ortogonal, evaluacion ACMG
-completa y consejo genetico. Se reporta como hipotesis, nunca como diagnostico.
+IMPORTANT - DECLARED LIMIT
+--------------------------
+This is NOT a clinical report. It is a list of candidates for human review. A
+reportable secondary finding requires orthogonal confirmation, full ACMG
+classification and genetic counselling. Results are hypotheses for follow-up,
+never diagnoses.
 
-FUENTE de la lista: ACMG SF v3.2 (Miller et al., Genet Med 2023).
-Se incluye embebida y no por descarga para que el pipeline sea reproducible
-sin depender de que una URL siga viva.
+SOURCE of list A: ACMG SF v3.2 (Miller et al., Genet Med 2023). Embedded rather
+than downloaded so the pipeline reproduces without depending on a live URL.
 ==============================================================================
 """
 import csv
@@ -49,9 +49,9 @@ RANK = BASE + "/results/05_ranked_genes.tsv"
 OUT_TSV = BASE + "/work/07_secondary_candidates.tsv"
 OUT_TXT = BASE + "/results/07_secondary_findings.txt"
 
-CADD_MIN = 20.0
+MIN_CADD = 20.0
 
-# ACMG SF v3.2 - genes con hallazgos secundarios reportables (Miller et al. 2023)
+# ACMG SF v3.2 - genes with reportable secondary findings (Miller et al. 2023)
 ACMG_SF = {
     # Cancer
     "BRCA1", "BRCA2", "PALB2", "TP53", "STK11", "MLH1", "MSH2", "MSH6", "PMS2",
@@ -65,25 +65,26 @@ ACMG_SF = {
     "KCNQ1", "KCNH2", "SCN5A", "FBN1", "TGFBR1", "TGFBR2", "SMAD3", "ACTA2",
     "MYH11", "COL3A1", "BAG3", "DES", "FLNC", "TTN", "TNNC1", "CASQ2", "TRDN",
     "CALM1", "CALM2", "CALM3", "HFE",
-    # Metabolico / otros
+    # Metabolic and other
     "OTC", "ATP7B", "BTD", "GAA", "APOB", "LDLR", "PCSK9", "RYR1", "CACNA1S",
     "ACVRL1", "ENG", "RPE65", "TTR", "GCK", "HNF1A", "HNF1B", "HNF4A",
 }
 
-# Genes fuera de ACMG SF pero con enfermedad TRATABLE o manejable.
-# Se reportan por separado y con menor peso: no son consenso, son criterio propio.
-TRATABLES = {
-    "SERPINA1": "deficit de alfa-1 antitripsina - manejo pulmonar/hepatico, terapia de aumento",
-    "CBS": "homocistinuria - responde a piridoxina/betaina y dieta restringida en metionina",
-    "PAH": "fenilcetonuria - manejo dietario",
-    "GALT": "galactosemia - manejo dietario",
-    "SLC22A5": "deficit primario de carnitina - suplementacion con L-carnitina",
-    "ATM": "ataxia-telangiectasia / riesgo oncologico en portadores - vigilancia",
-    "MEFV": "fiebre mediterranea familiar - colchicina",
-    "G6PD": "deficit de G6PD - evitar farmacos oxidantes",
-    "ACADM": "deficit de MCAD - evitar ayuno prolongado",
-    "F5": "factor V Leiden - manejo del riesgo trombotico",
-    "F2": "protrombina G20210A - manejo del riesgo trombotico",
+# Genes outside ACMG SF but with a treatable or manageable disease.
+# Reported separately and with less weight: this is our own judgement, not
+# international consensus, and it is declared as such.
+TREATABLE = {
+    "SERPINA1": "alpha-1 antitrypsin deficiency - pulmonary/hepatic management, augmentation therapy",
+    "CBS": "homocystinuria - responds to pyridoxine/betaine and a methionine-restricted diet",
+    "PAH": "phenylketonuria - dietary management",
+    "GALT": "galactosemia - dietary management",
+    "SLC22A5": "primary carnitine deficiency - L-carnitine supplementation",
+    "ATM": "ataxia-telangiectasia / carrier cancer risk - surveillance",
+    "MEFV": "familial Mediterranean fever - colchicine",
+    "G6PD": "G6PD deficiency - avoid oxidative drugs",
+    "ACADM": "MCAD deficiency - avoid prolonged fasting",
+    "F5": "factor V Leiden - thrombotic risk management",
+    "F2": "prothrombin G20210A - thrombotic risk management",
 }
 
 
@@ -97,93 +98,93 @@ def fnum(v, d=0.0):
 def main():
     for p in (RARE, RANK):
         if not os.path.exists(p):
-            sys.exit("falta " + p)
+            sys.exit("missing " + p)
 
     ranked = list(csv.DictReader(open(RANK), delimiter="\t"))
-    primario = ranked[0]["gene"] if ranked else None
+    primary = ranked[0]["gene"] if ranked else None
 
     rows = list(csv.DictReader(open(RARE), delimiter="\t"))
 
-    acmg, trat = [], []
+    acmg, treat = [], []
     for r in rows:
-        gen = r.get("gene", "")
-        if not gen or gen == primario:
+        gene = r.get("gene", "")
+        if not gene or gene == primary:
             continue
-        impacto = r.get("vep_impact") or r.get("impact") or "."
+        impact = r.get("vep_impact") or r.get("impact") or "."
         cadd = fnum(r.get("cadd"))
-        if not (impacto == "HIGH" or (impacto == "MODERATE" and cadd >= CADD_MIN)):
+        if not (impact == "HIGH" or (impact == "MODERATE" and cadd >= MIN_CADD)):
             continue
-        if gen in ACMG_SF:
+        if gene in ACMG_SF:
             acmg.append(r)
-        elif gen in TRATABLES:
-            trat.append(r)
+        elif gene in TREATABLE:
+            treat.append(r)
 
-    def orden(r):
+    def order(r):
         return (-(1 if (r.get("vep_impact") or r.get("impact")) == "HIGH" else 0),
                 -fnum(r.get("cadd")))
 
-    acmg.sort(key=orden)
-    trat.sort(key=orden)
+    acmg.sort(key=order)
+    treat.sort(key=order)
 
-    if acmg or trat:
-        cols = list((acmg or trat)[0].keys())
+    if acmg or treat:
+        cols = list((acmg or treat)[0].keys())
         with open(OUT_TSV, "w", newline="") as f:
             w = csv.DictWriter(f, fieldnames=cols, delimiter="\t")
             w.writeheader()
-            for r in acmg + trat:
+            for r in acmg + treat:
                 w.writerow(r)
 
-    def bloque(titulo, lista, notas=None):
-        L = ["", titulo, "-" * len(titulo), ""]
-        if not lista:
-            L.append("  (ninguno)")
+    def block(title, items, notes=None):
+        L = ["", title, "-" * len(title), ""]
+        if not items:
+            L.append("  (none)")
             return L
-        for r in lista:
-            gen = r["gene"]
-            af = r.get("gnomad_af") or "AUSENTE"
-            L.append("  {}  {}:{} {}>{}".format(gen, r["chrom"], r["pos"], r["ref"], r["alt"]))
-            L.append("     {}  |  impacto {}  |  CADD {}".format(
+        for r in items:
+            gene = r["gene"]
+            af = r.get("gnomad_af") or "ABSENT"
+            L.append("  {}  {}:{} {}>{}".format(gene, r["chrom"], r["pos"], r["ref"], r["alt"]))
+            L.append("     {}  |  impact {}  |  CADD {}".format(
                 r.get("vep_consequence", "."),
                 r.get("vep_impact") or r.get("impact") or ".",
                 r.get("cadd") or "."))
             L.append("     {}".format(r.get("vep_hgvsp", ".")))
             L.append("     gnomAD {}  |  {}  |  ClinVar: {}".format(
                 af, r.get("rsid", "."), r.get("clinvar", ".")))
-            L.append("     genotipo {}  DP {}  GQ {}".format(
+            L.append("     genotype {}  DP {}  GQ {}".format(
                 r.get("gt", "."), r.get("dp", "."), r.get("gq", ".")))
-            if notas and gen in notas:
-                L.append("     relevancia: {}".format(notas[gen]))
+            if notes and gene in notes:
+                L.append("     relevance: {}".format(notes[gene]))
             L.append("")
         return L
 
     L = ["=" * 78,
-         " 07 - HALLAZGOS SECUNDARIOS CANDIDATOS",
+         " 07 - CANDIDATE SECONDARY FINDINGS",
          "=" * 78,
          "",
-         "Gen causal primario (excluido de esta lista): {}".format(primario),
-         "Variantes raras evaluadas: {:,}".format(len(rows)),
+         "Primary causal gene (excluded from this list): {}".format(primary),
+         "Rare variants evaluated: {:,}".format(len(rows)),
          "",
-         "CRITERIO: impacto HIGH, o MODERATE con CADD >= {}".format(CADD_MIN)]
-    L += bloque("A) Genes de la lista ACMG SF v3.2 (consenso internacional)", acmg)
-    L += bloque("B) Genes con enfermedad tratable (criterio propio, no consenso)",
-                trat, TRATABLES)
+         "CRITERION: HIGH impact, or MODERATE with CADD >= {}".format(MIN_CADD)]
+    L += block("A) ACMG SF v3.2 genes (international consensus)", acmg)
+    L += block("B) Genes with treatable disease (own judgement, not consensus)",
+               treat, TREATABLE)
     L += ["",
           "=" * 78,
-          " LIMITE DECLARADO",
+          " DECLARED LIMIT",
           "=" * 78,
           "",
-          "  Esto NO es un reporte clinico. Es una lista de candidatos para",
-          "  revision humana. Un hallazgo secundario reportable exige:",
+          "  This is NOT a clinical report. It is a list of candidates for human",
+          "  review. A reportable secondary finding requires:",
           "",
-          "    - confirmacion ortogonal de la variante",
-          "    - clasificacion ACMG completa por un profesional",
-          "    - correlacion con historia clinica y familiar",
-          "    - consejo genetico antes de cualquier comunicacion",
+          "    - orthogonal confirmation of the variant",
+          "    - full ACMG classification by a professional",
+          "    - correlation with clinical and family history",
+          "    - genetic counselling before any communication",
           "",
-          "  Se reporta como hipotesis para seguimiento, nunca como diagnostico.",
+          "  Reported as hypotheses for follow-up, never as a diagnosis.",
           "",
-          "  Fuente de la lista A: ACMG SF v3.2, Miller et al., Genet Med 2023.",
-          "  La lista B es criterio propio y se declara como tal.",
+          "  Source of list A: ACMG SF v3.2, Miller et al., Genet Med 2023.",
+          "  List B is our own judgement and is declared as such.",
           "",
           "  -> {}".format(OUT_TSV)]
 

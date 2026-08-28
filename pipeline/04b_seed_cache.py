@@ -1,27 +1,27 @@
 #!/usr/bin/env python3
 """
 ==============================================================================
-04b_seed_cache.py - Reconstruye el cache de VEP desde una corrida previa
+04b_seed_cache.py - Rebuild the VEP cache from a previous run
 
-ENTRADA : $WORK/04_annotated_candidates.tsv
-SALIDA  : $WORK/04_vep_cache.jsonl
+INPUT  : $WORK/04_annotated_candidates.tsv
+OUTPUT : $WORK/04_vep_cache.jsonl
 
-PROPOSITO
----------
-Utilidad de recuperacion. La primera version de 04_frequency_clinical.py no
-persistia resultados por lote: escribia todo al final. En esa corrida, 3 de 47
-lotes fallaron con HTTP 500 de Ensembl y sus 600 variantes quedaron sin anotar,
-pero las otras 8.784 si se anotaron bien.
+PURPOSE
+-------
+Recovery utility. The first version of 04_frequency_clinical.py did not persist
+results per batch: it wrote everything at the end. In that run, 3 of 47 batches
+failed with HTTP 500 from Ensembl and their 600 variants were left unannotated,
+while the other 8,784 were annotated correctly.
 
-Reejecutar la etapa entera para recuperar 600 variantes seria tirar 40 minutos
-de consultas validas. Este script siembra el cache incremental con lo que ya
-se anoto correctamente, para que al volver a correr la etapa 04 solo se pidan
-a Ensembl las variantes que realmente faltan.
+Re-running the whole stage to recover 600 variants would throw away 40 minutes
+of valid queries. This script seeds the incremental cache with what was already
+annotated, so re-running stage 04 asks Ensembl only for what is genuinely
+missing.
 
-Detecta "sin respuesta de VEP" cuando TODOS los campos anotados vienen vacios:
-sin consecuencia, sin rsID, sin transcrito MANE y sin CADD.
+A variant counts as "no VEP response" when every annotated field is empty: no
+consequence, no rsID, no MANE transcript and no CADD.
 
-Se puede correr las veces que haga falta: es idempotente.
+Idempotent - safe to run as many times as needed.
 ==============================================================================
 """
 import csv
@@ -34,40 +34,40 @@ IN_TSV = BASE + "/work/04_annotated_candidates.tsv"
 CACHE = BASE + "/work/04_vep_cache.jsonl"
 
 
-def sin_respuesta(r):
-    """True si VEP no devolvio nada para esta variante."""
-    vacio = (".", "", None)
-    return (r.get("vep_consequence") in vacio
-            and r.get("rsid") in vacio
-            and r.get("mane") in vacio
+def no_response(r):
+    """True when VEP returned nothing for this variant."""
+    empty = (".", "", None)
+    return (r.get("vep_consequence") in empty
+            and r.get("rsid") in empty
+            and r.get("mane") in empty
             and not r.get("cadd"))
 
 
 def main():
     if not os.path.exists(IN_TSV):
-        sys.exit("falta " + IN_TSV + " - no hay corrida previa para sembrar")
+        sys.exit("missing " + IN_TSV + " - no previous run to seed from")
 
-    ya = set()
+    already = set()
     if os.path.exists(CACHE):
         with open(CACHE, encoding="utf-8") as f:
             for line in f:
                 try:
-                    ya.add(json.loads(line)["key"])
+                    already.add(json.loads(line)["key"])
                 except Exception:
                     continue
-        print("cache existente: {:,} entradas".format(len(ya)))
+        print("existing cache: {:,} entries".format(len(already)))
 
     rows = list(csv.DictReader(open(IN_TSV), delimiter="\t"))
-    sembradas = faltantes = repetidas = 0
+    seeded = missing = duplicate = 0
 
     with open(CACHE, "a", encoding="utf-8") as out:
         for r in rows:
             key = "{}_{}_{}_{}".format(r["chrom"], r["pos"], r["ref"], r["alt"])
-            if sin_respuesta(r):
-                faltantes += 1
+            if no_response(r):
+                missing += 1
                 continue
-            if key in ya:
-                repetidas += 1
+            if key in already:
+                duplicate += 1
                 continue
             af = r.get("gnomad_af")
             cadd = r.get("cadd")
@@ -84,21 +84,21 @@ def main():
                 "gene": r.get("gene", "."),
             }
             out.write(json.dumps({"key": key, "ann": ann}) + "\n")
-            ya.add(key)
-            sembradas += 1
+            already.add(key)
+            seeded += 1
 
     print("=" * 60)
-    print(" 04b - SIEMBRA DEL CACHE DE VEP")
+    print(" 04b - SEED THE VEP CACHE")
     print("=" * 60)
-    print("  filas leidas          {:>8,}".format(len(rows)))
-    print("  sembradas al cache    {:>8,}".format(sembradas))
-    print("  ya estaban            {:>8,}".format(repetidas))
-    print("  SIN anotar (a pedir)  {:>8,}".format(faltantes))
+    print("  rows read             {:>8,}".format(len(rows)))
+    print("  seeded into cache     {:>8,}".format(seeded))
+    print("  already present       {:>8,}".format(duplicate))
+    print("  UNannotated (to ask)  {:>8,}".format(missing))
     print()
     print("  -> " + CACHE)
     print()
-    print("  Ahora corre de nuevo 04_frequency_clinical.py:")
-    print("  solo va a consultar a Ensembl las {:,} que faltan.".format(faltantes))
+    print("  Now re-run 04_frequency_clinical.py: it will query Ensembl")
+    print("  for the {:,} missing variants only.".format(missing))
 
 
 if __name__ == "__main__":

@@ -1,26 +1,26 @@
 ==============================================================
- QC BASELINE — 2026-08-27T18:33:21-04:00
+ QC BASELINE - 2026-08-27T21:52:27-04:00
 ==============================================================
 
-## Muestra
+## Sample
   WGS_EX2312012
 
-## Referencia declarada en el header
+## Reference declared in the header
   ##reference=file://refGenome/GCA_000001405.15_GRCh38_no_alt_analysis_set_plus_hs38d1_maskedGRC_exclusions_v2_no_chr.fasta
   ##reference=file://refGenome/genome.fasta
 
 ## Caller
   GATK Version="4.2.4.0"
-  lineas GATKCommandLine: 1
+  GATKCommandLine lines: 1
 
-## Naming de contigs (CRITICO para el submission)
+## Contig naming (CRITICAL for the submission)
   ##contig=<ID=1,length=248956422,assembly=unknown>
   ##contig=<ID=2,length=242193529,assembly=unknown>
   ##contig=<ID=3,length=198295559,assembly=unknown>
   total contigs: 2580
-  ESTILO: Ensembl (SIN prefijo chr) -> el submission necesita anteponer 'chr'
+  STYLE: Ensembl (NO chr prefix) -> the submission must prepend 'chr'
 
-## Campos FORMAT disponibles
+## Available FORMAT fields
   ##FORMAT=<ID=AD,Number=R,Type=Integer
   ##FORMAT=<ID=DP,Number=1,Type=Integer
   ##FORMAT=<ID=GQ,Number=1,Type=Integer
@@ -29,7 +29,7 @@
   ##FORMAT=<ID=PID,Number=1,Type=String
   ##FORMAT=<ID=PL,Number=G,Type=Integer
 
-## Filtros definidos
+## Declared filters
   ##FILTER=<ID=PASS,Description="All filters passed">
   ##FILTER=<ID=FS60,Description="FS > 60.0">
   ##FILTER=<ID=LowQual,Description="Low quality">
@@ -38,6 +38,6 @@
   ##FILTER=<ID=QD2,Description="QD < 2.0">
   ##FILTER=<ID=RPRS-8,Description="ReadPosRankSum < -8.0">
 
-## Conteos
-  totales : 5012204
-  PASS    : 4740790
+## Counts
+  total : 5012204
+  PASS  : 4740790

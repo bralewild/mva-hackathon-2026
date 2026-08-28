@@ -1,34 +1,34 @@
 #!/usr/bin/env python3
 """
 ==============================================================================
-05_phenotype_rank.py - Ranking de genes candidatos por similitud fenotipica
+05_phenotype_rank.py - Rank candidate genes by phenotype similarity
 
-ENTRADA : $WORK/04_rare_candidates.tsv
-          $RAW/patient_hpo.tsv          (terminos HPO del paciente)
-SALIDA  : $RESULTS/05_ranked_genes.tsv
-          $RESULTS/05_ranking_report.txt
+INPUT  : $WORK/04_rare_candidates.tsv
+         $RAW/patient_hpo.tsv          (the patient's HPO terms)
+OUTPUT : $RESULTS/05_ranked_genes.tsv
+         $RESULTS/05_ranking_report.txt
 
-PROPOSITO
----------
-Ultimo paso de la busqueda CIEGA. Hasta aca el pipeline redujo 5.012.204
-variantes a un conjunto de genes con variantes raras y potencialmente daninas,
-sin saber nada de la enfermedad. Ahora se ordenan esos genes por cuanto se
-parece su fenotipo conocido al del paciente.
+PURPOSE
+-------
+Final step of the blind search. Up to here the pipeline reduced 5,012,204
+variants to a set of genes carrying rare, potentially damaging variants, with no
+knowledge of the disease. Those genes are now ordered by how closely their known
+phenotype resembles the patient's.
 
-METODO
+METHOD
 ------
-Similitud semantica tipo Resnik sobre la ontologia HPO:
+Resnik semantic similarity over the HPO ontology:
 
-  IC(t)      = -log( genes_anotados_a_t_o_sus_descendientes / total_genes )
-  sim(a, b)  = max IC sobre los ancestros comunes de a y b
-  score(gen) = media sobre los terminos del paciente de
-               max_b sim(termino_paciente, b)  con b en los terminos del gen
+  IC(t)      = -log( genes annotated to t or its descendants / total genes )
+  sim(a, b)  = max IC over the common ancestors of a and b
+  score(gene)= mean over the patient's terms of
+               max_b sim(patient_term, b)  for b in the gene's terms
 
-Se usa la MEDIA y no la suma para no premiar a genes con muchas anotaciones.
-Es el mismo principio detras de Phenomizer y del priorizador de Exomiser,
-implementado de forma explicita y auditable.
+The MEAN (not the sum) is used so that genes with many annotations are not
+rewarded for volume. This is the principle behind Phenomizer and the Exomiser
+prioritiser, implemented explicitly and auditably.
 
-FUENTES (publicas, no son datos del paciente -> viven en $ANNOT):
+SOURCES (public, not patient data -> stored in $ANNOT):
   hp.obo                  https://purl.obolibrary.org/obo/hp.obo
   genes_to_phenotype.txt  https://purl.obolibrary.org/obo/hp/hpoa/
 ==============================================================================
@@ -54,18 +54,18 @@ SRC = {
 
 
 def fetch(name, url):
-    """Descarga un recurso publico a $ANNOT si no esta ya."""
+    """Download a public resource into $ANNOT unless it is already there."""
     path = os.path.join(ANNOT, name)
     if os.path.exists(path) and os.path.getsize(path) > 100000:
         return path
     os.makedirs(ANNOT, exist_ok=True)
-    print("  descargando " + name + " ...", file=sys.stderr)
+    print("  downloading " + name + " ...", file=sys.stderr)
     urllib.request.urlretrieve(url, path)
     return path
 
 
 def parse_obo(path):
-    """Devuelve (parents, names). Descarta terminos obsoletos."""
+    """Return (parents, names). Obsolete terms are discarded."""
     parents = collections.defaultdict(set)
     names = {}
     tid = None
@@ -89,7 +89,7 @@ def parse_obo(path):
 
 
 def ancestors(term, parents, cache):
-    """Cierre transitivo de ancestros, incluyendo el propio termino."""
+    """Transitive closure of ancestors, including the term itself."""
     if term in cache:
         return cache[term]
     out = {term}
@@ -104,7 +104,7 @@ def ancestors(term, parents, cache):
 
 
 def load_gene_annotations(path):
-    """gen -> set de terminos HPO, detectando columnas por cabecera."""
+    """gene -> set of HPO terms, detecting columns from the header."""
     gene_terms = collections.defaultdict(set)
     with open(path, encoding="utf-8") as f:
         hdr = f.readline().lstrip("#").rstrip("\n").split("\t")
@@ -131,9 +131,9 @@ def load_patient_terms(path):
 
 def main():
     if not os.path.exists(IN_TSV):
-        sys.exit("falta " + IN_TSV + " - corre antes 04_frequency_clinical.py")
+        sys.exit("missing " + IN_TSV + " - run 04_frequency_clinical.py first")
     if not os.path.exists(HPO_PT):
-        sys.exit("falta " + HPO_PT + " - corre antes 00b_extract_phenotype.py")
+        sys.exit("missing " + HPO_PT + " - run 00b_extract_phenotype.py first")
 
     obo = fetch("hp.obo", SRC["hp.obo"])
     g2p = fetch("genes_to_phenotype.txt", SRC["genes_to_phenotype.txt"])
@@ -142,9 +142,9 @@ def main():
     cache = {}
 
     gene_terms = load_gene_annotations(g2p)
-    print("  genes con anotacion HPO: {:,}".format(len(gene_terms)), file=sys.stderr)
+    print("  genes with HPO annotations: {:,}".format(len(gene_terms)), file=sys.stderr)
 
-    # Contenido de informacion, propagando cada anotacion a sus ancestros
+    # Information content, propagating each annotation to its ancestors
     freq = collections.Counter()
     for terms in gene_terms.values():
         anc = set()
@@ -160,13 +160,13 @@ def main():
         return max((IC.get(c, 0.0) for c in common), default=0.0)
 
     patient = load_patient_terms(HPO_PT)
-    print("  terminos del paciente: {}".format(len(patient)), file=sys.stderr)
+    print("  patient terms: {}".format(len(patient)), file=sys.stderr)
 
     rows = list(csv.DictReader(open(IN_TSV), delimiter="\t"))
     by_gene = collections.defaultdict(list)
     for r in rows:
         by_gene[r["gene"]].append(r)
-    print("  genes candidatos: {:,}".format(len(by_gene)), file=sys.stderr)
+    print("  candidate genes: {:,}".format(len(by_gene)), file=sys.stderr)
 
     def cadd_of(v):
         try:
@@ -213,20 +213,20 @@ def main():
                 w.writerow(d)
 
     lines = ["=" * 96,
-             " 05 - RANKING FENOTIPICO (busqueda ciega)",
+             " 05 - PHENOTYPE RANKING (blind search)",
              "=" * 96,
              "",
-             "## Terminos HPO del paciente"]
+             "## Patient HPO terms"]
     for t in patient:
         lines.append("  {}  {}".format(t, names.get(t, "?")))
     lines += ["",
-              "## Genes candidatos evaluados: {:,}".format(len(scored)),
+              "## Candidate genes evaluated: {:,}".format(len(scored)),
               "",
               "## TOP 25",
               "",
               "{:<4}{:<12}{:<9}{:<6}{:<18}{:<5}{:<10}{:<26}{:<20}{:<7}{}".format(
-                  "#", "GEN", "SCORE", "HPO", "MODELO", "VAR", "IMPACTO",
-                  "MEJOR VARIANTE", "HGVSp", "CADD", "CLINVAR")]
+                  "#", "GENE", "SCORE", "HPO", "MODEL", "VAR", "IMPACT",
+                  "BEST VARIANT", "HGVSp", "CADD", "CLINVAR")]
     for i, d in enumerate(scored[:25], 1):
         lines.append("{:<4}{:<12}{:<9}{:<6}{:<18}{:<5}{:<10}{:<26}{:<20}{:<7}{}".format(
             i,

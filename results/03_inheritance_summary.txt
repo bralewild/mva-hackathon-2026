@@ -1,24 +1,24 @@
 ==================================================================
- 03 — MODELOS DE HERENCIA (busqueda ciega)
+ 03 - INHERITANCE MODELS (blind search)
 ==================================================================
 
-## Embudo
+## Reduction funnel
   total                         5,012,204
-  descartada_filtro               271,414
+  dropped_filter                  271,414
   pass                          4,740,790
-  descartada_ref_o_nocall               0
-  descartada_calidad_gt            64,373
-  descartada_vaf_incoherente      107,395
-  calidad_ok                    4,569,022
-  sin_anotacion                         0
-  impacto_bajo                  4,554,325
-  impacto_alto_o_moderado          14,697
-  zig_het                           9,398
-  zig_hom                           5,299
+  dropped_ref_or_nocall                 0
+  dropped_genotype_quality         64,373
+  dropped_vaf_incoherent          107,395
+  quality_ok                    4,569,022
+  no_annotation                         0
+  low_impact                    4,554,325
+  impact_high_or_moderate          14,697
+  zyg_het                           9,398
+  zyg_hom                           5,299
 
-## Genes por modelo
+## Genes per model
   AR_HOMOZYGOUS           3,483 genes
   AR_COMPOUND_HET         1,338 genes
 
-## Variantes candidatas escritas: 9,145
+## Candidate variants written: 9,145
    -> /home/user/mva/work/03_candidates.tsv

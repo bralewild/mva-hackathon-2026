@@ -1,49 +1,49 @@
 ==============================================================================
- 06 - COMPUERTA DE VALIDACION DE LA BUSQUEDA CIEGA
+ 06 - VALIDATION GATE FOR THE BLIND SEARCH
 ==============================================================================
 
-Las etapas 01-05 corrieron sin conocer la enfermedad.
-Esta etapa evalua el resultado DESPUES de cerrado el ranking.
+Stages 01-05 ran without knowing the disease.
+This stage evaluates the result AFTER the ranking was closed.
 
-## Gen convergente
+## Convergent gene
 
   TOP-1 : BUB1B   score 1.8476
   TOP-2 : ZFP57   score 1.4271
-  margen: 22.8%
+  margin: 22.8%
 
-## Variantes raras en BUB1B
+## Rare variants in BUB1B
 
   15:40209701 T>G
-     stop_gained  |  impacto HIGH  |  CADD 36.0
+     stop_gained  |  impact HIGH  |  CADD 36.0
      ENSP00000287598.7:p.Leu737Ter
      gnomAD 7.867e-05  |  rs759242053  |  ClinVar: likely_pathogenic,pathogenic
-     genotipo 0/1  DP 46  GQ 99  AD 21,25
+     genotype 0/1  DP 46  GQ 99  AD 21,25
 
   15:40220612 T>G
-     missense_variant  |  impacto MODERATE  |  CADD 24.5
+     missense_variant  |  impact MODERATE  |  CADD 24.5
      ENSP00000287598.7:p.Asn1002Lys
-     gnomAD AUSENTE  |  .  |  ClinVar: .
-     genotipo 0/1  DP 28  GQ 99  AD 15,13
+     gnomAD ABSENT  |  .  |  ClinVar: .
+     genotype 0/1  DP 28  GQ 99  AD 15,13
 
-## Criterios de convergencia
+## Convergence criteria
 
-  [OK] Separacion sobre el 2do    22.8% (minimo 15%)
-  [OK] Modelo recesivo            AR_COMPOUND_HET
-  [OK] Par de variantes raras     2 variantes raras
-  [OK] Al menos una HIGH          1 de impacto HIGH
-  [OK] Evidencia independiente    1 en ClinVar patogenica, 2 con CADD>=20.0
+  [OK] Separation over 2nd        22.8% (minimum 15%)
+  [OK] Recessive model            AR_COMPOUND_HET
+  [OK] Pair of rare variants      2 rare variants
+  [OK] At least one HIGH          1 of HIGH impact
+  [OK] Independent evidence       1 pathogenic in ClinVar, 2 with CADD>=20.0
 
-  5 de 5 criterios cumplidos
+  5 of 5 criteria met
 
-  >>> CONVERGENCIA CONFIRMADA <<<
+  >>> CONVERGENCE CONFIRMED <<<
 
-  El pipeline, sin conocer la enfermedad, ordeno BUB1B en primer
-  lugar entre 140 genes candidatos, partiendo de 5.012.204 variantes.
+  Without knowing the disease, the pipeline ranked BUB1B first
+  among 140 candidate genes, starting from 5,012,204 variants.
 
-## Limitaciones que siguen vigentes
+## Limitations that still apply
 
-  - Singleton: sin padres no se puede probar la fase por pedigri.
-    El par se reporta como PRESUNTO en trans.
-  - Solo SNV e indels: el VCF no contiene CNV, SV ni expansiones.
-  - El filtro de impacto descarta intrones profundos y reguladoras.
-  - Un gen sin anotaciones HPO obtiene score 0 aunque fuera el causal.
+  - Singleton: without parents, phase cannot be proven from pedigree.
+    The pair is reported as PRESUMED in trans.
+  - SNVs and indels only: the VCF has no CNVs, SVs or repeat expansions.
+  - The impact filter discards deep intronic and regulatory variants.
+  - A gene with no HPO annotations scores 0 even if it were causal.
