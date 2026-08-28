@@ -1,8 +1,8 @@
 # 3-Minute Pitch Video — script and slides
 
 **Deliverable:** required for Track 2, recommended for Track 1 ([02_compliance.md](02_compliance.md) §7).
-**Runtime:** 2:58 at 150 wpm — never let it pass 3:00.
-**Script length:** 445 spoken words. Slide timings below are derived from the
+**Runtime:** 3:04 at 150 wpm — never let it pass 3:00.
+**Script length:** 458 spoken words. Slide timings below are derived from the
 per-slide counts, not estimated.
 
 The panel scores **rigour 35 % · impact 25 % · innovation 25 % · scalability 15 %**.
@@ -129,38 +129,43 @@ worth more than any diagram.
 
 > Track 2 asks: is there anything we could actually give this child?
 >
-> I built the mechanistic neighbourhood and pulled every reported drug. Nothing
-> survived.
+> I pulled every reported drug for the pathway. Nothing survived.
 >
 > But look at the *shape* of that negative. The forty-three best-evidenced drugs
 > collapse onto four checkpoint genes, and forty-one of them are inhibitors. Not
 > one acts in the direction that would help.
 
-*(56 words · 22 s)*
+*(54 words · 22 s)*
 
 ---
 
-## Slide 6 — Why that is not an accident · 1:53–2:10
+## Slide 6 — Three searches, all pointing the wrong way · 1:53–2:20
 
 > Oncology develops checkpoint inhibitors **precisely to force missegregation**
-> and kill dividing cells.
+> and kill dividing cells. **That is this disease, deliberately induced.**
 >
-> **That is this disease, deliberately induced.**
+> Connectivity Map — needs no drug target — returned **vincristine**.
+> A spindle poison already in his chemotherapy. For his spindle defect.
 >
-> The pharmacology is not missing. It is aimed the wrong way.
+> **Three independent searches. All aimed the wrong way.**
 
 **Say:**
 
-> And that is not a curation accident. Oncology develops checkpoint inhibitors
-> precisely to force missegregation and kill dividing cells — which is this
-> child's disease, deliberately induced. The pharmacology is not missing. It is
-> aimed in exactly the direction that would harm him.
+> And that is not an accident. Oncology develops checkpoint inhibitors precisely
+> to force missegregation and kill dividing cells — this child's disease, induced
+> on purpose.
+>
+> So I ran the standard alternative too. Connectivity Map needs no drug target at
+> all. It returned vincristine — a spindle poison already in his chemotherapy —
+> as a therapy for his spindle defect.
+>
+> Three independent searches. Every one of them aimed the wrong way.
 
-*(42 words · 17 s)*
+*(67 words · 27 s)*
 
 ---
 
-## Slide 7 — So the proposal comes from the variant class · 2:10–2:32
+## Slide 7 — So the proposal comes from the variant class · 2:20–2:42
 
 > One allele is a **premature stop codon** — addressable at the ribosome, not the gene
 >
@@ -184,7 +189,7 @@ worth more than any diagram.
 
 ---
 
-## Slide 8 — What generalises · 2:32–2:58
+## Slide 8 — What generalises · 2:42–3:04
 
 > **Direction filter** — drops drugs that would worsen a loss-of-function disease
 > **Phenotype screen** — needs only the HPO file every rare-disease case already has
@@ -196,14 +201,13 @@ worth more than any diagram.
 **Say:**
 
 > Two pieces generalise: a filter for direction of effect, and a screen against
-> the patient's own phenotype. Neither needs anything a rare-disease case does
-> not already have.
+> the patient's own phenotype.
 >
 > I am not claiming a cure. The expected effect is small, and I say so in the
 > report's first paragraph. But the experiment that would settle it is cheap —
 > and this child deserves someone to run it.
 
-*(64 words · 26 s)*
+*(54 words · 22 s)*
 
 ---
 
@@ -215,19 +219,15 @@ worth more than any diagram.
 | 2 Blind design | 73 | 29 | innovation, scalability |
 | 3 Result | 57 | 23 | rigour, impact |
 | 4 Self-caught error | 76 | 30 | **rigour** |
-| 5 Track 2 search | 56 | 22 | rigour, innovation |
-| 6 The shaped negative | 42 | 17 | **innovation** |
+| 5 Track 2 search | 54 | 22 | rigour, innovation |
+| 6 Three searches converge | 67 | 27 | **innovation** |
 | 7 Phenotype screen | 54 | 22 | innovation, impact |
-| 8 Generalises + close | 64 | 26 | **scalability**, impact |
-| **Total** | **445** | **178** | |
+| 8 Generalises + close | 54 | 22 | **scalability**, impact |
+| **Total** | **458** | **184** | |
 
-**445 words → 2:58 at 150 wpm.** These counts and every slide timing above are
-derived from the script blocks, not typed by hand. If you edit a line,
-re-derive them.
+**458 words → 3:04 at 150 wpm.** These counts and every slide timing above are derived from the script blocks, not typed by hand. If you edit a line, re-derive them.
 
-If you run long on the day, cut in this order: slide 3's *"Four filters"*
-line, then slide 8's *"Neither needs anything…"* sentence. **Never cut slides
-4, 6 or 7** — they carry rigour and innovation, which are 60 % of the score.
+If you run long on the day, cut slide 3's *"Four filters"* line. **Never cut slides 4, 6 or 7** — they carry rigour and innovation, which are 60 % of the score.
 
 ---
 
