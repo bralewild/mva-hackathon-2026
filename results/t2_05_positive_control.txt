@@ -1,0 +1,89 @@
+========================================================================================
+ T2-05 - POSITIVE CONTROL
+========================================================================================
+
+t2_03 returns zero candidates for BUB1B. This stage asks whether the same
+gate returns zero for EVERYTHING - in which case that zero measures the
+filters, not the gene.
+
+Gate: approved AND score >= 0.1 AND >= 2 distinct sources,
+      then the gene-agnostic loss-of-function direction rule.
+
+----------------------------------------------------------------------------------------
+CFTR  -  cystic fibrosis
+----------------------------------------------------------------------------------------
+  associations in DGIdb        : 49
+  ... approved                 : 19
+  ... passing the evidence gate: 7
+  SURVIVING (compensatory)     : 5
+
+  expected drug IVACAFTOR:
+    found      yes (3 rows for this drug; showing the best-annotated)
+    approved   True   score 1.80   sources 5
+    type       'activator,positive modulator' / 'ACTIVATING,ACTIVATING'
+    direction  activates  ->  COMPENSATORY
+    SURVIVES   True
+    rationale  potentiator of the mutated channel; activating a loss-of-function target is by definition the compensatory direction
+
+  survivors:
+    TEZACAFTOR                       score 10.80  sources 5  activates
+    ELEXACAFTOR                      score 6.48  sources 3  activates
+    DEUTIVACAFTOR                    score 2.16  sources 2  activates
+    VANZACAFTOR                      score 2.16  sources 2  activates
+    IVACAFTOR                        score 1.80  sources 5  activates
+
+----------------------------------------------------------------------------------------
+GBA1  -  Gaucher disease type 1
+----------------------------------------------------------------------------------------
+  associations in DGIdb        : 35
+  ... approved                 : 8
+  ... passing the evidence gate: 1
+  SURVIVING (compensatory)     : 0
+
+  expected drug IMIGLUCERASE: NOT PRESENT in DGIdb for this gene.
+    That is a gap in the database, not in the filter.
+
+----------------------------------------------------------------------------------------
+PAH  -  phenylketonuria
+----------------------------------------------------------------------------------------
+  associations in DGIdb        : 7
+  ... approved                 : 5
+  ... passing the evidence gate: 2
+  SURVIVING (compensatory)     : 2
+
+  expected drug SAPROPTERIN:
+    found      yes (2 rows for this drug; showing the best-annotated)
+    approved   True   score 5.67   sources 3
+    type       'activator' / 'ACTIVATING'
+    direction  activates  ->  COMPENSATORY
+    SURVIVES   True
+    rationale  BH4 cofactor; increases residual hydroxylase activity
+
+  survivors:
+    SAPROPTERIN DIHYDROCHLORIDE      score 15.12  sources 2  activates
+    SAPROPTERIN                      score 5.67  sources 3  activates
+
+----------------------------------------------------------------------------------------
+NEGATIVE CONTROL: AURKB  -  must NOT survive
+----------------------------------------------------------------------------------------
+  inhibitor of a checkpoint kinase - must be rejected
+  associations                 : 91
+  passing the evidence gate    : 0
+  SURVIVING                    : 0   (correct)
+
+========================================================================================
+ VERDICT
+========================================================================================
+
+  2 of 3 positive controls returned at least one surviving approved
+  drug, and the negative control returned none.
+
+  The gate is therefore capable of admitting a real approved drug when
+  one exists for the mutated gene, and capable of rejecting one that
+  points the wrong way. BUB1B's zero is a statement about BUB1B.
+
+  Scope: this controls the gate on the MUTATED gene. It does not control
+  the harder case BUB1B actually posed - finding a drug on a network
+  NEIGHBOUR when the mutated gene itself is undruggable.
+
+  -> C:/Users/user/AppData/Local/Temp/claude/c--Users-user-Documents-real-kid-mva-hackathon/e2bbbb4e-7b37-4f7c-b1c3-f49b80045020/scratchpad/t2check\work\t2_05_positive_control.tsv

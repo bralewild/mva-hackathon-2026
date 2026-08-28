@@ -236,6 +236,23 @@ safety screen against the child's own HPO terms, exactly one candidate is both
 marketed and unconflicted — **escin**. Expected effect size is small, and the
 report says so in its first section rather than its last.
 
+### Is the negative real? A positive control
+
+A zero means nothing unless the pipeline can produce a one. The same gate, run
+against loss-of-function diseases that *do* have an approved drug on the
+deficient product:
+
+| Control | Survives | |
+|---|---:|---|
+| **CFTR** — cystic fibrosis | **5** | tezacaftor, elexacaftor, deutivacaftor, vanzacaftor, ivacaftor |
+| **PAH** — phenylketonuria | **2** | sapropterin |
+| **GBA1** — Gaucher type 1 | 0 | imiglucerase absent from DGIdb (biologics gap) |
+| *AURKB* — **negative control** | **0** | 91 associations, correctly rejected |
+
+Two of three pass and the negative control rejects, so **BUB1B's zero is a
+statement about BUB1B, not about the filters**. Ivacaftor is admitted on its own
+annotation, with the pipeline never told what cystic fibrosis is.
+
 ### Two components worth reusing
 
 * **Direction filter** — drops inhibitors that would worsen a loss-of-function
@@ -253,6 +270,7 @@ report says so in its first section rather than its last.
 | `track2/t2_02_drug_evidence.py` | drug–gene evidence across the network (DGIdb v5, Open Targets) |
 | `track2/t2_03_mechanism_filter.py` | evidence gate, direction of effect, safety class |
 | `track2/t2_04_readthrough_branch.py` | PTC context from the MANE CDS + HPO safety screen |
+| `track2/t2_05_positive_control.py` | does the gate admit a real drug when one exists? |
 
 Evidence tables: [results/track2_evidence/](results/track2_evidence/) — committed
 so the negative can be audited.

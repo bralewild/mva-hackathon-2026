@@ -24,6 +24,9 @@ python3 "$D/t2_03_mechanism_filter.py" > /dev/null
 log "===== T2-04 readthrough branch ====="
 python3 "$D/t2_04_readthrough_branch.py" > /dev/null
 
+log "===== T2-05 positive control ====="
+python3 "$D/t2_05_positive_control.py" > /dev/null
+
 log "===== mirroring results ====="
 bash "$D/../sync_results.sh" > /dev/null
 

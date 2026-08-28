@@ -251,7 +251,48 @@ arrest, slippage and tetraploidy, which is why oncology develops these agents.
 "Compensatory" here means *opposes the direction of the lesion*, not *corrects
 the defect*. The distinction is the difference between a sign and a mechanism.
 
-### 3.5 What this negative does and does not establish
+### 3.5 Is the negative real? A positive control
+
+A zero is worthless on its own. A pipeline strict enough to return zero for
+BUB1B might return zero for **every** gene — in which case the number measures
+the filters, not the biology. `t2_05_positive_control.py` tests exactly that:
+the same evidence gate, applied to loss-of-function rare diseases where an
+approved drug does act on the deficient product.
+
+For the mutated gene itself no curated direction knowledge is needed. The rule
+is mechanical and gene-agnostic: **a drug that activates a deficient product is
+compensatory; one that inhibits it is harmful.** That is the portable half of
+the direction filter, and this is where it is tested.
+
+| Control | Assoc. | Approved | Pass gate | **Survive** | |
+|---|---:|---:|---:|---:|---|
+| **CFTR** — cystic fibrosis | 49 | 19 | 7 | **5** | tezacaftor, elexacaftor, deutivacaftor, vanzacaftor, ivacaftor |
+| **PAH** — phenylketonuria | 7 | 5 | 2 | **2** | sapropterin (both salt forms) |
+| **GBA1** — Gaucher type 1 | 35 | 8 | 1 | 0 | imiglucerase absent from DGIdb |
+| *AURKB* — **negative control** | 91 | — | **0** | **0** | correctly rejected |
+
+Ivacaftor is admitted on its own annotation — `activator, positive modulator` /
+`ACTIVATING` — with five distinct sources, and the pipeline reaches
+COMPENSATORY without being told what cystic fibrosis is. AURKB, whose 91
+associations include the best-evidenced compounds in the entire Track 2 result,
+returns zero.
+
+**Two of three positive controls pass and the negative control rejects. The
+BUB1B zero is therefore a statement about BUB1B.**
+
+The third is informative rather than embarrassing. Imiglucerase is an enzyme
+replacement therapy, and DGIdb — built from drug–*target* interaction sources —
+largely does not carry biologics. That is a systematic gap in the database, not
+a failure of the gate, and it is a real limitation of any repurposing search
+built on these resources.
+
+**What this control does not cover.** It validates the gate on the *mutated
+gene*. BUB1B posed the harder problem: BubR1 has no drug at all, so the search
+had to go outward to network neighbours, and nothing here proves the gate would
+recognise a good drug two nodes away. The control bounds the claim; it does not
+remove it.
+
+### 3.6 What this negative does and does not establish
 
 It establishes that **DGIdb contains no well-evidenced, directionally useful,
 approved drug for this network**, and that the well-evidenced pharmacology it
@@ -419,9 +460,14 @@ of a checkpoint gene in a checkpoint-deficiency disease. The **phenotype screen*
 the answer twice here and needs nothing but the HPO file every rare disease case
 already has.
 
-**An honest scope statement**: the code is not gene-agnostic. `t2_01`'s curated
-core, `t2_03`'s direction sets and `t2_04`'s candidate list are specific to this
-pathway and this variant class. What generalises is the *pattern*; porting it to
+**One half of the direction filter is already gene-agnostic.** For the mutated
+gene itself the rule needs no curation — *activating a deficient product is
+compensatory, inhibiting it is harmful* — and §3.5 runs it unchanged against
+CFTR, PAH and GBA1. That part ports to any loss-of-function gene as written.
+
+**An honest scope statement for the rest**: the code is not gene-agnostic.
+`t2_01`'s curated core, `t2_03`'s network direction sets and `t2_04`'s candidate
+list are specific to this pathway and this variant class. What generalises is the *pattern*; porting it to
 another gene means rewriting those three knowledge bases. Claiming otherwise —
 as an earlier draft did — is contradicted by the files a reviewer can open.
 
@@ -444,8 +490,13 @@ as an earlier draft did — is contradicted by the files a reviewer can open.
 6. **The class's clinical record is poor** (§4.4).
 7. **Phase was never proven**; if *cis*, this collapses.
 8. **The search was partial**: DGIdb only, approved drugs only, no
-   signature-based repurposing, no aneuploidy-selective compounds (§3.4).
-9. **The mosaicism screen is inconclusive**, not negative (§2.3).
+   signature-based repurposing, no aneuploidy-selective compounds (§3.6). The
+   positive control (§3.5) shows the gate works on the mutated gene; it does not
+   show it would work two nodes out, which is what BUB1B required.
+9. **DGIdb does not carry biologics.** Enzyme replacement therapy for Gaucher
+   is absent from it entirely — a systematic blind spot of any repurposing
+   search built on drug–target interaction databases.
+10. **The mosaicism screen is inconclusive**, not negative (§2.3).
 
 ---
 
@@ -459,7 +510,7 @@ as an earlier draft did — is contradicted by the files a reviewer can open.
 *Automated*: the 52-target network; all 424 drug–gene associations; the evidence,
 direction and safety-class filters; the PTC sequence context from the Ensembl
 MANE CDS; the phenotype screen that reads the HPO file and reorders candidates;
-the zero-candidate result. *Manual*: the literature identifying readthrough as a
+the positive and negative controls of §3.5; the zero-candidate result. *Manual*: the literature identifying readthrough as a
 variant-class strategy; the curated candidate set; the direction classifications
 in `t2_03`. **No database query returns escin or amlexanox as readthrough agents
 — their activity is a primary-literature property, not a drug–target
@@ -542,8 +593,11 @@ conflicts with nephrocalcinosis, and amlexanox, whose TBK1/IKKε inhibition
 conflicts with an active cancer predisposition — and which has, in any case, no
 marketed product since 2019.
 
-**Strengths.** The negative is computed and auditable, with evidence tables
-committed, and it is a shaped negative rather than an empty one. The direction
+**Strengths.** The negative is computed, auditable and **controlled**: the same
+gate admits the CFTR modulators and sapropterin from their own annotations while
+rejecting all 91 AURKB associations, so the BUB1B zero is a statement about
+BUB1B rather than about the filters. It is a shaped negative rather than an
+empty one. The direction
 filter and the phenotype screen address failure modes naive repurposing does not,
 and both changed the answer here rather than sitting unexercised. The pipeline runs in under two minutes at zero cost,
 and adding the variant-class machinery gives it a working positive control.
@@ -599,7 +653,7 @@ Protocol approved by **WCG IRB #20252010**. Released under **CC BY 4.0**.
 - Loughran G. *et al.* Evidence of efficient stop codon readthrough in four
   mammalian genes. *Nucleic Acids Res* 2014.
 - Tang Y.-C. *et al.* Identification of aneuploidy-selective antiproliferation
-  compounds. *Cell* 2011 — cited, and not pursued (§3.4).
+  compounds. *Cell* 2011 — cited, and not pursued (§3.6).
 - EMA / CHMP public assessment record, Translarna (ataluren), 2024.
 - German Commission E monograph, *Aesculus hippocastanum* seed extract, 1984 /
   1994.
