@@ -1,11 +1,27 @@
 # Submissions
 
-Track 1 deliverables, uploaded to the challenge submission form.
+Deliverables uploaded to the challenge submission forms.
+
+## Track 1 — variant prediction · **SUBMITTED**
+
+> **Scored 100.0 / 100** — F-max 1.000, full match at rank 1.
+> 5 of 6 attempts remain.
 
 | File | Size | Purpose |
 |---|---|---|
-| `bralewild_blind-wgs-triage.csv` | 0.8 KB | ranked variant predictions |
-| `bralewild_track1_report.md` | 15.3 KB | methods report (357 lines) |
+| `bralewild_blind-wgs-triage.csv` | 1.7 KB | ranked variant predictions (7 lines) |
+| `bralewild_track1_report.md` | 26.6 KB | methods report (555 lines) |
+
+## Track 2 — drug repositioning · **NOT YET SUBMITTED**
+
+> **One attempt only.** No resubmission, no correction after the fact.
+
+| File | Size | Purpose |
+|---|---|---|
+| `bralewild_track2_report.md` | 33.9 KB | mechanism → candidate report (659 lines) |
+
+Supporting evidence for Track 2 is in [../results/track2_evidence/](../results/track2_evidence/)
+so the negative result can be audited rather than taken on trust.
 
 Both are committed here. The Official Rules release submissions under
 **CC BY 4.0**, and a repository with its results redacted reads as incomplete to
@@ -21,6 +37,7 @@ a reviewer.
 ```
 <hf-username>_<model-name>.csv     ->  bralewild_blind-wgs-triage.csv
 <hf-username>_track1_report.md     ->  bralewild_track1_report.md
+<hf-username>_track2_report.md     ->  bralewild_track2_report.md
 ```
 
 ## CSV format (verified against `tabs/submit_track1.py` and `evaluation.py`)
