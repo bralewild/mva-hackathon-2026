@@ -79,6 +79,21 @@ There is a second reason. If the VCF lived inside this repository, a careless
 `git add .` would publish a child's genome. The file **not being here** is
 defence in depth; `.gitignore` is the second line, not the first.
 
+### Reaching the data from Windows
+
+1. **`results/`** — lightweight reports are mirrored here by
+   `pipeline/sync_results.sh`, so they open like any project file
+2. **UNC path** — paste into Explorer or open as a folder in VS Code:
+
+   ```
+   \\wsl.localhost\Ubuntu-24.04\home\user\mva
+   ```
+
+   Pin it to Explorer's Quick Access once and it stays one click away. A `.lnk`
+   shortcut is not used: `WScript.Shell` normalises `\\wsl.localhost\...` into a
+   broken `C:\wsl.localhost\...` target, and a machine-specific shortcut does
+   not belong in a shared repository anyway.
+
 ---
 
 ## Pipeline

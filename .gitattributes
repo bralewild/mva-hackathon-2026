@@ -7,4 +7,4 @@
 *.md   text eol=lf
 *.csv  text eol=lf
 *.tsv  text eol=lf
-*.lnk  binary
+

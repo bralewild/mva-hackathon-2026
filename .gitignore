@@ -41,11 +41,6 @@ results/07_secondary_findings.txt
 results/*.html
 results/*.genes.txt
 
-# ---- 2. Local convenience, not project code ---------------------------------
-# Shortcut to the data inside WSL: a broken path for anyone else, and it leaks
-# this machine's layout.
-DATA-IN-WSL.lnk
-
 # ---- Housekeeping ------------------------------------------------------------
 __pycache__/
 *.pyc
