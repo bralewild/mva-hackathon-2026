@@ -1,0 +1,68 @@
+========================================================================================
+ T2-02 - DRUG-GENE EVIDENCE ACROSS THE TARGET NETWORK
+========================================================================================
+
+Targets queried              : 61
+Targets with any association : 18
+Targets with NO association  : 43
+
+Associations returned        : 668
+  with an approved drug      : 125
+  with a declared interaction type : 195  (29%)
+
+Open Targets tractability for BUB1B:
+  Database Ubiquitination, Druggable Family, High-Quality Ligand, Literature, UniProt Ubiquitination
+
+THE CAUSAL GENE ITSELF
+----------------------
+
+  No drug-gene association is reported for BUB1B in DGIdb.
+
+  This is a result, not a gap: BubR1 is not a target any existing drug
+  acts on. Any therapeutic hypothesis must therefore either act on the
+  network around it, or bypass the protein entirely - which is what the
+  readthrough branch (t2_04) does by acting on the ribosome.
+
+APPROVED DRUGS ACROSS THE NETWORK (top 30 by score)
+--------------------------------------------------
+
+  GENE     DRUG                              TYPE                SCORE   SRC
+  MAD1L1   CARBOPLATIN                       -                    0.60     1
+  MAD1L1   PACLITAXEL PROTEIN-BOUND          -                    0.45     1
+  CDK1     CINNARIZINE                       -                    0.11     1
+  CDK1     CLOFIBRATE                        -                    0.09     1
+  CDK1     SERTRALINE HYDROCHLORIDE          -                    0.06     1
+  AURKB    COPANLISIB                        -                    0.06     1
+  NEK2     PAZOPANIB                         -                    0.06     1
+  AURKB    BELUMOSUDIL                       -                    0.06     1
+  NEK2     PALBOCICLIB                       -                    0.05     1
+  CDK1     FENOFIBRATE MICRONIZED            -                    0.05     1
+  PLK1     SUCCIMER                          -                    0.04     1
+  CDK1     CLOTRIMAZOLE                      -                    0.03     1
+  PLK1     HYDROXYZINE PAMOATE               -                    0.03     1
+  PLK1     OLEIC ACID                        -                    0.03     1
+  PLK1     TOPOTECAN HYDROCHLORIDE           -                    0.03     1
+  CDK1     RUCAPARIB                         -                    0.03     1
+  PLK1     STAVUDINE                         -                    0.02     1
+  AURKB    LAPATINIB                         -                    0.02     1
+  PLK1     IDARUBICIN HYDROCHLORIDE          -                    0.02     1
+  PLK1     ACITRETIN                         -                    0.02     1
+  PLK1     BENZBROMARONE                     -                    0.02     1
+  PLK1     CEFACLOR ANHYDROUS                -                    0.02     1
+  PLK1     INAMRINONE                        -                    0.02     1
+  PLK1     OXYTETRACYCLINE ANHYDROUS         -                    0.01     1
+  PLK1     APOMORPHINE HYDROCHLORIDE         -                    0.01     1
+  PLK1     ERYTHROMYCIN                      -                    0.01     1
+  AURKB    PAZOPANIB                         -                    0.01     1
+  PLK1     LANSOPRAZOLE                      -                    0.01     1
+  AURKB    VANDETANIB                        -                    0.01     1
+  AURKB    ENTRECTINIB                       -                    0.01     1
+
+Targets with no reported drug association:
+
+  BUB1B, BUB3, CDC20, KNL1, MAD2L1, ANAPC1, ANAPC10, ANAPC2, ANAPC4, ANAPC7, CDC16, CDC23, CDC27, CENPF, ANAPC11, ANAPC13, ANAPC15, ANAPC16, ANAPC5, CCNB2, CDC26, CDCA8, ESPL1, FZR1, NDC80, NUF2, NUSAP1, PPP2R5A, PPP2R5C, SGO1, SKA1, SKA3, UBE2C, ZWINT, CENPA, DLGAP5, ASPM, KIF2C, TRIM33, KIF20A, KIF4A, SPDL1, ZWILCH
+
+  -> /home/user/mva/work/t2_02_drug_evidence.tsv
+
+Interpretation is deliberately deferred to t2_03. This stage records
+what the databases say; the next one decides what any of it is worth.

@@ -1,0 +1,53 @@
+========================================================================================
+ T2-03 - MECHANISTIC FILTER
+========================================================================================
+
+The disease is a LOSS of BubR1 function. A drug is only a candidate if it
+pushes the mechanism in the opposing direction. Direction is not a detail
+here - it decides whether a drug would help or make the lesion worse.
+
+## Funnel
+
+  associations recorded                   668
+  with an approved drug                   125
+  ... of which carry a direction           15  (12%)
+
+  dropped - single source / low score     114
+  dropped - acute cytotoxic only            1
+  dropped - direction unknown               7
+  dropped - direction HARMFUL               0
+  dropped - no directional argument         3
+  --------------------------------------------
+  SURVIVING CANDIDATES                      0
+
+## No candidate survives
+
+  Target-based repurposing does not produce a usable candidate for this
+  lesion, and the reason is structural rather than accidental:
+
+  1. BubR1 itself has no drug. The Mitotic Checkpoint Complex and the
+     entire APC/C are a pharmacological desert - 43 of 61 network members
+     have no reported drug association at all.
+
+  2. The direction that would help is the direction nobody has drugs for.
+     Inhibiting CDC20 or the APC/C would substitute for the lost BubR1
+     restraint on anaphase. Those are exactly the nodes with zero drugs.
+
+  3. The direction that IS available is the harmful one. Inhibitors of
+     BUB1, TTK, AURKB, PLK1 and CDK1 exist because oncology wants to push
+     cancer cells past a checkpoint. In a child whose checkpoint is
+     already failing, that is the wrong way round.
+
+  4. What remains is single-source text mining. Every approved-drug
+     association in this network is backed by exactly one source, with
+     scores of 0.01-0.60 - associations like PLK1-erythromycin or
+     PLK1-lansoprazole are not pharmacology.
+
+  This negative is the argument for the next stage. A therapy for this
+  variant has to bypass the pathway entirely rather than act within it.
+
+## What was dropped, and why - the harmful ones are worth naming
+
+  (none reached this filter - they were dropped earlier for weak evidence)
+
+  -> /home/user/mva/work/t2_03_filtered.tsv
