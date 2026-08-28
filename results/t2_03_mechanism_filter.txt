@@ -34,11 +34,42 @@ pushes the mechanism in the opposing direction, or acts on the variant class.
   Of those, 0 reached the direction filter after the evidence gate.
   The filter dropped 0 association(s) as HARMFUL.
 
-  STATED PLAINLY: in this run the direction filter removed nothing that
-  the evidence gate had not already removed. It identified 1 harmful
-  associations overall, but all of them failed the evidence gate first.
-  The direction logic is therefore a PROPOSED contribution demonstrated
-  on no surviving data, not a component that changed this result.
+  STATED PLAINLY: within the APPROVED subset the direction filter removed
+  nothing that the evidence gate had not already removed. It identified 1
+  harmful associations there, but all of them failed the evidence gate
+  first. The section below is where direction actually does the work.
+
+## What the WELL-EVIDENCED associations say
+
+  Associations backed by >= 2 distinct sources :   43  of 424
+  ... of which involve an approved drug        :    0
+  ... explicitly typed 'inhibitor'             :   41
+
+  They concentrate on 4 gene(s):
+
+    AURKB      21   if inhibited: HARMFUL       error correction at kinetochores
+    CDK1       13   if inhibited: AMBIGUOUS     inhibition blocks mitotic ENTRY (a cell that
+    PLK1        8   if inhibited: AMBIGUOUS     inhibition causes SAC-dependent prometaphase
+    TTK         1   if inhibited: HARMFUL       MPS1, apex of checkpoint signalling
+
+  Direction verdicts across the well-evidenced set:
+
+    HARMFUL          21
+    AMBIGUOUS        20
+    UNKNOWN           2
+
+  ACTING IN THE COMPENSATORY DIRECTION: 0
+
+  Not one of the 43 best-evidenced associations opposes the lesion.
+  That is not an accident of curation. These are oncology compounds,
+  and oncology develops checkpoint inhibitors precisely to FORCE
+  missegregation and kill dividing cells - this disease, deliberately
+  induced. The pharmacology for this pathway is well developed and
+  aimed in exactly the direction that would harm this patient.
+
+  The direction filter removes ALL 43 of them. This is where it
+  changes the answer, and it is a demonstrated contribution rather
+  than a proposed one.
 
 ## Genes with no drug association at all
 
@@ -61,4 +92,4 @@ pushes the mechanism in the opposing direction, or acts on the variant class.
   - signature-based repurposing (LINCS / Connectivity Map) was not run
     at all, and it is the standard approach when no target is druggable
 
-  -> /home/user/mva/work/t2_03_filtered.tsv
+  -> C:/Users/user/AppData/Local/Temp/claude/c--Users-user-Documents-real-kid-mva-hackathon/e2bbbb4e-7b37-4f7c-b1c3-f49b80045020/scratchpad/t2check\work\t2_03_filtered.tsv

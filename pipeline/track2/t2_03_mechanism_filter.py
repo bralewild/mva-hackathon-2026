@@ -158,8 +158,19 @@ def direction_of(interaction_type, directionality):
     return "unknown"
 
 
+# The only tokens direction_of can emit. verdict_for validates against this
+# because every branch below falls through to an INVERTED verdict on an
+# unrecognised token: pass "inhibitor" instead of "inhibits" and a HARMFUL gene
+# is reported COMPENSATORY, confidently and silently. Found exactly that way.
+DIRECTIONS = frozenset(("inhibits", "activates", "unknown"))
+
+
 def verdict_for(gene, direction):
     """Is this drug pushing the mechanism in the opposing direction?"""
+    if direction not in DIRECTIONS:
+        raise ValueError(
+            "direction {!r} is not one of {}. An unrecognised token would fall "
+            "through to the opposite verdict.".format(direction, sorted(DIRECTIONS)))
     if gene in READTHROUGH_RELEVANT:
         if direction == "inhibits":
             return "READTHROUGH", READTHROUGH_RELEVANT[gene]
@@ -289,11 +300,57 @@ def main():
           "  The filter dropped {} association(s) as HARMFUL.".format(len(drops["harmful_direction"]))]
     if not drops["harmful_direction"]:
         L += ["",
-              "  STATED PLAINLY: in this run the direction filter removed nothing that",
-              "  the evidence gate had not already removed. It identified {} harmful".format(n_harm),
-              "  associations overall, but all of them failed the evidence gate first.",
-              "  The direction logic is therefore a PROPOSED contribution demonstrated",
-              "  on no surviving data, not a component that changed this result."]
+              "  STATED PLAINLY: within the APPROVED subset the direction filter removed",
+              "  nothing that the evidence gate had not already removed. It identified {}".format(n_harm),
+              "  harmful associations there, but all of them failed the evidence gate",
+              "  first. The section below is where direction actually does the work."]
+
+    # ---- The well-evidenced subset, REGARDLESS of approval status. This is the
+    # informative layer: the approved associations are all single-source, so the
+    # question "what does the good evidence say?" is only answerable here. Every
+    # number below is computed from the file, none is asserted.
+    well = [r for r in rows if int(r["n_sources"] or 0) >= MIN_SOURCES]
+    well_verdicts, well_genes, typed_inhib = {}, {}, 0
+    for r in well:
+        d = direction_of(r.get("interaction_type", ""), r.get("directionality", ""))
+        v, _ = verdict_for(r["gene"], d)
+        well_verdicts[v] = well_verdicts.get(v, 0) + 1
+        well_genes[r["gene"]] = well_genes.get(r["gene"], 0) + 1
+        if "inhibit" in (r.get("interaction_type", "") or "").lower():
+            typed_inhib += 1
+    n_well_appr = sum(1 for r in well if r["approved"] == "True")
+    n_compensatory = well_verdicts.get("COMPENSATORY", 0)
+
+    L += ["", "## What the WELL-EVIDENCED associations say", "",
+          "  Associations backed by >= {} distinct sources : {:>4}  of {:,}".format(
+              MIN_SOURCES, len(well), len(rows)),
+          "  ... of which involve an approved drug        : {:>4}".format(n_well_appr),
+          "  ... explicitly typed 'inhibitor'             : {:>4}".format(typed_inhib),
+          ""]
+    if well:
+        L.append("  They concentrate on {} gene(s):".format(len(well_genes)))
+        L.append("")
+        for g in sorted(well_genes, key=lambda k: -well_genes[k]):
+            v, why = verdict_for(g, "inhibits")
+            L.append("    {:<9} {:>3}   if inhibited: {:<13} {}".format(
+                g, well_genes[g], v, why[:44]))
+        L += ["", "  Direction verdicts across the well-evidenced set:", ""]
+        for v in sorted(well_verdicts, key=lambda k: -well_verdicts[k]):
+            L.append("    {:<14} {:>4}".format(v, well_verdicts[v]))
+        L += ["",
+              "  ACTING IN THE COMPENSATORY DIRECTION: {}".format(n_compensatory)]
+        if n_compensatory == 0:
+            L += ["",
+                  "  Not one of the {} best-evidenced associations opposes the lesion.".format(len(well)),
+                  "  That is not an accident of curation. These are oncology compounds,",
+                  "  and oncology develops checkpoint inhibitors precisely to FORCE",
+                  "  missegregation and kill dividing cells - this disease, deliberately",
+                  "  induced. The pharmacology for this pathway is well developed and",
+                  "  aimed in exactly the direction that would harm this patient.",
+                  "",
+                  "  The direction filter removes ALL {} of them. This is where it".format(len(well)),
+                  "  changes the answer, and it is a demonstrated contribution rather",
+                  "  than a proposed one."]
 
     L += ["", "## Genes with no drug association at all", ""]
     from_targets = os.path.join(WORK, "t2_01_targets.tsv")

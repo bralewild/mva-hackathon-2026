@@ -1,487 +1,566 @@
-# Track 2 — Drug Repositioning: Methods Report
+# Track 2 — Drug Repositioning for biallelic *BUB1B*
 
 **Participant:** `bralewild` (individual)
-**Track 1 result this builds on:** biallelic *BUB1B* — `NM_001211.6:c.2210T>G`
-(p.Leu737Ter) and `c.3006T>G` (p.Asn1002Lys), scored 100/100 with F-max 1.000
-**Code:** see repository README; Track 2 pipeline in `pipeline/track2/`
+**Builds on Track 1:** biallelic *BUB1B* — `NM_001211.6:c.2210T>G` (p.Leu737Ter)
+and `c.3006T>G` (p.Asn1002Lys), scored 100/100, F-max 1.000
+**Code:** `pipeline/track2/` · evidence tables in `results/track2_evidence/`
 **Date:** 2026-08-28
 
 ---
 
-## 1. The proposal in one paragraph
+## 1. The proposal
 
-The lesion is a loss of BubR1 function in an undruggable protein complex. A
-systematic search across the entire spindle assembly checkpoint and APC/C —
-61 targets, 668 drug–gene associations — returns **zero viable candidates**, and
-the reasons are structural rather than accidental. That negative is the argument
-for the proposal: do not act on the pathway, act on the ribosome.
+**Escin** (β-aescin), a marketed triterpene saponin, is the single candidate that
+is simultaneously (a) evidenced for translational readthrough, (b) currently
+available as a medicine, and (c) free of any liability contraindicated by this
+child's own phenotype.
 
-**Lead candidate: amlexanox** — an FDA-approved anti-inflammatory reported to
-act simultaneously as a translational readthrough inducer *and* a
-nonsense-mediated decay inhibitor. One allele carries a premature termination
-codon; the transcript is NMD-degraded; readthrough alone would have no
-substrate. The dual activity is precisely what this lesion requires.
+Its readthrough activity was not a literature guess: escin was identified in an
+**unbiased high-throughput screen of ~1,600 clinically approved compounds**
+against CFTR premature termination codons, where it proved *"efficacious and
+potent in a variety of primary human airway cells"* carrying G542X and W1282X.
+It is marketed under a German Commission E monograph (1984, renewed 1994) and an
+EMA traditional-use registration, with established human dosing of 50–75 mg twice
+daily.
 
-The therapeutic goal is not cure but a **threshold crossing**: aneuploidy
-appears below roughly 50 % residual BUB1B expression, and this patient sits near
-that line.
+That ranking is produced by the pipeline, not asserted. Two better-known
+candidates were demoted by an automated screen against the proband's HPO terms:
+
+| Candidate | Mechanistic rank | After screen | Why |
+|---|---:|---:|---|
+| **Escin** | 2 | **1** | marketed; no phenotype conflict |
+| Gentamicin / amikacin | 3 | 2 | **nephrotoxic** vs `HP:0000121` nephrocalcinosis |
+| Ataluren | 4 | 3 | not marketed — reference only |
+| Amlexanox | **1** | 4 | not marketed; **TBK1/IKKε immunosuppression** vs `HP:0002859` rhabdomyosarcoma |
+
+**Amlexanox is the best mechanistic fit and it is not proposable.** It is the
+only agent reported to induce readthrough *and* inhibit NMD — the pair of
+activities this lesion needs — but it has no marketed product anywhere
+(Aphthasol discontinued in the US; Solfa discontinued by Takeda in Japan in
+2019), and its principal systemic pharmacology is TBK1/IKKε inhibition, which is
+a poor thing to give a child with an active cancer predisposition syndrome.
+
+**Expected effect size is small, and we say so up front.** Published in-cell
+readthrough efficiencies for this drug class are single-digit percent. This is
+not a proposal that a threshold will be crossed. It is the observation that
+readthrough is the only pharmacological route that addresses the causal allele at
+all, together with the experiment that would falsify it (§6).
 
 ---
 
-## 2. Mechanism characterization
+## 2. Mechanism
 
 ### 2.1 Direction of effect: loss of function
 
 *BUB1B* encodes BubR1, a core component of the mitotic checkpoint complex (MCC).
-BubR1 is bifunctional: an enzymatic role requiring CENPE-dependent kinase
-activation at kinetochores, and a **stoichiometric role as a direct inhibitor of
-CDC20**. The MCC — BubR1, BUB3, MAD2L1 — sequesters CDC20 and prevents it from
-activating the anaphase-promoting complex/cyclosome until every chromosome is
-correctly attached.
+Its essential role is **stoichiometric**: BubR1, BUB3 and MAD2L1 sequester CDC20
+and prevent it from activating the anaphase-promoting complex until every
+chromosome is correctly attached.
 
-Both of this patient's alleles reduce function, by different routes:
+A correction worth making explicitly, because an earlier draft of this analysis
+got it wrong: **human BubR1 is widely characterised as a pseudokinase**, with no
+demonstrable catalytic activity, and its kinase domain is dispensable for
+checkpoint function. Attributing p.Asn1002Lys's effect to "reduced enzymatic
+activity" would be inventing a mechanism. What can be said is that it is a
+full-length protein carrying a substitution in that domain, of **unknown**
+functional consequence.
 
-| Allele | Change | Consequence |
-|---|---|---|
-| 1 | `c.2210T>G` p.Leu737Ter | nonsense in exon 17/23; NMD-predicted; **≈ 0 % protein** |
-| 2 | `c.3006T>G` p.Asn1002Lys | missense in exon 23/23, **within the kinase domain**; full-length protein, reduced enzymatic function |
-
-This is unambiguously **loss of function**. There is no gain-of-function or
-dominant-negative component to argue for.
-
-### 2.2 Pathway disrupted, and the downstream consequence
+| Allele | Change | What is established | What is not |
+|---|---|---|---|
+| 1 | `c.2210T>G` p.Leu737Ter | nonsense, exon 17/23, NMD-predicted, ClinVar Pathogenic/LP | — |
+| 2 | `c.3006T>G` p.Asn1002Lys | absent from gnomAD, CADD 24.5; the same amino-acid change via `c.3006T>A` is a **ClinVar VUS** | **residual function — entirely unmeasured** |
 
 ```
 BubR1 ↓ → MCC cannot restrain CDC20 → APC/C activates prematurely
-      → sister chromatids separate before correct attachment
-      → chromosome missegregation → MOSAIC ANEUPLOIDY
+      → premature sister chromatid separation
+      → chromosome missegregation → mosaic aneuploidy
       → chromosomal instability → cancer predisposition
       → rhabdomyosarcoma (HP:0002859), the presenting event
 ```
 
-The phenotype is coherent with the mechanism end to end: severe IUGR, growth
-restriction, nephrocalcinosis, parental recurrent miscarriage, and a childhood
-sarcoma are what a constitutional chromosomal-instability disorder produces.
+### 2.2 The dose–response, and what it does and does not permit
 
-### 2.3 The quantitative anchor
+BubR1 reduction produces a **graded** phenotype. In HeLa cells carrying an shRNA
+gradient of residual expression, *all* transduced cells showed premature
+chromatid separation, its severity correlated inversely with residual
+expression, and detectable aneuploidy appeared below roughly 50 % (*Gradual
+reduction of BUBR1 protein levels results in premature sister-chromatid
+separation then in aneuploidy*, **Hum Genet 2008**, PMID 18932004).
 
-Published work reports **premature chromatid separation in all cells with
-reduced BUB1B expression, with aneuploidy detectable below ~50 % residual
-expression**. That converts a qualitative mechanism into a measurable target: a
-therapy does not need to normalise BubR1, only to push residual function back
-above a threshold.
+An earlier draft treated 50 % as a **threshold to be crossed**. That framing does
+not survive arithmetic, and the correction matters:
 
-With one null allele and one hypomorphic full-length allele, this patient sits
-close to that line. **Recovering even a fraction of allele 1 may be sufficient.**
+> Normalise each allele to 50 points. Allele 1 contributes ≈ 0. Therefore
+> **a patient with one null allele cannot exceed 50 % even if the other allele
+> were perfect.** The ceiling *is* the figure. Obligate carriers sit at exactly
+> 50 % and are healthy — so "become a healthy carrier" is the maximum a perfect
+> therapy could achieve, and single-digit readthrough moves perhaps 2–3 points
+> toward it.
 
-### 2.4 We looked for the consequence, and did not find it
+What survives is the **gradient**, not the cliff. Severity of premature chromatid
+separation tracks residual expression continuously, so a small increase predicts
+a small improvement — measurable in cells, not obviously meaningful in a child.
+That is a weaker claim than the one this analysis started with, and it is the one
+the data supports.
 
-Stage 08 of the Track 1 pipeline screened for mosaic aneuploidy directly from
-the VCF, using B-allele fractions at 2,241,007 heterozygous SNVs across 285
-genomic windows. **No whole-chromosome mosaicism is detectable above ~3 % cell
-fraction in this blood sample.**
+Two caveats on transferring even the gradient: HeLa is p53-null, hypotriploid and
+already chromosomally unstable, so it is a poor reporter for a threshold in a
+p53-competent child; and an shRNA gradient reduces *wild-type* protein, whereas
+this patient has a full-length mutant that still occupies its slot in a
+stoichiometric complex. A defective subunit that fills its position can be worse
+than an absent one. Neither confound is resolvable from published data.
 
-An initial pass appeared to show 5–7 % mosaic fractions on several chromosomes;
-a uniformity test rejected it, because the signal concentrated in a minority of
-windows on the acrocentric and heterochromatic chromosomes rather than spreading
-uniformly as a true whole-chromosome event must.
+### 2.3 We looked for the cellular phenotype, and the result is ambiguous
 
-This negative matters for Track 2: **blood is the wrong tissue for a functional
-readout.** Lymphocytes carrying severe aneuploidy proliferate poorly, and
-clinical cytogenetics measures aneuploid fractions in *cultured* lymphocytes,
-where they are enriched. Any ex vivo test of a therapeutic hypothesis should use
-patient fibroblasts, not bulk blood.
+Track 1 stage 08 screened for mosaic aneuploidy from B-allele fractions at
+2,241,007 heterozygous SNVs across 285 windows.
+
+An initial pass flagged eight autosomes, chr21 at an apparent 17 % mosaic
+fraction. A uniformity test rejected it: a true whole-chromosome event affects
+every window, and the signal concentrated in a minority — on the acrocentric and
+heterochromatic chromosomes where mapping is hardest. But the rejection is not
+clean, and the report says so:
+
+- the uniformity test for chr21 ran on **5 windows**, which is little power;
+- the GC-content confounder check returned **r = +0.475**, which the pipeline
+  itself reports as *"GC bias contributes and cannot be excluded"*;
+- MVA aneuploidy is **variegated** — different chromosomes in different cells —
+  so a uniform whole-chromosome model may be the wrong detector entirely.
+
+**The honest statement is that this screen is inconclusive**, not that
+mosaicism is absent. An earlier draft also argued that blood is the wrong tissue
+because aneuploid lymphocytes are "enriched in culture"; that is
+self-contradictory, and MVA is in fact routinely diagnosed by karyotype on
+cultured peripheral blood lymphocytes. Ex vivo work should use fibroblasts for
+reasons of assay control, not because blood is uninformative.
 
 ---
 
-## 3. The systematic search — and why it returns nothing
+## 3. The systematic search
 
-Before proposing anything, we asked the obvious question computationally: **is
-there already a drug that acts on this pathway?**
+Before proposing anything, we asked computationally whether a drug already acts
+on this pathway. `pipeline/track2/` mirrors the Track 1 discipline: numbered
+stages, traceable evidence, every discard counted, evidence tables committed.
 
-`pipeline/track2/` mirrors the Track 1 discipline — numbered stages, traceable
-evidence, every discard counted.
+### 3.1 Network (t2-01) — and a correction
 
-### 3.1 The target network (t2-01)
-
-61 targets, tiered by *mechanistic distance from the lesion* rather than
-importance:
+52 targets, tiered by mechanistic distance:
 
 | Tier | Members | Rationale |
 |---|---|---|
 | 0 | BUB1B | the mutated gene |
-| 1 | BUB1, BUB3, MAD2L1, CDC20, MAD1L1, KNL1 | the MCC and its direct target |
-| 2 | APC/C subunits, TTK, AURKB, PLK1, CDK1, CENPE, CCNB1, NEK2 | what the MCC restrains, and the kinases regulating it |
-| 3 | 38 further high-confidence STRING partners | the wider mitotic apparatus |
+| 1 | MCC and CDC20 | what BubR1 acts in and on |
+| 2 | APC/C, separase, securin, checkpoint kinases, PP2A | what the MCC restrains |
+| 3 | additional physical STRING interactors | the immediate complex |
+| **4** | **ETF1, GSPT1/2, UPF1/2/3B, SMG1/5/6/7, EIF4A3, RPL3, RPS15** | **actionable by variant CLASS, not by gene** |
 
-Source: STRING v12 at confidence ≥ 0.9, plus a curated core from the SAC
-literature so the network does not depend on one API being available.
+Two corrections from an adversarial review of the first version:
 
-### 3.2 The evidence (t2-02)
+**The network was contaminated.** Using STRING's *combined* score at ≥ 0.9 pulled
+in BRCA2, TOP2A and BIRC5 — because mitotic genes are co-expressed and co-cited,
+so the score saturates on those channels. Those three genes then supplied the
+only well-evidenced drugs in the entire result: olaparib, etoposide,
+trastuzumab. PARP inhibitors and topoisomerase poisons have nothing to do with
+BubR1 dosage. Switching to the **physical** subnetwork removed them, and with
+them 244 spurious associations.
 
-DGIdb v5 across all 61 targets:
+**The search was blind to its own answer.** The proposal acts on the ribosome,
+and no node of the translation-termination or NMD machinery was in the network —
+so the search could not possibly have found it. A negative from a search that
+cannot see the class of answer being proposed measures its own blind spot. Tier 4
+fixes that, and it functions as a **positive control**: the corrected search now
+independently recovers **ataluren** (on RPL3 and RPS15) and **ELX-02** from the
+databases. The machinery works. Neither drug is marketed.
+
+### 3.2 Evidence (t2-02) and filter (t2-03)
 
 | | |
-|---|---|
-| Associations returned | **668** |
-| With an approved drug | **125** |
-| **Carrying a declared interaction direction** | **15 (12 %)** |
-| Backed by more than one source | **0** |
-| **Targets with no association at all** | **43 of 61** |
+|---|---:|
+| Associations returned | **424** |
+| With an approved drug | **41** |
+| Approved **and** backed by ≥ 2 distinct sources | **0** |
+| Approved and carrying a resolvable interaction direction | **2 (5 %)** |
+| Network targets with no association at all | **38 of 52** |
+| **Surviving candidates** | **0** |
 
-### 3.3 The filter, and the result (t2-03)
+Every one of the 41 approved associations rests on a **single** source, so all
+41 fail an evidence gate of score ≥ 0.10 and ≥ 2 distinct sources. Within the
+approved subset, therefore, the direction filter removed nothing the evidence
+gate had not already removed, and the pipeline says so itself rather than
+claiming a decisiveness it did not have. An earlier draft claimed the opposite in
+three separate sections; it was wrong, and the pipeline's own output contradicted
+it.
 
-Three filters, applied in order: evidence quality, **direction of effect**, and
-safety class. **Zero candidates survive.**
+### 3.3 The well-evidenced pharmacology exists — and all of it points the wrong way
 
-The direction filter is the part that matters. BubR1's job is to *inhibit*
-CDC20, so:
+The interesting result is one layer down. **43 of the 424 associations *are*
+backed by two or more distinct sources** — none of them approved drugs. They are
+not scattered across the network. They collapse onto four genes:
 
-| Node | Effect of inhibiting it | Verdict |
+| Gene | Multi-source associations | Direction if inhibited |
+|---|---:|---|
+| AURKB | 21 | **harmful** |
+| CDK1 | 13 | ambiguous |
+| PLK1 | 8 | ambiguous |
+| TTK | 1 | **harmful** |
+
+**41 of the 43 are explicitly typed `inhibitor`.** The remaining two — rigosertib
+and alisertib — carry no interaction type in DGIdb, so the pipeline refuses to
+classify them. The verdicts it does assign are **21 harmful, 20 ambiguous, 2
+unclassifiable**, and the number that matters is the one that is absent:
+
+> **Compensatory: 0.** Not one of the 43 best-evidenced associations in the
+> entire result opposes the lesion.
+
+There is nothing accidental about that distribution. These are oncology
+clinical-stage compounds, and oncology develops checkpoint inhibitors **precisely
+to force missegregation and kill dividing cells** — which is the disease
+mechanism here, deliberately induced. The pharmacology for this pathway is not
+missing. It is well developed, well evidenced, and aimed in exactly the direction
+that would harm this patient.
+
+That is a stronger and more useful negative than an empty database, and it is
+where the direction filter earns its place. All 43 are removed — 21 because
+inhibiting AURKB or TTK would weaken an already-failing checkpoint, 20 because
+CDK1 and PLK1 inhibition is genuinely two-sided (§3.4), and 2 because DGIdb
+records no direction at all. Three different reasons, none of them
+"insufficient evidence".
+
+### 3.4 The direction assignments, and a correction
+
+| Node | Effect of inhibiting | Verdict |
 |---|---|---|
-| CDC20, APC/C subunits | restrains anaphase onset — **substitutes for the lost BubR1 function** | compensatory |
-| BUB1, BUB3, MAD2L1, KNL1, TTK, AURKB, PLK1, CDK1, CENPE | weakens an already-failing checkpoint | **harmful** |
+| CDC20, APC/C subunits, separase | restrains anaphase — opposes the lesion | compensatory |
+| BUB1, BUB3, MAD2L1, KNL1, TTK, AURKB, CENPE, PP2A | weakens an already-failing checkpoint | harmful |
+| **CDK1, CCNB1, PLK1, FZR1** | **two-sided** | **ambiguous** |
 
-**The direction that would help is the direction nobody builds drugs for.**
-CDC20 and every APC/C subunit have zero reported drug associations. The
-inhibitors that *do* exist — AURKB, PLK1, TTK, CDK1 — were built by oncology to
-push cancer cells *past* a checkpoint. In a child whose checkpoint is already
-failing, that is exactly backwards.
+The ambiguous row is a correction to our own first version, which called CDK1 and
+PLK1 harmful-if-inhibited. CDK1 inhibition blocks mitotic *entry* — a cell that
+does not divide cannot missegregate — and CDK1 also phosphorylates APC/C subunits
+to permit CDC20 binding, so inhibiting it reduces APC/C–CDC20 activity, the
+compensatory direction. PLK1 inhibition causes SAC-dependent prometaphase arrest,
+not checkpoint weakening. FZR1 activates APC/C in G1, not at anaphase. **Twenty
+of the 43 land in that row**, so the ambiguity is not a technicality — it is
+nearly half the well-evidenced result, and calling it harmful would have been
+easier and wrong.
 
-What remained after removing harmful directions was single-source text mining:
-`PLK1–erythromycin`, `PLK1–lansoprazole`, `CDK1–sertraline`, `PLK1–oleic acid`,
-at interaction scores of 0.01–0.11. Those are not pharmacology.
+And a caveat the first version omitted: **BubR1's inhibition of CDC20 is
+conditional and attachment-responsive; a drug is constitutive.** Constitutive
+APC/C inhibition does not restore checkpoint *fidelity* — it produces mitotic
+arrest, slippage and tetraploidy, which is why oncology develops these agents.
+"Compensatory" here means *opposes the direction of the lesion*, not *corrects
+the defect*. The distinction is the difference between a sign and a mechanism.
 
-**This is a general problem, not a quirk of this gene.** Drug–target databases
-are populated overwhelmingly with inhibitors, because inhibitors are what the
-industry builds. For any loss-of-function disease, that makes naive target-based
-repurposing structurally unlikely to succeed — and a search that does not filter
-by direction will confidently return drugs that would make the patient worse.
+### 3.5 What this negative does and does not establish
+
+It establishes that **DGIdb contains no well-evidenced, directionally useful,
+approved drug for this network**, and that the well-evidenced pharmacology it
+does contain is contraindicated by direction of effect. It does not establish
+that no drug could help. Specifically not run:
+
+- **only approved drugs** were carried forward; the clinical-stage TTK, PLK1,
+  AURKB and CDK1 inhibitors of §3.3 were excluded by that filter, and — on the
+  direction argument — rightly so;
+- **only DGIdb** was queried; ChEMBL and Open Targets `knownDrugs` were not;
+- **signature-based repurposing was not run at all** — LINCS / Connectivity Map
+  is the field's standard approach when no target is druggable, and its absence
+  is the largest gap in this analysis;
+- **aneuploidy-selective compounds** (Tang et al., *Cell* 2011 — AICAR, 17-AAG,
+  chloroquine) are a live hypothesis for the cancer-risk arm and were not
+  pursued.
 
 ---
 
-## 4. The proposal: bypass the pathway
+## 4. The variant-class route
 
-If the pathway is undruggable and the useful direction unavailable, the
-remaining option is to stop acting on the pathway. **Act on the ribosome.**
+A premature termination codon is actionable at the ribosome, which sidesteps
+both the undruggability of BubR1 and the direction problem entirely.
 
-One allele carries a premature termination codon. Translational readthrough
-drugs allow the ribosome to insert an amino acid at a PTC and produce
-full-length protein. This sidesteps both problems at once: BubR1 does not need
-to be druggable, and no pathway node is pushed in the wrong direction.
-
-### 4.1 The PTC context, computed rather than assumed
-
-From the Ensembl MANE Select CDS (`ENST00000287598`, 3,153 nt, 1,051 codons):
+### 4.1 The PTC, computed from the MANE CDS
 
 ```
-codon 737 = TTA  (leucine)
-c.2210T>G →  TTA → TGA
-context:  ...CCAGAG [TGA] AGTGCC...
+transcript ENST00000287598 · CDS 3,153 nt · 1,051 codons
+codon 737   TTA  (Leu)
+c.2210T>G   TTA → TGA  (Ter)
+context     ...CCAGAG [TGA] AGTGCC...
 ```
 
-| Feature | Value | Rank | Meaning |
+| Feature | Value | Rank | Effect size |
 |---|---|---|---|
-| Stop codon | **UGA** | 1 of 3 | the most readthrough-permissive (UGA > UAG >> UAA) |
-| +1 nucleotide | **A** | 3 of 4 | less favourable (C > U > A > G) |
+| Stop codon | **UGA** | 1 of 3 | UGA vs UAA ≈ an order of magnitude in reporter assays |
+| +4 nucleotide | **A** | 3 of 4 | C vs A ≈ 2–3-fold |
 
-**Mixed, and reported as mixed.** The stop codon is the best of the three; the
-downstream context is not. Readthrough efficiency at this specific allele is an
-empirical question and the first thing any follow-up should measure.
+Mixed, and the two are not commensurable — which is why they are reported with
+effect sizes rather than as competing ranks.
 
-### 4.2 Why the mechanism demands a *dual* activity
+### 4.2 What readthrough actually produces
 
-The p.Leu737Ter transcript is degraded by nonsense-mediated decay. Readthrough
-drugs need transcript to act on: patients with higher transcript levels respond
-better, and co-administration of an NMD inhibitor with gentamicin restored
-full-length protein in a Hurler syndrome model.
+At UGA, near-cognate incorporation inserts **tryptophan, cysteine or arginine —
+not leucine**. Successful readthrough therefore yields **BubR1
+p.Leu737Trp/Cys/Arg**, a *novel missense variant*, in a patient whose other
+allele is already an uncharacterised missense.
 
-So the requirement is not "a readthrough drug". It is **readthrough plus NMD
-inhibition**. That requirement is what selects the candidate.
+This has a direct consequence for how the hypothesis must be tested: **a western
+blot for full-length BubR1 cannot distinguish restored function from a
+full-length non-functional product.** The functional readout is not a
+confirmation step. It is the experiment.
 
-### 4.3 Candidates
+### 4.3 Why the mechanism wants a dual activity
 
-#### 1. Amlexanox — the proposal
+The PTC transcript is NMD-degraded, so readthrough has little substrate.
+Patients with higher transcript levels respond better to readthrough drugs, and
+co-administering an NMD inhibitor with gentamicin restored full-length protein in
+a Hurler syndrome model. Readthrough itself partially inhibits NMD, which helps.
 
-| | |
-|---|---|
-| **Approval** | **FDA-approved** (5 % oral paste, aphthous ulcers); oral anti-allergic in Japan |
-| **Mechanism** | **dual**: translational readthrough inducer *and* NMD inhibitor |
-| **Why it fits** | the lesion requires both activities; amlexanox provides them in one molecule |
-| **Precedent** | *COL7A1* in recessive dystrophic epidermolysis bullosa: **8 of 12 PTC alleles responded, some reaching > 50 % of normal full-length protein**. *GDAP1* in patient-derived hiPSC neurons (Charcot–Marie–Tooth). |
-| **Patient fit** | no known nephrotoxicity — decisive here (§5) |
-| **Limitations** | the approved formulation is topical/oral-local; systemic exposure for a genetic indication would require reformulation and dose-finding. Never tested on *BUB1B*. Readthrough efficiency is allele-specific. |
+This requirement is what makes amlexanox mechanistically attractive and its
+unavailability genuinely costly.
 
-The 50 % figure in the COL7A1 work is a striking coincidence with the ~50 %
-BUB1B threshold. It is a coincidence, in a different gene and a different assay,
-and should be read as an order-of-magnitude plausibility argument — not as a
-prediction.
+### 4.4 The class-level evidence is not encouraging, and that belongs here
 
-#### 2. Aminoglycosides (gentamicin, amikacin) — mechanistic reference, not a proposal
+**Ataluren is the only purpose-built PTC readthrough drug taken through a full
+phase-3 programme, and it failed on efficacy.** Its EMA conditional
+authorisation was not renewed — CHMP negative January 2024, re-examined and
+confirmed October 2024, adopted by the Commission. Aminoglycoside readthrough
+trials in cystic fibrosis and Duchenne produced marginal and inconsistent
+results.
 
-The best-characterised readthrough agents, approved worldwide for decades. The
-closest published precedent to BubR1 is compelling: **aminoglycoside-induced
-readthrough functionally restored *BRCA1* nonsense alleles** — a large nuclear
-protein in genome maintenance, rescued by an approved drug. Also *BBS2*/*ALMS1*
-ciliopathies, where both protein and ciliary function were restored in patient
-fibroblasts.
-
-**They are nevertheless contraindicated in this patient** (§5). Retained here as
-an ex vivo tool compound and as the mechanistic benchmark against which
-amlexanox should be compared, not as a therapy.
-
-#### 3. Ataluren — listed for honesty, not proposed
-
-Purpose-built for PTC readthrough, and the reason the class exists clinically.
-**It is not currently market-approved.** The EMA's conditional authorisation for
-nonsense-mutation Duchenne was not renewed: CHMP negative in January 2024,
-annulled on procedural grounds and re-examined, confirmed negative in October
-2024, adopted by the European Commission. Efficacy — not safety — was the
-ground. Individual member states may still permit named-patient use.
-
-We name it because a report that omitted the obvious candidate would look like
-it had not checked.
+That is the single most informative datapoint about whether readthrough restores
+clinically meaningful protein, and it argues **against** this strategy. Any
+honest reading of this proposal has to weigh it. Ours is that the approach
+remains worth testing *ex vivo* — where it is cheap and fast — precisely because
+the clinical record says it should not be assumed.
 
 ---
 
-## 5. Patient-specific safety — where a generic answer and this one diverge
+## 5. The patient screen
 
-Candidate drugs were cross-checked against the proband's own HPO phenotype:
+Candidate liabilities are matched automatically against the proband's own HPO
+terms, read from the phenotype file the pipeline extracts:
 
-| HPO | Feature | Consequence for drug selection |
+| HPO | Feature | Contraindicated liability |
 |---|---|---|
-| **HP:0000121** | **Nephrocalcinosis** | **avoid nephrotoxic agents** — aminoglycosides, and anything requiring renal dose adjustment |
-| HP:0002859 | Rhabdomyosarcoma | avoid agents that could promote proliferation or confound oncological surveillance |
-| HP:0001508 | Failure to thrive | avoid significant GI intolerance or appetite suppression |
+| `HP:0000121` | Nephrocalcinosis | **nephrotoxic** — reduced renal reserve |
+| `HP:0002859` | Rhabdomyosarcoma | **immunosuppressive**, **proliferative risk** |
+| `HP:0001508` | Failure to thrive | GI intolerance |
 
-The nephrocalcinosis flag is decisive and it reverses the ranking. The
-**best-evidenced** readthrough agents are aminoglycosides — approved worldwide,
-with the closest mechanistic precedent — and chronic systemic exposure is
-**contraindicated in this specific child**, who has had calcium deposits in the
-kidney since birth.
+It changed the answer twice. Gentamicin has the best readthrough evidence and the
+closest precedent to BubR1 — aminoglycosides functionally restored *BRCA1*
+nonsense alleles, a large nuclear genome-maintenance protein — and it is
+contraindicated in a child with calcium deposits in the kidney since birth.
+Amlexanox is the best mechanistic fit and its TBK1/IKKε inhibition suppresses
+innate immune and type-I interferon signalling in a child with an active cancer
+predisposition syndrome.
 
-A repurposing proposal that ranked by mechanism alone would have put gentamicin
-first and been clinically unusable. Amlexanox leads because it is the candidate
-that survives both the mechanism filter and the patient.
+**A ranking by mechanism alone would have proposed gentamicin, then amlexanox.
+Both are unusable in this patient, and it takes a phenotype file to see it.**
 
 ---
 
-## 6. What follow-up would look like
+## 6. What would falsify this
 
-Nothing here is a treatment recommendation. These are hypotheses, and they are
-falsifiable in a defined order:
+In order, each step gating the next:
 
-1. **Quantify *BUB1B* transcript** in patient-derived cells. Readthrough
-   response correlates with transcript abundance, and NMD efficiency varies
-   between alleles. If the transcript is absent, readthrough cannot work and the
-   hypothesis dies here.
-2. **Measure baseline BubR1 protein** against the ~50 % threshold. This
-   establishes how far there is to go.
-3. **Test readthrough ex vivo in patient fibroblasts** — not blood, for the
-   reason established in §2.4. Primary readout: full-length BubR1 on western
-   blot. Compare amlexanox against gentamicin as the mechanistic benchmark.
-4. **Functional readout**: premature chromatid separation and aneuploidy rate in
-   treated versus untreated patient cells. Protein restoration without
-   functional rescue would be a negative result, and should be reported as one.
+1. **Quantify *BUB1B* transcript** in patient-derived fibroblasts. Readthrough
+   response tracks transcript abundance and NMD efficiency varies by allele. If
+   the PTC transcript is absent, readthrough has no substrate and the hypothesis
+   dies here.
+2. **Measure baseline BubR1 protein**, and — critically — **measure allele 2's
+   residual function**. The entire dose–response argument is unquantified without
+   it. If p.Asn1002Lys is functionally null, restoring allele 1 lands at best at
+   the carrier level, and that is the ceiling.
+3. **Test readthrough ex vivo**: escin, with gentamicin as the mechanistic
+   benchmark. Primary readout full-length BubR1 — but see §4.2: full-length is
+   not the same as functional.
+4. **Functional readout**: premature chromatid separation rate and aneuploidy in
+   treated versus untreated patient fibroblasts. **This is the decisive
+   experiment.** Protein restoration without functional rescue is a negative
+   result and should be reported as one.
+5. **Resolve phase.** The compound-heterozygous configuration is presumed, not
+   proven (Track 1 §8). Parental testing or long-read sequencing settles it, and
+   it is cheap. If the variants are in *cis*, the mechanism and this entire
+   proposal collapse — that makes it the first thing to check, not a caveat.
 
-Only if protein and function move together does this become a clinical question
-rather than a laboratory one.
+### What clinical benefit could look like — and what it cannot
+
+The IUGR, the growth restriction and the developmental phenotype were
+established *in utero* and are not reversible by any of this. Existing aneuploid
+cells stay aneuploid. **The only plausible benefit is a reduction in the rate of
+future missegregation, and therefore in future cancer risk** — in one child, over
+decades, with no short-term measurable endpoint.
+
+That is a modest and slow claim, and it is the honest one. What demonstrably
+helps MVA families today is tumour surveillance; nothing here displaces it, and
+any intervention would sit alongside it. A further clinical consideration
+deserves stating: rhabdomyosarcoma protocols contain **vincristine**, a spindle
+poison, in a patient whose spindle checkpoint is already deficient. That
+interaction is outside the scope of this proposal and inside the scope of this
+child's care.
 
 ---
 
 ## 7. Scalability
 
-The pipeline is not *BUB1B*-specific. Nothing in stages t2-01 to t2-04 hardcodes
-this gene beyond a single entry point.
-
-The generalisable pattern is:
+The generalisable pattern:
 
 ```
 loss-of-function variant in an undruggable target
-   → build the mechanistic neighbourhood (STRING + curated core)
-   → query drug–gene evidence across it
-   → FILTER BY DIRECTION OF EFFECT relative to the lesion
-   → if nothing survives: does the variant class itself offer a route?
-        nonsense  → readthrough ± NMD modulation
-        missense  → chaperone/stabiliser strategies
-        splice    → antisense modulation
-   → screen surviving candidates against the patient's own phenotype
+   → build the mechanistic neighbourhood (physical interactions + curated core)
+   → ADD the variant-class machinery: for a nonsense allele, the ribosome
+   → query drug–gene evidence across both
+   → filter by DIRECTION OF EFFECT relative to the lesion
+   → screen survivors against the patient's own phenotype
 ```
 
-Two components of that are, as far as we can tell, not standard practice:
+Two components are worth reusing. The **direction filter** drops inhibitors that
+would worsen a loss-of-function disease — a silent failure mode of naive
+repurposing, and here not a hypothetical one: it removes **all 43** of the
+best-evidenced associations in the result (§3.3), every one of them an inhibitor
+of a checkpoint gene in a checkpoint-deficiency disease. The **phenotype screen** changed
+the answer twice here and needs nothing but the HPO file every rare disease case
+already has.
 
-**The direction filter.** Repurposing searches routinely return inhibitors for
-loss-of-function diseases. Ours drops them explicitly and names them, which
-turns a silent failure mode into a reported one.
-
-**The phenotype-aware safety screen.** Cross-checking candidate toxicity against
-the patient's own HPO terms is what moved gentamicin from first place to
-contraindicated. It requires nothing but the phenotype file that every rare
-disease case already has.
-
-Roughly 10 % of rare disease alleles are nonsense variants. For every one of
-them in an undruggable gene, this pipeline runs unchanged.
+**An honest scope statement**: the code is not gene-agnostic. `t2_01`'s curated
+core, `t2_03`'s direction sets and `t2_04`'s candidate list are specific to this
+pathway and this variant class. What generalises is the *pattern*; porting it to
+another gene means rewriting those three knowledge bases. Claiming otherwise —
+as an earlier draft did — is contradicted by the files a reviewer can open.
 
 ---
 
 ## 8. Limitations
 
-Stated plainly, because a proposal that hides them cannot be evaluated:
-
-1. **No readthrough agent has ever been tested on *BUB1B*,** in any system. The
-   novelty and the risk are the same fact.
-2. **Amlexanox's approved formulation is local, not systemic.** Reformulation
-   and dose-finding would be required, and systemic pharmacokinetics for this
-   indication are unknown.
-3. **The +1 sequence context is unfavourable.** UGA is permissive, but the
-   adenine immediately downstream is third of four. Efficiency at this allele is
-   unmeasured.
-4. **The second allele is untouched.** Readthrough addresses p.Leu737Ter only.
-   p.Asn1002Lys remains a kinase-domain substitution of unknown residual
-   function; if it is functionally null, restoring allele 1 may not be enough.
-5. **The ~50 % threshold comes from other patients and cell systems,** not this
-   one. It anchors the reasoning but has not been measured here.
-6. **Phase was never proven** (Track 1, §8). The compound-heterozygous
-   configuration is presumed, not demonstrated, in a singleton.
-7. **The COL7A1 > 50 % result is a different gene and a different assay.** It
-   supports plausibility, not prediction.
-8. **We measured no mosaic aneuploidy in blood** (§2.4), which means the most
-   direct functional readout is unavailable in the most accessible tissue.
+1. **No readthrough agent has been tested on *BUB1B*** in any system, and
+   escin has no readthrough data in any nuclear or cell-cycle gene.
+2. **Expected effect size is small.** Single-digit readthrough against a deficit
+   that is an entire gene copy.
+3. **The readthrough product is not wild-type protein** (§4.2), and its function
+   is unknown.
+4. **Allele 2's residual function is unmeasured**, and the dose–response argument
+   is unquantified without it.
+5. **Escin's registration is herbal/traditional**, not a full marketing
+   authorisation, and no exposure calculation was performed — the concentrations
+   producing readthrough in the CFTR screen versus achievable human plasma levels
+   are the gating pharmacological question and remain open.
+6. **The class's clinical record is poor** (§4.4).
+7. **Phase was never proven**; if *cis*, this collapses.
+8. **The search was partial**: DGIdb only, approved drugs only, no
+   signature-based repurposing, no aneuploidy-selective compounds (§3.4).
+9. **The mosaicism screen is inconclusive**, not negative (§2.3).
 
 ---
 
 ## 9. Methods description form
 
-Answers to `methods_description_form.xlsx`, Track 2 sheet.
-
 **Team name** — `bralewild` (individual).
 
-**Describe your approach in detail (variant/mechanism → candidate medication)** —
-see §2–4. In brief: characterise the lesion as loss of function with a
-quantitative expression threshold; build the mechanistic neighbourhood; query
-drug–gene evidence across it; filter by evidence quality, **direction of effect**
-and safety class; observe that nothing survives and why; then ask whether the
-*variant class* rather than the *target* offers a route. It does: a premature
-termination codon is actionable at the ribosome. Finally, screen the surviving
-candidates against the patient's own phenotype.
+**Approach (variant/mechanism → candidate)** — §2–5.
 
-**Was candidate identification automated, or manual literature review?** —
-**Both, in a deliberate division of labour, and it is worth being precise about
-which did what.**
+**Automated or manual?** — Both, and the split is worth stating precisely.
+*Automated*: the 52-target network; all 424 drug–gene associations; the evidence,
+direction and safety-class filters; the PTC sequence context from the Ensembl
+MANE CDS; the phenotype screen that reads the HPO file and reorders candidates;
+the zero-candidate result. *Manual*: the literature identifying readthrough as a
+variant-class strategy; the curated candidate set; the direction classifications
+in `t2_03`. **No database query returns escin or amlexanox as readthrough agents
+— their activity is a primary-literature property, not a drug–target
+annotation.** The corrected pipeline searched the right biology, recovered
+ataluren and ELX-02 as a positive control, and still did not surface them. That
+is now a demonstrated limitation of database-driven repurposing rather than an
+assertion about it.
 
-*Automated* (`pipeline/track2/`, reproducible, re-runnable): construction of the
-61-target network from STRING; retrieval of all 668 drug–gene associations from
-DGIdb; the evidence, direction and safety-class filters; the computation of the
-PTC sequence context from the Ensembl MANE CDS. **The negative result — zero
-surviving candidates — is entirely automated output.**
+**Describe the manual review** — targeted searches on BubR1 mechanism and the
+MCC; MVA management and prior therapeutic attempts; readthrough agents and their
+regulatory status; NMD and combined readthrough/NMD strategies; stop-codon and
+sequence-context effects; screens of approved compounds for PTC suppression;
+aneuploidy-selective compounds. Every claim carried into this report is cited.
+Claims that failed verification were removed — including our own statements that
+ataluren was EMA-approved, that amlexanox was marketed, and that BubR1's kinase
+activity was the relevant function. An adversarial review of the first draft is
+what surfaced them; its findings are recorded in the repository history.
 
-*Manual* (documented in §9 below): the literature search that identified
-readthrough as a variant-class strategy, and amlexanox specifically. No database
-query would have returned amlexanox, because its readthrough activity is not a
-drug–target annotation — it is a property reported in the primary literature.
-The curation of which network nodes are compensatory versus harmful when
-inhibited is also a human judgement, encoded explicitly in
-`t2_03_mechanism_filter.py` so it can be inspected and disagreed with.
+**Public or proprietary?** — Public only. STRING v12, DGIdb v5, Open Targets,
+Ensembl REST, OMIM, PubMed/Europe PMC, EMA and FDA public records, the Human
+Phenotype Ontology. Only gene symbols and genomic coordinates were transmitted —
+no subject identifier.
 
-**Describe the manual literature review** — targeted searches on: BubR1
-mechanism and the MCC; MVA clinical management and prior therapeutic attempts;
-translational readthrough agents and their approval status; nonsense-mediated
-decay and combined readthrough/NMD strategies; stop-codon and sequence-context
-effects on readthrough efficiency; aneuploidy-selective compounds. Sources are
-listed in §11. Each claim carried into the report is cited; claims that could not
-be verified were removed — including our own initial statement that ataluren was
-EMA-approved, which the EMA record contradicts (§4.3).
+**Proprietary sources** — none.
 
-**Public or proprietary data sources?** — **Publicly available sources only.**
-No proprietary database, no commercial licence, no restricted resource.
+**How was the mechanism characterised?** — §2. Loss of function, from the
+consequence type of both alleles, BubR1's stoichiometric role in the MCC, the
+published dose–response, and phenotype coherence. Explicitly *not* from kinase
+activity, which BubR1 is not established to have.
 
-**Describe the public data sources** — STRING v12 (protein interaction network);
-DGIdb v5 (drug–gene interactions, aggregating DrugBank, ChEMBL, TTD, PharmGKB,
-Guide to Pharmacology and text-mined sets); Open Targets Platform (target
-metadata and tractability); Ensembl REST (MANE Select transcript and CDS
-sequence); OMIM (BUB1B, MVA); PubMed / Europe PMC and journal-hosted full text
-for the mechanistic and readthrough literature; EMA and CHMP public records for
-regulatory status; the Human Phenotype Ontology for the patient's phenotype
-terms. Only genomic coordinates and gene symbols were transmitted to any API —
-no subject identifier of any kind.
-
-**Proprietary data sources** — none.
-
-**How did you characterize the variant's mechanism?** — See §2. Loss of
-function, established from: the consequence type of both alleles (nonsense with
-predicted NMD; missense within the annotated kinase domain), the known
-bifunctional role of BubR1 in the MCC, the published dosage threshold below
-which aneuploidy appears, and the coherence of the patient's full phenotype with
-a constitutional chromosomal-instability disorder. Pathway: spindle assembly
-checkpoint → CDC20 → APC/C. Downstream consequence: premature chromatid
-separation → mosaic aneuploidy → chromosomal instability → cancer predisposition.
-
-**Estimate of time or effort** — the computational pipeline runs in **under
-two minutes** end to end (61 STRING and DGIdb queries plus one Ensembl call) at
-**zero cost**, on a laptop. The mechanistic and literature work behind it was
-the substantive effort: roughly a day of focused analysis, most of it spent
-verifying claims rather than generating them.
-
-**Method abstract** — §10.
+**Time and effort** — the pipeline runs in **under two minutes at zero cost**
+(one STRING call, three batched DGIdb calls, one Open Targets, one Ensembl). The
+substantive effort was mechanistic reading, verification, and a four-reviewer
+adversarial audit of the first draft that invalidated several of its central
+claims.
 
 ---
 
-## 10. Method abstract (500 words)
+## 10. Method abstract
 
-Mosaic Variegated Aneuploidy has no established treatment. This proposal starts
-from the Track 1 result — biallelic *BUB1B*, `p.Leu737Ter` and `p.Asn1002Lys` —
-and asks whether any approved medicine could plausibly act on it.
+Mosaic Variegated Aneuploidy has no established treatment. Starting from the
+Track 1 result — biallelic *BUB1B*, p.Leu737Ter and p.Asn1002Lys — this work asks
+whether any available medicine could plausibly act on it.
 
-The mechanism is unambiguous loss of function. BubR1 inhibits CDC20, holding the
-anaphase-promoting complex inactive until every chromosome is correctly
-attached. Losing it lets anaphase proceed early, producing missegregation,
-mosaic aneuploidy, chromosomal instability, and the cancer predisposition that
-presented here as rhabdomyosarcoma. The relationship is dosage-dependent with a
-published threshold: aneuploidy appears below roughly 50 % residual expression.
-That makes the mechanism measurable.
+The lesion is unambiguous loss of function. BubR1 stoichiometrically inhibits
+CDC20, holding the anaphase-promoting complex inactive until chromosomes are
+correctly attached; losing it produces premature chromatid separation,
+missegregation, mosaic aneuploidy, chromosomal instability and the cancer
+predisposition that presented here as rhabdomyosarcoma. The relationship is
+graded: premature chromatid separation severity tracks residual expression
+continuously, with detectable aneuploidy below roughly 50 %.
 
-We first asked the obvious question computationally. A pipeline built the
-mechanistic neighbourhood of the lesion — 61 targets across the checkpoint
-complex, the APC/C and the mitotic kinases — and retrieved every drug–gene
-association reported for them: 668 associations, 125 involving an approved drug.
-Three filters followed: evidence quality, direction of effect relative to the
-lesion, and safety class. **Zero candidates survived.**
+We asked the obvious question computationally. A pipeline built the mechanistic
+neighbourhood — 52 targets across the checkpoint complex, the APC/C, and, because
+one allele is a premature termination codon, the translation-termination and NMD
+machinery — and retrieved 424 drug–gene associations, 41 involving an approved
+drug. None survived filters on evidence quality, direction of effect and safety
+class.
 
-The failure is structural. BubR1 has no drug, and 43 of 61 network members have
-no reported association at all. The direction that would help — inhibiting CDC20
-or the APC/C, substituting for the lost restraint on anaphase — is precisely the
-direction nobody has built drugs for. The inhibitors that exist target BUB1,
-TTK, AURKB, PLK1 and CDK1, because oncology wants to push cancer cells *past* a
-checkpoint; in a child whose checkpoint is already failing, that is backwards.
-Only 12 % of the approved-drug associations record a direction at all, and every
-one rests on a single source. A repurposing search that does not filter by
-direction will confidently return drugs that would worsen the disease.
+The shape of that negative is the informative part. Thirty-eight of the 52
+targets have no reported drug at all. Every one of the 41 approved associations
+rests on a single source. And the 43 associations that *are* well evidenced
+collapse onto four genes — AURKB, CDK1, PLK1, TTK — with 41 of the 43 explicitly
+typed as inhibitors and **not one acting in the compensatory direction**. That is
+not a coincidence: these are oncology clinical-stage compounds, and oncology
+develops checkpoint inhibitors precisely to force missegregation and kill
+dividing cells, which is this disease deliberately induced. The pharmacology for
+this pathway is well developed and aimed in exactly the direction that would harm
+this patient. Including the ribosome in the network matters too: the search
+independently recovers ataluren and ELX-02, confirming it can see readthrough
+biology, and neither is marketed.
 
-That negative motivates the proposal: stop acting on the pathway; act on the
-ribosome. One allele carries a premature termination codon, and translational
-readthrough restores full-length protein without the target needing to be
-druggable. The PTC is UGA, the most permissive stop codon, though the +1 context
-is unfavourable; we report both. Because the transcript is NMD-degraded,
-readthrough alone would lack substrate: the requirement is readthrough *plus*
-NMD inhibition.
+The proposal is therefore **escin**, a marketed triterpene saponin identified as
+a readthrough inducer in an unbiased screen of ~1,600 approved compounds against
+CFTR premature termination codons. It is the only candidate that is
+simultaneously evidenced, available, and free of a liability this child's
+phenotype contraindicates. An automated screen against the proband's HPO terms
+demoted the two better-known alternatives: gentamicin, whose nephrotoxicity
+conflicts with nephrocalcinosis, and amlexanox, whose TBK1/IKKε inhibition
+conflicts with an active cancer predisposition — and which has, in any case, no
+marketed product since 2019.
 
-That requirement selects **amlexanox**, an FDA-approved anti-inflammatory
-reported to do both. It restored >50 % of full-length protein in some *COL7A1*
-nonsense alleles and showed activity in patient-derived *GDAP1* neurons, and it
-carries no known nephrotoxicity — decisive here, because this child's
-nephrocalcinosis contraindicates the aminoglycosides that are otherwise the
-best-evidenced readthrough agents. Screening against the patient's own phenotype
-is what moved gentamicin from first place to contraindicated.
+**Strengths.** The negative is computed and auditable, with evidence tables
+committed, and it is a shaped negative rather than an empty one. The direction
+filter and the phenotype screen address failure modes naive repurposing does not,
+and both changed the answer here rather than sitting unexercised. The pipeline runs in under two minutes at zero cost,
+and adding the variant-class machinery gives it a working positive control.
 
-**Strengths:** the negative is automated and auditable; the direction filter is
-explicit; safety is patient-specific; the pipeline runs in under two minutes at
-zero cost and generalises to any nonsense variant in an undruggable gene.
+**Limitations, stated plainly.** No readthrough agent has been tested on *BUB1B*.
+The expected effect is small: single-digit readthrough against a deficit of an
+entire gene copy, and with one null allele the ceiling is the healthy-carrier
+level. Readthrough at UGA inserts tryptophan, cysteine or arginine — the product
+is a novel missense protein, not restored BubR1, so full-length protein on a blot
+is not evidence of rescue. Allele 2's residual function is unmeasured. No
+exposure calculation was performed. And ataluren, the only purpose-built agent
+taken through phase 3, failed on efficacy — class-level evidence that argues
+against this strategy and that we weigh rather than omit.
 
-**Limitations:** no readthrough agent has been tested on *BUB1B*; amlexanox's
-approved formulation is local rather than systemic; the +1 context is
-unfavourable; the second allele is untouched; and the 50 % threshold comes from
-other patients, not this one. These are hypotheses for laboratory follow-up, not
-a treatment.
+These are hypotheses for laboratory follow-up. The decisive experiment — premature
+chromatid separation rate in treated patient fibroblasts — is cheap, fast, and
+would settle it.
 
 ---
 
@@ -495,33 +574,32 @@ a treatment.
 > advance research into this rare disease. We acknowledge their trust in making
 > this Hackathon possible.
 
-Data shared under a protocol approved by **WCG IRB #20252010**. This submission
-is released under **CC BY 4.0**.
+Protocol approved by **WCG IRB #20252010**. Released under **CC BY 4.0**.
 
-### Key references
+### References
 
 - Hanks S. *et al.* Constitutional aneuploidy and cancer predisposition caused by
   biallelic mutations in *BUB1B*. *Nat Genet* 2004.
-- OMIM 602860 — *BUB1B*, mitotic checkpoint serine/threonine kinase B.
-- Physiological relevance of post-translational regulation of the spindle
-  assembly checkpoint protein BubR1. *PMC8066494*.
+- **Gradual reduction of BUBR1 protein levels results in premature
+  sister-chromatid separation then in aneuploidy.** *Hum Genet* 2008,
+  PMID 18932004 — the source of the dose–response and the ~50 % figure.
+- Mutyam V. *et al.* Discovery of clinically approved agents that promote
+  suppression of CFTR nonsense mutations. *Am J Respir Crit Care Med* 2016 —
+  escin.
 - Atkinson J. *et al.* Amlexanox enhances premature termination codon
-  read-through in *COL7A1* and expression of full-length type VII collagen.
-  *J Invest Dermatol* 2017.
+  read-through in *COL7A1*. *J Invest Dermatol* 2017.
 - Amlexanox: readthrough induction and NMD inhibition in a Charcot–Marie–Tooth
-  model of hiPSC-derived neuronal cells harbouring a nonsense mutation in
-  *GDAP1*. *PMC10385573*, 2023.
+  hiPSC model harbouring a *GDAP1* nonsense mutation. *PMC10385573*, 2023.
 - Functional restoration of *BRCA1* nonsense mutations by aminoglycoside-induced
   readthrough. *PMC9273842*.
-- Translational readthrough of ciliopathy genes *BBS2* and *ALMS1* restores
-  protein, ciliogenesis and function in patient fibroblasts. *PMC8353411*.
-- Nonsense-mediated mRNA decay efficiency varies in choroideremia, providing a
-  target to boost small-molecule therapeutics. *Hum Mol Genet* 2019.
+- Translational readthrough of *BBS2* and *ALMS1* restores protein, ciliogenesis
+  and function in patient fibroblasts. *PMC8353411*.
 - Howard M. *et al.* Sequence specificity of aminoglycoside-induced stop codon
   readthrough. *Ann Neurol* 2000.
 - Loughran G. *et al.* Evidence of efficient stop codon readthrough in four
   mammalian genes. *Nucleic Acids Res* 2014.
 - Tang Y.-C. *et al.* Identification of aneuploidy-selective antiproliferation
-  compounds. *Cell* 2011.
+  compounds. *Cell* 2011 — cited, and not pursued (§3.4).
 - EMA / CHMP public assessment record, Translarna (ataluren), 2024.
-- Miller D.T. *et al.* ACMG SF v3.2 secondary findings list. *Genet Med* 2023.
+- German Commission E monograph, *Aesculus hippocastanum* seed extract, 1984 /
+  1994.

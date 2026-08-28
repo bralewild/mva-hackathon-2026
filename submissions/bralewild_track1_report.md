@@ -283,14 +283,28 @@ arms of 21 and 22, the heterochromatic blocks of 9 and 16, the pericentromeric
 block of 1. A GC-content confounder check gives r = +0.475 between chromosome GC
 and BAF excess: moderate, and not excludable as a partial explanation.
 
-**Conclusion.** *No whole-chromosome mosaic aneuploidy is detectable above
-approximately 3 % cell fraction in this blood sample.* The floor is quantified,
-not asserted: a window-scale z of 3 corresponds to an excess of 0.0066.
+**Conclusion, and its limits.** *No whole-chromosome mosaic aneuploidy is
+detectable above approximately 3 % cell fraction in this blood sample.* The floor
+is quantified, not asserted: a window-scale z of 3 corresponds to an excess of
+0.0066.
 
-This is biologically unsurprising. Lymphocytes carrying severe aneuploidy
-proliferate poorly, and clinical cytogenetics measures aneuploid fractions in
-*cultured* lymphocytes, where they are enriched. Bulk blood WGS is a different
-measurement.
+That is a statement about the assay, and it should not be read as a statement
+about the child. Three limits bound it:
+
+- **Power.** The chr21 uniformity test ran on **5 windows**, chr22 on four. A
+  40 % figure from five observations is a weak rejection, not a clean one.
+- **The confounder is not excluded.** GC correlates with BAF excess at
+  r = +0.475 - enough to contribute, not enough to explain.
+- **The model may be the wrong one.** MVA aneuploidy is *variegated*: different
+  chromosomes in different cells. A detector that requires one chromosome to be
+  uniformly affected across a whole sample is, by construction, poorly matched to
+  a mosaic of many different single-cell events.
+
+**The honest reading is inconclusive rather than negative.** Bulk blood WGS is
+also a different measurement from the diagnostic one: MVA is diagnosed by
+karyotype on *cultured* peripheral blood lymphocytes, scored one cell at a time,
+where an aneuploid cell is counted individually instead of being averaged into a
+population mean. Averaging is what destroys the signal here - not the tissue.
 
 We report it because a negative with a quantified detection floor is a result,
 and because the episode is the honest version of how the pipeline behaves: the
