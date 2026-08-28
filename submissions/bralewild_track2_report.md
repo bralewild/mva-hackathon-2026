@@ -432,53 +432,51 @@ Mosaic Variegated Aneuploidy has no established treatment. This proposal starts
 from the Track 1 result — biallelic *BUB1B*, `p.Leu737Ter` and `p.Asn1002Lys` —
 and asks whether any approved medicine could plausibly act on it.
 
-The mechanism is unambiguous loss of function. BubR1 is a mitotic checkpoint
-complex component whose job is to inhibit CDC20 and hold the anaphase-promoting
-complex inactive until every chromosome is correctly attached. Losing it lets
-anaphase proceed early, producing chromosome missegregation, mosaic aneuploidy,
-chromosomal instability, and the cancer predisposition that presented in this
-child as rhabdomyosarcoma. Critically, the relationship is dosage-dependent with
-a published threshold: aneuploidy appears below roughly 50 % residual BUB1B
-expression. That converts an abstract mechanism into a measurable target.
+The mechanism is unambiguous loss of function. BubR1 inhibits CDC20, holding the
+anaphase-promoting complex inactive until every chromosome is correctly
+attached. Losing it lets anaphase proceed early, producing missegregation,
+mosaic aneuploidy, chromosomal instability, and the cancer predisposition that
+presented here as rhabdomyosarcoma. Critically the relationship is
+dosage-dependent with a published threshold: aneuploidy appears below roughly
+50 % residual BUB1B expression. That converts an abstract mechanism into a
+measurable target.
 
 We first asked the obvious question computationally. A pipeline built the
-mechanistic neighbourhood of the lesion — 61 targets spanning the checkpoint
+mechanistic neighbourhood of the lesion — 61 targets across the checkpoint
 complex, the APC/C and the mitotic kinases — and retrieved every drug–gene
 association reported for them: 668 associations, 125 involving an approved drug.
-Three filters were then applied: evidence quality, direction of effect relative
-to the lesion, and safety class. **Zero candidates survived.**
+Three filters followed: evidence quality, direction of effect relative to the
+lesion, and safety class. **Zero candidates survived.**
 
-The failure is structural and, we argue, generalisable. BubR1 has no drug; 43 of
-61 network members have no reported drug association at all. The direction that
-would help — inhibiting CDC20 or the APC/C, substituting for the lost restraint
-on anaphase — is precisely the direction nobody has built drugs for. The
-inhibitors that exist target BUB1, TTK, AURKB, PLK1 and CDK1, because oncology
-wants to push cancer cells *past* a checkpoint; in a child whose checkpoint is
-already failing, that is backwards. Only 12 % of the approved-drug associations
-even record a direction, and every one rests on a single source. A repurposing
-search that does not filter by direction will confidently return drugs that
-would worsen the disease.
+The failure is structural. BubR1 has no drug, and 43 of 61 network members have
+no reported association at all. The direction that would help — inhibiting CDC20
+or the APC/C, substituting for the lost restraint on anaphase — is precisely the
+direction nobody has built drugs for. The inhibitors that exist target BUB1,
+TTK, AURKB, PLK1 and CDK1, because oncology wants to push cancer cells *past* a
+checkpoint; in a child whose checkpoint is already failing, that is backwards.
+Only 12 % of the approved-drug associations record a direction at all, and every
+one rests on a single source. A repurposing search that does not filter by
+direction will confidently return drugs that would worsen the disease.
 
 That negative motivates the proposal: stop acting on the pathway; act on the
 ribosome. One allele carries a premature termination codon, and translational
-readthrough restores full-length protein without needing the target to be
-druggable. The PTC is UGA — the most permissive stop codon — though the +1
-context is unfavourable, and we report both. Because the transcript is
-NMD-degraded, readthrough alone would lack substrate: the requirement is
-readthrough *plus* NMD inhibition.
+readthrough restores full-length protein without the target needing to be
+druggable. The PTC is UGA, the most permissive stop codon, though the +1 context
+is unfavourable; we report both. Because the transcript is NMD-degraded,
+readthrough alone would lack substrate: the requirement is readthrough *plus*
+NMD inhibition.
 
 That requirement selects **amlexanox**, an FDA-approved anti-inflammatory
 reported to do both. It restored >50 % of full-length protein in some *COL7A1*
-nonsense alleles and showed activity in patient-derived *GDAP1* neurons. It
+nonsense alleles and showed activity in patient-derived *GDAP1* neurons, and it
 carries no known nephrotoxicity — decisive here, because this child's
 nephrocalcinosis contraindicates the aminoglycosides that are otherwise the
-best-evidenced readthrough agents. Screening candidates against the patient's
-own phenotype is what moved gentamicin from first place to contraindicated.
+best-evidenced readthrough agents. Screening against the patient's own phenotype
+is what moved gentamicin from first place to contraindicated.
 
-**Strengths:** the negative result is automated and auditable; the direction
-filter is explicit; candidate safety is patient-specific; the pipeline runs in
-under two minutes at zero cost and generalises to any nonsense variant in an
-undruggable gene.
+**Strengths:** the negative is automated and auditable; the direction filter is
+explicit; safety is patient-specific; the pipeline runs in under two minutes at
+zero cost and generalises to any nonsense variant in an undruggable gene.
 
 **Limitations:** no readthrough agent has been tested on *BUB1B*; amlexanox's
 approved formulation is local rather than systemic; the +1 context is
