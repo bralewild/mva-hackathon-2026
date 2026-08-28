@@ -51,3 +51,9 @@ Thumbs.db
 # Challenge templates downloaded for reference - not our work product
 docs/methods_description_form.xlsx
 docs/track1_submission_template.csv
+
+# Internal working material - not part of the public deliverable set.
+# The pitch narration is ours: while the leaderboard is open there is no reason
+# to hand competing teams the framing. Untracked on 2026-08-28; note that it
+# remains in git history from commits 17fbf32..821cdf0 (see below).
+docs/03_video_script.md
