@@ -18,16 +18,35 @@ narrows the problem to three genes and one inheritance model.
 
 **This pipeline deliberately ignores both.**
 
-```
-   Informed approach                  Blind approach
-   ─────────────────                  ──────────────
-   "I know it's MVA"                  "here is a VCF and 8 HPO terms"
-          ↓                                   ↓
-   inspect BUB1B/CEP57/TRIP13         process the whole genome
-          ↓                                   ↓
-   find the answer                    let the ranking converge
-          ↓                                   ↓
-   proves nothing                     proves the METHOD works
+```mermaid
+flowchart TB
+    subgraph INF["❌  Informed approach"]
+        direction TB
+        I1["<i>“I know it's MVA”</i>"]
+        I2["inspect BUB1B<br/>CEP57 · TRIP13"]
+        I3["find the answer"]
+        I4["<b>proves nothing</b><br/><i>works only when you<br/>already know</i>"]
+        I1 --> I2 --> I3 --> I4
+    end
+
+    subgraph BLI["✅  Blind approach — what this pipeline does"]
+        direction TB
+        B1["<i>“here is a VCF<br/>and 8 HPO terms”</i>"]
+        B2["process the<br/>whole genome"]
+        B3["let the ranking<br/>converge on its own"]
+        B4["<b>proves the METHOD works</b><br/><i>reusable for the<br/>next undiagnosed child</i>"]
+        B1 --> B2 --> B3 --> B4
+    end
+
+    classDef bad fill:#742a2a,stroke:#9b2c2c,color:#fff
+    classDef good fill:#22543d,stroke:#276749,color:#fff
+    classDef neutral fill:#2d3748,stroke:#4a5568,color:#fff
+    class I1,I2,I3 neutral
+    class I4 bad
+    class B1,B2,B3 neutral
+    class B4 good
+    style INF fill:#1a202c,stroke:#742a2a,color:#fff
+    style BLI fill:#1a202c,stroke:#276749,color:#fff
 ```
 
 Stages 01–05 contain **no gene list, no disease name, no inheritance hint**. The
