@@ -1,0 +1,46 @@
+================================================================================================
+ 05 - RANKING FENOTIPICO (busqueda ciega)
+================================================================================================
+
+## Terminos HPO del paciente
+  HP:0002859  Rhabdomyosarcoma
+  HP:0000121  Nephrocalcinosis
+  HP:0004322  Short stature
+  HP:0001508  Failure to thrive
+  HP:0003202  Skeletal muscle atrophy
+  HP:0001622  Premature birth
+  HP:0001518  Small for gestational age
+  HP:0200067  Recurrent spontaneous abortion
+
+## Genes candidatos evaluados: 154
+
+## TOP 25
+
+#   GEN         SCORE    HPO   MODELO            VAR  IMPACTO   MEJOR VARIANTE            HGVSp               CADD   CLINVAR
+1   BUB1B       1.8476   7     AR_COMPOUND_HET   2    HIGH      15:40209701T>G            87598.7:p.Leu737Ter 36.0   likely_pathogenic,pa
+2   ZFP57       1.4271   8     AR_COMPOUND_HET   4    MODERATE  6:29673078C>G             66080.2:p.Ala345Pro 1.317  uncertain_significan
+3   ITGB4       1.2678   8     AR_COMPOUND_HET   1    MODERATE  17:75737601C>T            00181.3:p.Ala726Val 17.91  .
+4   ATM         1.2492   7     AR_COMPOUND_HET   1    MODERATE  11:108271261T>C           01606.1:p.Ser978Pro 25.4   uncertain_significan
+5   PRDM16      1.1283   7     AR_COMPOUND_HET   1    HIGH      1:3386696A>G              .                   1.62   benign
+6   ARID1B      1.1283   7     AR_COMPOUND_HET   1    HIGH      6:157186528C>T            .                   1.273  .
+7   RFWD3       1.0706   7     AR_COMPOUND_HET   1    HIGH      16:74666841C>T            .                   8.964  .
+8   BTNL2       1.0408   7     AR_COMPOUND_HET   1    MODERATE  6:32405014C>T             90613.3:p.Asp118Asn 22.3   benign
+9   ZNF808      0.9892   7     AR_COMPOUND_HET   1    MODERATE  19:52554063C>T            52846.4:p.His383Tyr 0.086  .
+10  LAMA3       0.8832   7     AR_COMPOUND_HET   1    MODERATE  18:23763431A>C            24532.8:p.Asn364His 20.6   .
+11  SERPINA1    0.8423   7     AR_COMPOUND_HET   16   HIGH      14:94379548C>CTA          :p.Gly328ArgfsTer25 27.8   benign
+12  HLA-DQA1    0.8131   7     AR_HOMOZYGOUS     3    MODERATE  6:32641487G>C             339398.5:p.Arg87Thr 1.642  .
+13  CTSA        0.7603   7     AR_COMPOUND_HET   1    MODERATE  20:45891598CCTG>C         .                   8.933  .
+14  NFASC       0.7422   7     AR_COMPOUND_HET   3    MODERATE  1:204954892C>T            44786.6:p.Thr159Met 25.0   benign,likely_benign
+15  VARS2       0.7171   7     AR_COMPOUND_HET   1    MODERATE  6:30921647C>T             02585.1:p.Ala564Val 24.6   uncertain_significan
+16  PON1        0.7051   7     AR_COMPOUND_HET   1    MODERATE  7:95316772A>T             222381.3:p.Leu55Met 18.11  .
+17  LRBA        0.6983   7     AR_COMPOUND_HET   1    MODERATE  4:150905948G>A            98582.2:p.Leu549Phe 24.5   .
+18  GIGYF2      0.6663   7     AR_COMPOUND_HET   1    MODERATE  2:232847552CACAGCAGCCACA> .Pro1225_Gln1228del 15.77  benign,likely_benign
+19  CBS         0.6627   7     AR_COMPOUND_HET   2    MODERATE  21:43067923T>C            .                   6.376  likely_benign
+20  LFNG        0.6608   7     AR_COMPOUND_HET   1    MODERATE  7:2526869C>T              22725.5:p.Arg341Trp 26.0   uncertain_significan
+21  CD247       0.6401   7     AR_COMPOUND_HET   1    MODERATE  1:167438562A>T            .                   0.61   benign
+22  CFAP74      0.5689   8     AR_COMPOUND_HET   1    MODERATE  1:1930142C>A              8276.2:p.Gly1069Val 23.5   benign
+23  DGCR6       0.5341   7     AR_HOMOZYGOUS     1    HIGH      22:18907087G>C            .                   3.33   .
+24  IGBP1       0.4691   7     AR_HOMOZYGOUS     1    MODERATE  X:70134785A>C             48784.4:p.Met151Leu 22.9   uncertain_significan
+25  EXOC3L2     0.4526   7     AR_COMPOUND_HET   1    MODERATE  19:45238745A>G            00713.2:p.Ser101Pro 24.0   .
+
+-> /home/user/mva/results/05_ranked_genes.tsv
