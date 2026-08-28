@@ -464,8 +464,12 @@ private repositories and any intermediate or derived datasets.
 
 ```bash
 rm -rf ~/mva/data/raw ~/mva/work ~/mva/results
-rm -rf results/
 ```
+
+The repository itself needs no deletion step: the data never enters it, and what
+`results/` holds is aggregate output plus the submitted CC BY 4.0 finding. Note
+also that `rm -rf` on a committed path would not remove it from git history
+anyway — see [docs/02_compliance.md](docs/02_compliance.md) §2.
 
 Then notify **both** official addresses — the Official Rules and the dataset
 gating form list different ones:
