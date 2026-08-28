@@ -1,21 +1,20 @@
 # Submissions
 
-Prediction files (`*.csv`) and the methods report are **not committed to this
-repository** while the competition is open (close: 24 Oct 2026, 23:59 UTC).
+Track 1 deliverables, uploaded to the challenge submission form.
 
-**Why:** the challenge requires a public repository. Publishing the causal
-coordinates before close would hand the answer to competing teams. What is
-judged here is the **method** — reproducibility, innovation and scalability —
-not a pre-chewed result.
+| File | Size | Purpose |
+|---|---|---|
+| `bralewild_blind-wgs-triage.csv` | 0.8 KB | ranked variant predictions |
+| `bralewild_track1_report.md` | 15.3 KB | methods report (357 lines) |
 
-The files are uploaded directly to the challenge submission form, which is
-private until evaluation. They will be added to this repository after close so
-the record is complete.
+Both are committed here. The Official Rules release submissions under
+**CC BY 4.0**, and a repository with its results redacted reads as incomplete to
+a reviewer.
 
-> **Operative rule:** this repository stays `PRIVATE` until the moment of
-> submission. Its README, documentation and mirrored result files name the
-> causal gene, so visibility — not selective redaction — is the protection.
-> See [../docs/02_compliance.md](../docs/02_compliance.md) §3.
+> **What is not here:** raw patient data, and variant-level tables listing the
+> hundreds of other coordinates the pipeline examined. Those fall under the Data
+> Use Agreement and are blocked permanently by `.gitignore`. See
+> [../docs/02_compliance.md](../docs/02_compliance.md) §2–3.
 
 ## Naming convention (required by the challenge)
 
@@ -24,7 +23,7 @@ the record is complete.
 <hf-username>_track1_report.md     ->  bralewild_track1_report.md
 ```
 
-## Format (verified against `tabs/submit_track1.py` and `evaluation.py`)
+## CSV format (verified against `tabs/submit_track1.py` and `evaluation.py`)
 
 | Field | Type | Note |
 |---|---|---|
@@ -50,7 +49,9 @@ exact tuples:
 
 The source VCF uses Ensembl contig naming (`15`), while the evaluator's own
 fallback and the submission documentation use `chr15`. **A correct answer in the
-wrong naming convention scores zero.** The submission therefore prepends `chr`,
-with a lower-EPCR hedge row in the VCF-native naming as insurance — extra rows
-do not reduce the automated score, and F-max takes the maximum across
-thresholds, so the hedge costs nothing.
+wrong naming convention scores zero.**
+
+The submission therefore prepends `chr`, with a second row in the VCF-native
+naming at a lower EPCR as insurance. The hedge is free: extra rows do not reduce
+the automated score, and F-max takes the maximum across confidence thresholds,
+so the top row alone determines it when correct.
