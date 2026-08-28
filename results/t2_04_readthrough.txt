@@ -1,116 +1,112 @@
 ========================================================================================
- T2-04 - READTHROUGH BRANCH: BYPASSING AN UNDRUGGABLE PATHWAY
+ T2-04 - VARIANT-CLASS ROUTE AND PATIENT SAFETY SCREEN
 ========================================================================================
 
-t2_03 returned zero candidates. That negative is the argument for this branch:
-a loss-of-function lesion in an undruggable complex cannot be addressed from
-within the pathway, so this one acts on the ribosome instead.
+## The premature termination codon - computed from the MANE CDS
 
-## The premature termination codon, computed not assumed
+  transcript        ENST00000287598 (NM_001211.6)
+  CDS               3,153 nt -> 1,051 codons
+  codon 737         TTA  (Leu)
+  c.2210T>G      TTA -> TGA  (Ter)
+  context           ...CCAGAG [TGA] AGTGCC...
 
-  transcript          ENST00000287598 (MANE Select, NM_001211.6)
-  CDS length          3,153 nt -> 1,051 codons
-  codon 737          TTA  (leucine)
-  c.2210T>G       TTA -> TGA
-  stop generated      TGA = UGA
-  sequence context    ...CCAGAG [TGA] AGTGCC...
+  stop codon        UGA - rank 1 of 3 - most permissive - the leakiest stop codon
+  +4 nucleotide     A - rank 3 of 4 - third
 
-  readthrough permissiveness (UGA > UAG >> UAA)
-    stop codon        UGA  - rank 1 of 3 - most permissive - the leakiest stop codon
-    +1 nucleotide     A  - rank 3 of 4 - third
+  MIXED. The stop codon is the most permissive of the three; the downstream
+  context is not. The two are not commensurable - UGA vs UAA is roughly an
+  order of magnitude in reporter assays, C vs A at +4 is two- to three-fold.
 
-  MIXED, and worth stating plainly: the stop codon is the most permissive of
-  the three, the downstream context is not. Readthrough efficiency at this
-  specific allele is an empirical question, and the first thing any follow-up
-  should measure.
+## What readthrough actually produces - and it is not wild-type protein
 
-## Why a threshold, not a cure
+  Near-cognate incorporation at UGA inserts Trp / Cys / Arg, not Leu.
 
-  Aneuploidy appears below ~50% residual BUB1B expression. This patient has:
+  Successful readthrough therefore yields BubR1 p.Leu737Trp/Cys/Arg
+  - a NOVEL MISSENSE VARIANT, in a patient whose other allele already carries
+  a missense of unknown functional consequence. Whether that product is
+  functional is unknown and cannot be assumed.
 
-    allele 1   p.Leu737Ter    NMD-degraded          -> ~0% contribution
-    allele 2   p.Asn1002Lys   full-length, kinase   -> reduced function
-                              domain substitution
+  Consequence for the follow-up plan: a western blot for full-length BubR1
+  cannot distinguish restored function from a full-length non-functional
+  product. The functional readout is not optional - it is the experiment.
 
-  Total BubR1 sits near the threshold. The therapeutic target is not to
-  restore normal function but to recover enough of allele 1 to cross it -
-  a quantitative, measurable goal.
+## Patient phenotype screen
 
-## Candidates
+  Read 8 HPO terms from /home/user/mva/data/raw/patient_hpo.tsv
 
-  ------------------------------------------------------------------------------------
-  1. Amlexanox
-  ------------------------------------------------------------------------------------
-     class       benzopyranobipyridine carboxylic acid; anti-inflammatory
-     APPROVAL    FDA-approved (5% oral paste, aphthous ulcers); oral anti-allergic in Japan
-     mechanism   DUAL: translational readthrough inducer (TRID) AND NMD inhibitor
-     rationale   the lesion needs both - readthrough has no substrate while NMD degrades the transcript, and amlexanox addresses both with one molecule
-     precedent   COL7A1 in recessive dystrophic epidermolysis bullosa: 8 of 12 PTC alleles responded, some reaching >50% of normal full-length protein. GDAP1 in patient-derived hiPSC neurons (Charcot-Marie-Tooth).
-     patient fit no known nephrotoxicity - important because the child has nephrocalcinosis (HP:0000121), which contraindicates chronic aminoglycoside exposure
-     limits      approved formulation is topical/oral-local; systemic exposure for a genetic indication would require reformulation and dose-finding. Never tested on BUB1B. Readthrough efficiency is allele-specific.
+    HP:0001508  contraindicates gi_intolerance       (failure to thrive)
+    HP:0002859  contraindicates immunosuppressive    (rhabdomyosarcoma - active cancer predisposition)
+    HP:0000121  contraindicates nephrotoxic          (nephrocalcinosis - reduced renal reserve)
+    HP:0002859  contraindicates proliferative_risk   (rhabdomyosarcoma - active cancer predisposition)
+
+## Candidates, after the screen
+
+  Being MARKETED is a requirement, not a ranking criterion: an unmarketed
+  drug cannot be repurposed however good its mechanism. Candidates are
+  partitioned on that first, then on the phenotype screen.
+
+  proposable (marketed AND no phenotype conflict): Escin
 
   ------------------------------------------------------------------------------------
-  2. Gentamicin / Amikacin (aminoglycosides)
+  1. Escin (beta-aescin)
+  ------------------------------------------------------------------------------------
+     class       triterpene saponin mixture, Aesculus hippocastanum
+     APPROVAL    MARKETED. German Commission E monograph (1984, renewed 1994) for chronic venous insufficiency; EMA traditional-use registration; oral dragees and topical gel (e.g. Reparil). NOT an FDA drug approval.
+     mechanism   readthrough induction; identified in an unbiased high-throughput screen of ~1,600 clinically approved compounds against CFTR PTCs
+     rationale   the only readthrough-active compound in this set with a currently marketed product and established human dosing (50-75 mg twice daily)
+     precedent   CFTR G542X and W1282X readthrough in primary human airway cells
+     SCREEN      no conflict found
+     limits      herbal/traditional registration rather than a full marketing authorisation; no readthrough data in any nuclear or cell-cycle gene; never tested on BUB1B
+
+  ------------------------------------------------------------------------------------
+  2. Gentamicin / Amikacin (aminoglycosides)   [DEMOTED BY SCREEN]
   ------------------------------------------------------------------------------------
      class       aminoglycoside antibiotic
-     APPROVAL    approved worldwide, decades of clinical use
+     APPROVAL    fully approved and marketed worldwide
      mechanism   binds the ribosomal A site, permitting near-cognate tRNA incorporation at the PTC
-     rationale   the best-characterised readthrough agents; direct precedent in a genome-stability gene
-     precedent   aminoglycoside-induced readthrough functionally restored BRCA1 nonsense alleles - the closest published analogue to BubR1: a large nuclear protein in genome maintenance, rescued by an approved drug. Also BBS2/ALMS1 ciliopathies (protein AND function restored in patient fibroblasts), COL4A5, fucosidosis.
-     patient fit POOR. Nephrotoxic and ototoxic. The child has nephrocalcinosis, so chronic systemic exposure is contraindicated. Retained as a mechanistic reference and an ex vivo tool compound, not as a therapeutic proposal for this patient.
-     limits      cumulative renal and cochlear toxicity; unsuitable for long-term use in any patient, and specifically counter-indicated in this one
+     rationale   the best-characterised readthrough agents, with the closest published precedent to BubR1
+     precedent   aminoglycoside readthrough functionally restored BRCA1 nonsense alleles - a large nuclear genome-maintenance protein. Also BBS2/ALMS1 ciliopathies (protein AND function in patient fibroblasts)
+     SCREEN      cumulative renal tubular injury (nephrocalcinosis - reduced renal reserve)
+     limits      cumulative renal and cochlear toxicity; unsuitable for chronic use
 
   ------------------------------------------------------------------------------------
-  3. Ataluren (PTC124)
+  3. Ataluren (PTC124)   [NOT MARKETED - reference only]
   ------------------------------------------------------------------------------------
-     class       oxadiazole; translational readthrough inducer
-     APPROVAL    NOT currently market-approved. EMA conditional authorisation for nonsense-mutation Duchenne was NOT renewed - CHMP negative in Jan 2024, re-examined and confirmed Oct 2024, adopted by the European Commission. Individual states may still permit named-patient use.
-     mechanism   promotes readthrough at the ribosomal A site with a better safety profile than aminoglycosides
-     rationale   mechanistically the most relevant purpose-built agent, and the reason this class exists clinically at all
-     precedent   MPS I-H mouse model; extensive DMD trial programme
-     patient fit not applicable while unapproved; efficacy was the ground for non-renewal, not safety
-     limits      efficacy not demonstrated to the EMA's satisfaction. Listed for completeness and honesty, NOT proposed as a candidate.
+     class       oxadiazole; purpose-built readthrough inducer
+     APPROVAL    NOT market-approved. EMA conditional authorisation for nonsense-mutation Duchenne not renewed (CHMP negative Jan 2024, re-examined and confirmed Oct 2024, adopted by the Commission). Efficacy, not safety, was the ground.
+     mechanism   promotes readthrough at the ribosomal A site
+     rationale   recovered independently by the t2-03 search on RPL3 and RPS15, which serves as a positive control that the corrected network can see readthrough biology
+     precedent   MPS I-H mouse model; a full phase-3 programme in DMD that FAILED ON EFFICACY - the most informative single datapoint about whether readthrough restores clinically meaningful protein
+     SCREEN      no conflict found
+     limits      efficacy not demonstrated. Its failure is evidence about the CLASS, not only about ataluren, and it argues against this entire strategy.
 
   ------------------------------------------------------------------------------------
-  4. NMD inhibition as an adjunct (e.g. NMDI-1 class)
+  4. Amlexanox   [NOT MARKETED - reference only]   [DEMOTED BY SCREEN]
   ------------------------------------------------------------------------------------
-     class       investigational NMD pathway inhibitors
-     APPROVAL    investigational - not approved
-     mechanism   raises the abundance of the PTC-containing transcript, increasing the substrate available for readthrough
-     rationale   co-administration of an NMD inhibitor with gentamicin restored full-length protein in a Hurler syndrome model; patients with higher transcript levels respond better to readthrough drugs
-     precedent   Hurler syndrome model (NMDI-1 + gentamicin); choroideremia, where NMD efficiency varies and predicts readthrough response
-     patient fit conceptual - included because it explains why a dual-activity molecule is preferable to a pure readthrough agent
-     limits      no approved agent; chronic global NMD inhibition has obvious safety concerns, since NMD is a housekeeping quality-control pathway
+     class       benzopyranobipyridine carboxylic acid; anti-inflammatory
+     APPROVAL    FDA-approved molecule (NDA 020511, 1996) but NO MARKETED PRODUCT: Aphthasol discontinued in the US; Solfa oral tablets discontinued in Japan by Takeda in 2019
+     mechanism   reported dual activity: translational readthrough inducer and NMD inhibitor. Principal known systemic pharmacology is TBK1/IKKe inhibition.
+     rationale   the lesion needs both readthrough and NMD inhibition; amlexanox is the only agent reported to do both
+     precedent   COL7A1 in recessive dystrophic epidermolysis bullosa (8 of 12 PTC alleles responded); GDAP1 in patient-derived hiPSC neurons
+     SCREEN      suppression of innate immune / type-I interferon signalling (rhabdomyosarcoma - active cancer predisposition)
+     limits      no marketed product anywhere; systemic PK for a genetic indication unknown; never tested on BUB1B
 
-## Patient-specific safety screen
+## What the screen changed
 
-  Candidate drugs are cross-checked against the proband's own phenotype.
-  This is where a generic repurposing answer and a patient-specific one
-  diverge:
+  Gentamicin moved to rank 2 (mechanistic rank was 3) - cumulative renal tubular injury (nephrocalcinosis - reduced renal reserve)
+  Amlexanox moved to rank 4 (mechanistic rank was 1) - suppression of innate immune / type-I interferon signalling (rhabdomyosarcoma - active cancer predisposition)
 
-    HP:0000121  Nephrocalcinosis         avoid nephrotoxic agents - aminoglycosides, high-dose NSAIDs, and anything requiring renal dose adjustment
-    HP:0002859  Rhabdomyosarcoma         avoid agents that could promote proliferation or interfere with oncological surveillance
-    HP:0001508  Failure to thrive        avoid agents with significant gastrointestinal intolerance or appetite suppression
+## Honest status of this branch
 
-  The nephrocalcinosis flag is decisive. Aminoglycosides are the
-  best-evidenced readthrough agents and are approved worldwide - and they
-  are contraindicated for chronic use in this specific child. A proposal
-  that ignored that would be unusable clinically, whatever the mechanism
-  said.
+  No agent in this set is both market-approved and evidenced for readthrough:
 
-## What follow-up would look like
+    amlexanox   best mechanistic fit, NO marketed product anywhere
+    escin       marketed, but herbal registration and no nuclear-gene data
+    aminoglyc.  fully approved, contraindicated in this patient
+    ataluren    not approved; its phase-3 failure is evidence against the class
 
-  1. Quantify BUB1B transcript in patient cells - readthrough response
-     correlates with transcript abundance, and NMD efficiency varies.
-  2. Measure baseline BubR1 protein against the ~50% threshold.
-  3. Test readthrough ex vivo in patient-derived fibroblasts: full-length
-     BubR1 by western blot, then premature chromatid separation and
-     aneuploidy rate as functional readouts.
-  4. Only if protein AND function move together does this become a clinical
-     question rather than a laboratory one.
-
-  Nothing here is a treatment recommendation. No readthrough agent has been
-  tested on BUB1B in any system - that gap is the novelty and the risk at
-  the same time.
+  That is the finding. The readthrough field has no cleanly approved agent,
+  and the most informative clinical datapoint in it - ataluren's efficacy
+  failure - argues against the strategy rather than for it.
 
   -> /home/user/mva/work/t2_04_candidates.tsv
