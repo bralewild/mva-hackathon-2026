@@ -11,7 +11,7 @@
 #    terminar el hackathon) de recursos PUBLICOS (referencias, BDs) que no
 #    contienen informacion del paciente y no requieren borrado.
 #
-# Ejecutar antes de notificar a MVAHackathon2026@synapse.org.
+# Ejecutar antes de notificar a RarediseaserealkidMVAhackathon2026@synapse.org (y copia a MVAHackathon2026@synapse.org).
 # ==============================================================================
 source "$(dirname "$0")/00_config.sh"
 set +o pipefail
@@ -71,7 +71,7 @@ echo "# D) COMANDO DE BORRADO (DUA)                                  #"
 echo "###############################################################"
 echo
 echo "    rm -rf $RAW $WORK $RESULTS"
-echo "    # luego notificar a MVAHackathon2026@synapse.org"
+echo "    # luego notificar a RarediseaserealkidMVAhackathon2026@synapse.org (y copia a MVAHackathon2026@synapse.org)"
 echo
 echo "## Espacio total en ext4"
 df -h /home | awk 'NR==2 {print "    usado: "$3"   libre: "$4}'

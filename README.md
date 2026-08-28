@@ -74,7 +74,7 @@ Al terminar el hackathon:
 rm -rf ~/mva/data/raw ~/mva/work ~/mva/results
 ```
 
-y notificar a **MVAHackathon2026@synapse.org**.
+y notificar a **RarediseaserealkidMVAhackathon2026@synapse.org (y copia a MVAHackathon2026@synapse.org)**.
 
 ## Formato del submission (verificado contra el codigo del evaluador)
 
@@ -86,3 +86,33 @@ proband_id,chrom_1,pos_1,ref_1,alt_1,chrom_2,pos_2,ref_2,alt_2,epcr,finding_type
 * `chrom` con prefijo **`chr`** — el VCF usa naming Ensembl (`15`), el evaluador
   espera `chr15`. **`evaluation.py` no normaliza**: compara tuplas exactas.
 * `epcr` en `(0, 1]`, filas ordenadas por EPCR descendente, maximo 10
+
+---
+
+## Cumplimiento normativo
+
+Ver [docs/02_compliance.md](docs/02_compliance.md) para el checklist operativo
+completo derivado de las Reglas Oficiales.
+
+Puntos clave:
+
+* **Borrado obligatorio** dentro de los 30 dias del cierre, incluyendo repos
+  privados y todo dataset intermedio o derivado. Correr
+  `pipeline/99_data_inventory.sh` y notificar a **ambas** direcciones oficiales.
+* **Las submissions pueden ser reejecutadas** por los organizadores: la
+  reproducibilidad es un requisito funcional, no estetico.
+* **El codigo se puede publicar en cualquier momento** — el embargo solo aplica
+  a manuscritos para revision por pares.
+* Protocolo aprobado por **WCG IRB #20252010**. Submissions bajo **CC BY 4.0**.
+
+## Acknowledgement
+
+Toda publicacion derivada debe incluir textualmente:
+
+> "This work was made possible through the Hackathon, organized by Sage
+> Bionetworks in partnership with the MVA Society, Hugging Face, and BEACON
+> (The Benchmarking, Evaluation, and Assessment Consortium for Science), with
+> prize sponsorship from AWS and Anthropic. We are deeply grateful to the child
+> and their family who generously contributed their data and their story to
+> advance research into this rare disease. We acknowledge their trust in making
+> this Hackathon possible."

@@ -270,7 +270,7 @@ notificarlo por correo. Por eso:
 
 ```bash
 rm -rf ~/mva/data/raw ~/mva/work ~/mva/results
-# → notificar a MVAHackathon2026@synapse.org
+# → notificar a RarediseaserealkidMVAhackathon2026@synapse.org (y copia a MVAHackathon2026@synapse.org)
 ```
 
 Tres barreras para que el genoma del chico nunca llegue a GitHub:
