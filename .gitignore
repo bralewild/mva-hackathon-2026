@@ -46,3 +46,7 @@ __pycache__/
 *.pyc
 .DS_Store
 Thumbs.db
+
+# Challenge templates downloaded for reference - not our work product
+docs/methods_description_form.xlsx
+docs/track1_submission_template.csv

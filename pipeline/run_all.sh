@@ -43,6 +43,9 @@ python "$D/06_validate_convergence.py"
 log "===== 07 secondary findings ====="
 python "$D/07_secondary_findings.py"
 
+log "===== 08 submission file (automated) ====="
+python "$D/08_make_submission.py"
+
 log "===== mirroring results to the project folder ====="
 bash "$D/sync_results.sh"
 

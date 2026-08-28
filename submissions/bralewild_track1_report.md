@@ -327,7 +327,129 @@ to the organisers.
 
 ---
 
-## 10. Acknowledgement
+## 10. Methods description form
+
+Answers to `methods_description_form.xlsx`, Track 1 sheet, reproduced here so the
+panel has them alongside the report.
+
+**Team name** — `bralewild` (individual participation).
+
+**Model number** — 1 of up to 6. `blind-wgs-triage`.
+
+**Describe your model/approach in detail** — see §4 and §5. In brief: an
+eight-stage genome-wide triage that reduces 5,012,204 VCF variants to a ranked
+gene list, using no disease name, no gene panel and no inheritance hint. Quality
+and genotype/VAF coherence → snpEff functional impact → recessive inheritance
+grouping → gnomAD/ClinVar/CADD via Ensembl VEP REST → Resnik semantic similarity
+against the proband's eight HPO terms → a post-hoc convergence gate that applies
+the compound-heterozygous expectation only after the ranking is closed.
+
+**Is the submission file automated output, or manually curated?** —
+**Automated.** `pipeline/08_make_submission.py` derives the CSV deterministically
+from the pipeline's own results: gene order comes from the stage 05 ranking, the
+variants from stage 04, and EPCR from an explicit evidence rule (rank base, plus
+increments for a HIGH-impact allele, a ClinVar pathogenic classification, and a
+complete compound-heterozygous pair). Re-running the pipeline regenerates a
+byte-identical file. No row was hand-edited.
+
+**Describe any downstream manual review** — none was applied to the submission
+file. Human judgement entered upstream, in designing the method, and is
+documented rather than hidden: the quality thresholds (§4), the choice of
+Ensembl-wide over MANE-only annotation (§4), and the VAF-coherence filter added
+after inspecting a mismapping artefact (§6). Each is stated with its rationale
+and each is a parameter in `pipeline/00_config.sh`, not a per-variant decision.
+
+**Public or proprietary data?** — **Publicly available data only.** No
+proprietary source, no commercial database, no restricted resource.
+
+**Public data used** — Ensembl 115 gene models and coordinates (REST API);
+snpEff `GRCh38.115`; Ensembl VEP REST for consequence, MANE Select transcript,
+HGVS, CADD phred, dbSNP identifiers, gnomAD allele frequencies and ClinVar
+classifications; the Human Phenotype Ontology (`hp.obo`) and its
+`genes_to_phenotype.txt` annotations; the ACMG SF v3.2 secondary-findings gene
+list (Miller et al., *Genet Med* 2023). Only genomic coordinates were sent to
+these APIs — no subject identifier of any kind.
+
+**Proprietary data used** — none.
+
+**Compound-heterozygous pairs, or single variants only?** — **Pairs, natively.**
+Stage 03 groups variants by gene and classifies an `AR_COMPOUND_HET` model when a
+gene carries two or more qualifying heterozygous variants; stage 08 emits both
+alleles in the `chrom_2`/`pos_2`/`ref_2`/`alt_2` columns. Single-variant rows are
+emitted for homozygous models or when only one rare variant survives filtering.
+The pipeline reports such pairs as **presumed in trans**: the case is a
+singleton, so phase cannot be proven (§8).
+
+**How were secondary or incidental findings handled?** — Stage 07 cross-checks
+every rare candidate against the ACMG SF v3.2 list and against a separate,
+explicitly declared list of genes with treatable disease. **No reportable
+secondary finding was identified**, so no `secondary` row appears in the
+submission. The single ACMG-adjacent candidate, *ATM* `p.Ser978Pro`, is
+classified benign / likely benign by multiple ClinVar submitters (gnomAD AF
+8.4 × 10⁻⁴) and was excluded. A well-founded negative is a result; padding the
+submission with a benign variant would work against the rigour being assessed.
+
+**Run time and cost** — **~1.5 hours wall clock, USD 0.** Entirely local, no
+cloud resources. On an Intel i9-14900HX (24 c / 32 t, 32 GB RAM) under WSL2:
+snpEff database download ~1 min (770 MB), genome-wide annotation **58 min**
+(single long step), stage 03 ~1 min, stage 04 ~40 min on the first run and
+seconds thereafter from the incremental cache, stages 05–08 under 30 seconds
+combined. Disk footprint ~2 GB beyond the input. The dominant costs are
+annotation CPU time and Ensembl VEP REST latency, both of which scale linearly
+with cohort size and parallelise trivially across samples.
+
+### Method abstract (500 words)
+
+Four teams had already reached a perfect leaderboard score when this work began,
+so identifying the causal variant was not, on its own, a contribution. The
+harder and more useful question was whether a method could find it *without
+being told what to look for* — because that is the method that helps the next
+undiagnosed child.
+
+The hackathon names the disease in its title, and the evaluator's public source
+states the answer is a compound-heterozygous pair. Either fact reduces the
+problem to three genes and an afternoon. This pipeline deliberately encodes
+neither. Stages 01–05 contain no disease name, no gene list and no inheritance
+hint; the compound-heterozygous expectation is applied only in stage 06, as a
+validation gate, after the ranking is final.
+
+From 5,012,204 variants: quality filtering and a genotype/VAF coherence check
+(added after diagnosing a paralogue-mismapping artefact) leave 4.57 M; snpEff
+HIGH/MODERATE impact leaves 14,697; grouping by gene under recessive inheritance
+models leaves 9,145 in 4,821 genes; a gnomAD frequency ceiling of 0.01 leaves
+179; and Resnik semantic similarity between the proband's eight HPO terms and
+`genes_to_phenotype` annotations ranks the 140 genes carrying HPO annotations.
+
+*BUB1B* ranked first, 22.8 % clear of the runner-up, and satisfied all five
+convergence criteria. Its two rare variants — `NM_001211.6:c.2210T>G`
+p.Leu737Ter (nonsense, exon 17/23, ClinVar Pathogenic/Likely pathogenic, CADD
+36) and `c.3006T>G` p.Asn1002Lys (missense in the kinase domain, absent from
+gnomAD, CADD 24.5) — reproduce the canonical architecture of *BUB1B*-related
+Mosaic Variegated Aneuploidy: one truncating allele plus one missense allele. An
+independent hypothesis-driven analysis of the three known MVA genes converged on
+the same pair.
+
+**Strengths.** The result is demonstrated rather than asserted: two
+methodologically independent routes agree, and the ranking survived a
+substantially stricter filter (107,395 variants removed) with an identical
+score, showing it never depended on tolerating noise. Every discard is counted
+in a summary file, so no filter is silent. The submission CSV is generated
+automatically from the pipeline's own output. Annotation runs against live
+public APIs rather than frozen local caches, so the method stays current and
+carries no additional data at rest. Everything is CPU-only and cost-free.
+
+**Limitations.** Phase is not proven: the case is a singleton and the two
+variants lie 10,911 bp apart, beyond the reach of short-read phasing even if the
+FASTQ were reprocessed — the pair is *presumed* in trans. Only SNVs and indels
+were assessed; no CNVs, structural variants or repeat expansions. The
+HIGH/MODERATE impact filter is coding-biased and discards deep intronic and
+regulatory variants. Phenotype ranking cannot score a gene that carries no HPO
+annotations, however causal it might be. The second allele is the weaker one:
+absent from gnomAD and computationally deleterious, but not present in ClinVar.
+
+---
+
+## 11. Acknowledgement
 
 > This work was made possible through the Hackathon, organized by Sage
 > Bionetworks in partnership with the MVA Society, Hugging Face, and BEACON
