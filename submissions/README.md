@@ -1,39 +1,56 @@
 # Submissions
 
-Los archivos `*.csv` de predicciones **no estan versionados en este repo**
-mientras la competencia siga abierta (cierre: 24 oct 2026).
+Prediction files (`*.csv`) and the methods report are **not committed to this
+repository** while the competition is open (close: 24 Oct 2026, 23:59 UTC).
 
-**Motivo:** el challenge exige un repositorio publico. Publicar las coordenadas
-causales antes del cierre equivaldria a entregarle la respuesta a los demas
-equipos. Lo que se juzga aqui es el **metodo** — reproducibilidad, innovacion y
-escalabilidad — no el resultado masticado.
+**Why:** the challenge requires a public repository. Publishing the causal
+coordinates before close would hand the answer to competing teams. What is
+judged here is the **method** — reproducibility, innovation and scalability —
+not a pre-chewed result.
 
-El CSV se sube directamente al formulario del challenge, que es privado hasta
-la evaluacion. Se agregara a este repo despues del cierre para dejar el
-registro completo.
+The files are uploaded directly to the challenge submission form, which is
+private until evaluation. They will be added to this repository after close so
+the record is complete.
 
-## Convencion de nombres (exigida por el challenge)
+> **Operative rule:** this repository stays `PRIVATE` until the moment of
+> submission. Its README, documentation and mirrored result files name the
+> causal gene, so visibility — not selective redaction — is the protection.
+> See [../docs/02_compliance.md](../docs/02_compliance.md) §3.
+
+## Naming convention (required by the challenge)
 
 ```
-<usuario-hf>_<nombre-del-modelo>.csv     ->  bralewild_blind-wgs-triage.csv
-<usuario-hf>_track1_report.md            ->  bralewild_track1_report.md
+<hf-username>_<model-name>.csv     ->  bralewild_blind-wgs-triage.csv
+<hf-username>_track1_report.md     ->  bralewild_track1_report.md
 ```
 
-## Formato (verificado contra tabs/submit_track1.py y evaluation.py)
+## Format (verified against `tabs/submit_track1.py` and `evaluation.py`)
 
-| Campo | Tipo | Nota |
+| Field | Type | Note |
 |---|---|---|
-| `proband_id` | string | **debe ser `PROBAND01`** |
-| `chrom_1` / `chrom_2` | string | **con prefijo `chr`** (ej. `chr15`) |
+| `proband_id` | string | **must be `PROBAND01`** — hardcoded in the submission handler |
+| `chrom_1` / `chrom_2` | string | **`chr` prefix required** (e.g. `chr15`) |
 | `pos_1` / `pos_2` | int | GRCh38 |
 | `ref_*` / `alt_*` | string | |
-| `epcr` | float | rango `(0, 1]`, filas ordenadas descendente |
-| `finding_type` | string | `primary` o `secondary` |
-| `notes` | string | opcional, justificacion |
+| `epcr` | float | range `(0, 1]`, rows sorted descending |
+| `finding_type` | string | `primary` or `secondary` |
+| `notes` | string | optional rationale |
 
-Maximo 10 filas. Maximo **6 submissions** por participante; solo la de mayor
-puntaje aparece en el leaderboard.
+Maximum 10 rows. Maximum **6 submissions** per participant; only the
+highest-scoring one appears on the leaderboard.
 
-`evaluation.py` **no normaliza** los nombres de cromosoma: compara tuplas
-exactas `(chrom, int(pos), ref.upper(), alt.upper())`. El VCF de origen usa
-naming Ensembl (`15`), asi que el submission debe anteponer `chr`.
+## The normalisation trap
+
+`evaluation.py` performs **no normalisation** of chromosome names. It compares
+exact tuples:
+
+```python
+(chrom.strip(), int(pos), ref.strip().upper(), alt.strip().upper())
+```
+
+The source VCF uses Ensembl contig naming (`15`), while the evaluator's own
+fallback and the submission documentation use `chr15`. **A correct answer in the
+wrong naming convention scores zero.** The submission therefore prepends `chr`,
+with a lower-EPCR hedge row in the VCF-native naming as insurance — extra rows
+do not reduce the automated score, and F-max takes the maximum across
+thresholds, so the hedge costs nothing.

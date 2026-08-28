@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
 # ==============================================================================
-# 00_config.sh — Configuracion compartida del pipeline
+# 00_config.sh - Shared pipeline configuration
 #
-# Uso:  source "$(dirname "$0")/00_config.sh"
+# Usage:  source "$(dirname "$0")/00_config.sh"
 #
-# Codigo  -> /mnt/c/Users/user/Documents/real-kid-mva-hackathon  (versionable)
-# Datos   -> ~/mva                                                (ext4, rapido)
+# Code -> /mnt/c/Users/user/Documents/real-kid-mva-hackathon  (version-controlled)
+# Data -> ~/mva                                                (ext4, fast I/O)
 # ==============================================================================
 set -euo pipefail
 
@@ -20,20 +20,20 @@ LOGS="$BASE/logs"
 
 VCF_RAW="$RAW/WGS_EX2312012_HGWCNDSX7.vcf.gz"
 SAMPLE="WGS_EX2312012"
-PROBAND_ID="PROBAND01"          # exigido por el evaluador (submit_track1.py)
+PROBAND_ID="PROBAND01"          # required by the evaluator (submit_track1.py)
 ASSEMBLY="GRCh38"
-CONTIG_STYLE="ensembl"          # el VCF usa 1..22,X,Y SIN prefijo chr
-SUBMIT_CONTIG_PREFIX="chr"      # el evaluador espera chr15 (ver docs/)
+CONTIG_STYLE="ensembl"          # the VCF uses 1..22,X,Y WITHOUT a chr prefix
+SUBMIT_CONTIG_PREFIX="chr"      # the evaluator expects chr15 (see docs/)
 
 SNPEFF_DB="GRCh38.115"
 THREADS=28
 JAVA_MEM="12g"
 
-# Umbrales de calidad (justificados en docs/02_metodologia.md)
+# Quality thresholds (rationale in docs/01_pipeline_flow.md)
 MIN_GQ=20
 MIN_DP=10
-MAX_AF_RECESSIVE=0.01           # gnomAD, modelo recesivo
-MAX_AF_DOMINANT=0.0001          # gnomAD, modelo dominante
+MAX_AF_RECESSIVE=0.01           # gnomAD, recessive model
+MAX_AF_DOMINANT=0.0001          # gnomAD, dominant model
 
 mkdir -p "$WORK" "$RESULTS" "$LOGS" "$REF" "$ANNOT"
 

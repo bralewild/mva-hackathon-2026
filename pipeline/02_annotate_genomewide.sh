@@ -1,30 +1,30 @@
 #!/usr/bin/env bash
 # ==============================================================================
-# 02_annotate_genomewide.sh — Anotacion funcional CIEGA de todo el genoma
+# 02_annotate_genomewide.sh - Blind genome-wide functional annotation
 #
-# ENTRADA : $VCF_RAW  (5.012.204 variantes)
-# SALIDA  : $WORK/02_annotated.vcf.gz + .tbi
-#           $RESULTS/02_snpeff_summary.html
+# INPUT  : $VCF_RAW  (5,012,204 variants)
+# OUTPUT : $WORK/02_annotated.vcf.gz + .tbi
+#          $RESULTS/02_snpeff_summary.html
 #
-# PROPOSITO: anotar TODAS las variantes sin ningun sesgo hacia genes candidatos.
-#            Este es el paso que hace CIEGA la busqueda: el pipeline no sabe que
-#            la enfermedad es MVA ni que existen BUB1B / CEP57 / TRIP13.
+# PURPOSE: annotate EVERY variant with no bias toward candidate genes. This is
+#          the step that makes the search blind: the pipeline does not know the
+#          disease is MVA, nor that BUB1B / CEP57 / TRIP13 exist.
 #
-# BD ELEGIDA: GRCh38.115 (Ensembl completo) en vez de GRCh38.mane.*
-#            MANE cubre ~19.3k genes con un transcrito cada uno — ideal para
-#            REPORTAR, pero en una busqueda ciega prima la cobertura completa.
-#            El reporte final usa transcritos MANE via VEP (etapa 04).
+# DATABASE CHOICE: GRCh38.115 (full Ensembl) rather than GRCh38.mane.*
+#          MANE covers ~19.3k genes with one transcript each - ideal for
+#          REPORTING, but a blind search needs complete coverage. The final
+#          report does use MANE transcripts, via VEP in stage 04.
 #
-# LECCION APRENDIDA: snpEff sale con codigo 0 aunque falle (opcion invalida,
-#            descarga muerta). NO alcanza con 'set -e': validamos la salida.
+# LESSON LEARNED: snpEff exits 0 even when it fails (invalid option, dead
+#          download). 'set -e' is not enough - we validate the output.
 # ==============================================================================
 source "$(dirname "$0")/00_config.sh"
 
-# --- dependencia: base de datos ---
+# --- dependency: annotation database ---
 bash "$(dirname "$0")/02a_download_snpeff_db.sh"
 
 OUT="$WORK/02_annotated.vcf.gz"
-log "anotando 5.012.204 variantes con snpEff $SNPEFF_DB (~15-40 min)"
+log "annotating 5,012,204 variants with snpEff $SNPEFF_DB (~15-60 min)"
 
 snpEff -Xmx${JAVA_MEM} ann \
   -noLog \
@@ -33,19 +33,19 @@ snpEff -Xmx${JAVA_MEM} ann \
   2> "$LOGS/02_snpeff.log" \
   | bgzip -@ 8 > "$OUT"
 
-# --- VALIDACION: no confiar en el exit code ---
+# --- VALIDATION: never trust the exit code ---
 SIZE=$(stat -c%s "$OUT")
 if [ "$SIZE" -lt 10000000 ]; then
-  log "ERROR: salida de ${SIZE} bytes — snpEff fallo. Ultimas lineas del log:"
+  log "ERROR: output is only ${SIZE} bytes - snpEff failed. Tail of the log:"
   tail -20 "$LOGS/02_snpeff.log"
   exit 1
 fi
 N=$(bcftools view -H "$OUT" | wc -l)
 if [ "$N" -lt 5000000 ]; then
-  log "ERROR: $N variantes anotadas, se esperaban ~5.012.204"; exit 1
+  log "ERROR: $N variants annotated, expected ~5,012,204"; exit 1
 fi
 
 tabix -f -p vcf "$OUT"
-log "OK — $N variantes anotadas"
-log "salida  -> $OUT ($(du -h "$OUT" | cut -f1))"
-log "resumen -> $RESULTS/02_snpeff_summary.html"
+log "OK - $N variants annotated"
+log "output  -> $OUT ($(du -h "$OUT" | cut -f1))"
+log "summary -> $RESULTS/02_snpeff_summary.html"

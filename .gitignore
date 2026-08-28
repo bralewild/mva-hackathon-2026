@@ -1,4 +1,22 @@
-# NUNCA versionar datos del paciente (obligacion del Data Use Agreement)
+# ==============================================================================
+# Two distinct concerns. Do not conflate them.
+#
+#   1. DUA OBLIGATION (permanent, legal)
+#      Patient data and variant-level derived data must never be redistributed
+#      through any channel. Enforced here, forever.
+#
+#   2. COMPETITIVE STRATEGY (temporary)
+#      Do not reveal the causal variants while the leaderboard is open.
+#      Enforced by REPOSITORY VISIBILITY, not by this file:
+#
+#          >>> the repository stays PRIVATE until the moment of submission <<<
+#
+#      The README, docs and convergence report name the causal gene. Selectively
+#      redacting them would leave an incomplete artefact that reads poorly to a
+#      reviewer. Visibility is the correct control.
+# ==============================================================================
+
+# ---- 1. DUA: raw patient data -----------------------------------------------
 *.vcf
 *.vcf.gz
 *.vcf.gz.tbi
@@ -10,31 +28,26 @@
 data/
 work/
 
-# resultados espejados que contienen coordenadas del paciente
-results/*.csv
-results/*.tsv
-
-# Las predicciones NO van al repo publico hasta despues del cierre (24 oct 2026).
-# El CSV se sube directo al formulario del challenge, que es privado.
-# El repo debe demostrar que el METODO funciona, no regalar el resultado.
-submissions/*.csv
-
-# Terminos HPO del paciente: el .docx es confidencial y no redistribuible
+# Patient HPO terms: extracted from a document marked "Do not redistribute"
 patient_hpo.tsv
 *phenotype*.tsv
 
-# Acceso directo local a los datos en WSL: es comodidad de esta maquina,
-# no codigo del proyecto. Para quien clone el repo seria una ruta rota.
-DATOS-EN-WSL.lnk
-
-# Reportes HTML de QC: son estadisticas agregadas del genoma DEL PACIENTE
-# (conteos por gen, por cromosoma, por tipo de variante). No aportan nada a la
-# reproducibilidad — cualquiera que corra el pipeline los regenera — y ante un
-# DUA estricto no vale la pena discutir si un agregado es reidentificable.
+# ---- 1b. DUA: variant-level derived data ------------------------------------
+# These files list hundreds of the patient's genomic coordinates. Aggregate
+# summaries (counts only) are fine; per-variant tables are not.
+results/05_ranked_genes.tsv
+results/05_ranking_report.txt
+results/07_secondary_findings.txt
 results/*.html
 results/*.genes.txt
 
-# El reporte de metodos tambien contiene las coordenadas causales.
-# Se sube al formulario del challenge (privado) y se agrega al repo
-# despues del cierre, igual que el CSV.
-submissions/bralewild_*
+# ---- 2. Local convenience, not project code ---------------------------------
+# Shortcut to the data inside WSL: a broken path for anyone else, and it leaks
+# this machine's layout.
+DATA-IN-WSL.lnk
+
+# ---- Housekeeping ------------------------------------------------------------
+__pycache__/
+*.pyc
+.DS_Store
+Thumbs.db
