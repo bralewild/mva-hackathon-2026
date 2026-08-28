@@ -317,3 +317,62 @@ Decirlas es parte del método, no una debilidad:
 - **Cobertura de anotación.** Un gen sin anotaciones HPO obtiene score 0 aunque
   sea el causal. Es la limitación intrínseca de cualquier priorización
   fenotípica.
+
+---
+
+## 9. Etapas agregadas tras la primera corrida
+
+### Filtro de coherencia VAF (dentro de `03_inheritance_models.py`)
+
+La primera corrida dejo pasar **201 variantes en SERPINA1**, incluidos cuatro
+frameshifts distintos en 61 pares de bases. Biologicamente imposible: hay dos
+alelos, no cuatro.
+
+La firma del artefacto:
+
+| Señal | Observado | Esperado en una het real |
+|---|---|---|
+| VAF | 0.13 – 0.20 | ~0.50 |
+| Genotipo | todas `0/1` | mezcla de het y hom |
+| Densidad | una cada 2-10 pb | dispersa |
+| GQ / DP | 99 / 50-60 | igual |
+
+**SERPINA1 esta en 14q32.13 pegado al pseudogen SERPINA2.** Lecturas del
+paralogo se mapean al gen real y el caller las reporta como heterocigotas de
+baja fraccion.
+
+`GQ` alto significa que el caller esta seguro, **no** que la variante sea real.
+Faltaba el filtro que exige coherencia entre la zigosidad llamada y la fraccion
+alelica observada:
+
+```
+   heterocigota :  0.25 <= VAF <= 0.75
+   homocigota   :  VAF >= 0.85
+```
+
+**Efecto:** 107.395 variantes descartadas genome-wide, candidatas de 9.384 a
+9.145, genes de 154 a 140. **BUB1B siguio primero con score identico (1.8476)
+y 5/5 criterios de convergencia.** El hallazgo no dependia de dejar pasar ruido.
+
+### `06_validate_convergence.py` — compuerta de validacion
+
+Cinco criterios aplicados DESPUES de cerrado el ranking: separacion sobre el
+segundo, modelo recesivo, par de variantes raras, al menos una de impacto HIGH,
+y evidencia independiente (ClinVar o CADD). Es validacion, no filtro: si el
+conocimiento de la enfermedad entrara antes, el resultado seria circular.
+
+### `07_secondary_findings.py` — hallazgos secundarios
+
+El FAQ del challenge aclara que los hallazgos secundarios no afectan el score
+automatico y se apartan para revision cualitativa del panel.
+
+Cruza las candidatas raras contra la lista **ACMG SF v3.2** (Miller et al.,
+Genet Med 2023) y contra una lista propia de genes con enfermedad tratable,
+declarada como criterio propio y no como consenso.
+
+**Resultado: ninguno reportable.** Cero en ACMG SF v3.2. El unico candidato de
+la lista B (ATM p.Ser978Pro) esta clasificado como benigno/probablemente benigno
+por multiples laboratorios en ClinVar y tiene AF 0.00084 en gnomAD.
+
+Un negativo bien fundamentado es un resultado. Inflar el envio con una variante
+benigna seria lo contrario del rigor que el panel evalua.

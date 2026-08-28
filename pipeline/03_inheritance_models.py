@@ -34,6 +34,13 @@ IN_VCF   = f"{BASE}/work/02_annotated.vcf.gz"
 OUT_TSV  = f"{BASE}/work/03_candidates.tsv"
 OUT_SUM  = f"{BASE}/results/03_inheritance_summary.txt"
 MIN_GQ, MIN_DP = 20, 10
+# Rango de fraccion alelica alternativa (VAF) aceptable para una heterocigota real.
+# Sin esto pasan artefactos de mismapeo: lecturas de un paralogo o pseudogen se
+# alinean al gen real y el caller las reporta como het con GQ=99 y DP alto pero
+# VAF ~0.15. Caso testigo: SERPINA1 (14q32.13, pegado al pseudogen SERPINA2)
+# aportaba 201 variantes con VAF 0.13-0.20, incluidos 4 frameshifts falsos.
+VAF_HET_MIN, VAF_HET_MAX = 0.25, 0.75
+VAF_HOM_MIN = 0.85
 KEEP_IMPACT = {"HIGH", "MODERATE"}
 
 # ANN de snpEff: Allele|Annotation|Impact|Gene_Name|Gene_ID|Feature_Type|
@@ -71,6 +78,27 @@ def main():
                 gq, dp = 0, 0
             if gq < MIN_GQ or dp < MIN_DP:
                 stats["descartada_calidad_gt"] += 1; continue
+
+            # Coherencia biologica del genotipo: la fraccion alelica (VAF) debe
+            # ser compatible con la zigosidad llamada. Un GQ alto significa que
+            # el caller esta seguro, NO que la variante sea real: lecturas de un
+            # paralogo mismapeadas dan het con GQ=99, DP>50 y VAF ~0.15.
+            ad = fd.get("AD", "")
+            vaf = None
+            if "," in ad:
+                try:
+                    partes = [int(x) for x in ad.split(",")]
+                    tot = sum(partes)
+                    if tot > 0:
+                        vaf = max(partes[1:]) / tot
+                except ValueError:
+                    vaf = None
+            es_hom = gt in ("1/1", "2/2")
+            if vaf is not None:
+                if es_hom and vaf < VAF_HOM_MIN:
+                    stats["descartada_vaf_incoherente"] += 1; continue
+                if not es_hom and not (VAF_HET_MIN <= vaf <= VAF_HET_MAX):
+                    stats["descartada_vaf_incoherente"] += 1; continue
             stats["calidad_ok"] += 1
 
             ann = None
@@ -129,7 +157,7 @@ def main():
     lines = ["="*66, " 03 — MODELOS DE HERENCIA (busqueda ciega)", "="*66, "",
              "## Embudo"]
     for k in ["total","descartada_filtro","pass","descartada_ref_o_nocall",
-              "descartada_calidad_gt","calidad_ok","sin_anotacion","impacto_bajo",
+              "descartada_calidad_gt","descartada_vaf_incoherente","calidad_ok","sin_anotacion","impacto_bajo",
               "impacto_alto_o_moderado","zig_het","zig_hom"]:
         lines.append(f"  {k:<28} {stats[k]:>10,}")
     lines += ["", "## Genes por modelo"]

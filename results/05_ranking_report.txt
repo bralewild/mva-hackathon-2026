@@ -12,7 +12,7 @@
   HP:0001518  Small for gestational age
   HP:0200067  Recurrent spontaneous abortion
 
-## Genes candidatos evaluados: 154
+## Genes candidatos evaluados: 140
 
 ## TOP 25
 
@@ -27,7 +27,7 @@
 8   BTNL2       1.0408   7     AR_COMPOUND_HET   1    MODERATE  6:32405014C>T             90613.3:p.Asp118Asn 22.3   benign
 9   ZNF808      0.9892   7     AR_COMPOUND_HET   1    MODERATE  19:52554063C>T            52846.4:p.His383Tyr 0.086  .
 10  LAMA3       0.8832   7     AR_COMPOUND_HET   1    MODERATE  18:23763431A>C            24532.8:p.Asn364His 20.6   .
-11  SERPINA1    0.8423   7     AR_COMPOUND_HET   16   HIGH      14:94379548C>CTA          :p.Gly328ArgfsTer25 27.8   benign
+11  SERPINA1    0.8423   7     AR_COMPOUND_HET   4    MODERATE  14:94379565C>T            76802.4:p.Asp322Asn 12.43  benign
 12  HLA-DQA1    0.8131   7     AR_HOMOZYGOUS     3    MODERATE  6:32641487G>C             339398.5:p.Arg87Thr 1.642  .
 13  CTSA        0.7603   7     AR_COMPOUND_HET   1    MODERATE  20:45891598CCTG>C         .                   8.933  .
 14  NFASC       0.7422   7     AR_COMPOUND_HET   3    MODERATE  1:204954892C>T            44786.6:p.Thr159Met 25.0   benign,likely_benign
@@ -41,6 +41,6 @@
 22  CFAP74      0.5689   8     AR_COMPOUND_HET   1    MODERATE  1:1930142C>A              8276.2:p.Gly1069Val 23.5   benign
 23  DGCR6       0.5341   7     AR_HOMOZYGOUS     1    HIGH      22:18907087G>C            .                   3.33   .
 24  IGBP1       0.4691   7     AR_HOMOZYGOUS     1    MODERATE  X:70134785A>C             48784.4:p.Met151Leu 22.9   uncertain_significan
-25  EXOC3L2     0.4526   7     AR_COMPOUND_HET   1    MODERATE  19:45238745A>G            00713.2:p.Ser101Pro 24.0   .
+25  SPAST       0.451    7     AR_COMPOUND_HET   1    MODERATE  2:32063962C>T             320885.3:p.Ser44Leu 24.7   benign,likely_benign
 
 -> /home/user/mva/results/05_ranked_genes.tsv

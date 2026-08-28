@@ -8,16 +8,17 @@
   pass                          4,740,790
   descartada_ref_o_nocall               0
   descartada_calidad_gt            64,373
-  calidad_ok                    4,676,417
+  descartada_vaf_incoherente      107,395
+  calidad_ok                    4,569,022
   sin_anotacion                         0
-  impacto_bajo                  4,661,242
-  impacto_alto_o_moderado          15,175
-  zig_het                           9,875
-  zig_hom                           5,300
+  impacto_bajo                  4,554,325
+  impacto_alto_o_moderado          14,697
+  zig_het                           9,398
+  zig_hom                           5,299
 
 ## Genes por modelo
   AR_HOMOZYGOUS           3,483 genes
-  AR_COMPOUND_HET         1,367 genes
+  AR_COMPOUND_HET         1,338 genes
 
-## Variantes candidatas escritas: 9,384
+## Variantes candidatas escritas: 9,145
    -> /home/user/mva/work/03_candidates.tsv

@@ -38,7 +38,7 @@ Esta etapa evalua el resultado DESPUES de cerrado el ranking.
   >>> CONVERGENCIA CONFIRMADA <<<
 
   El pipeline, sin conocer la enfermedad, ordeno BUB1B en primer
-  lugar entre 154 genes candidatos, partiendo de 5.012.204 variantes.
+  lugar entre 140 genes candidatos, partiendo de 5.012.204 variantes.
 
 ## Limitaciones que siguen vigentes
 

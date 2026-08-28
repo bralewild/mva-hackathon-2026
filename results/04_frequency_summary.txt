@@ -2,10 +2,10 @@
  04 - FRECUENCIA POBLACIONAL Y EVIDENCIA CLINICA
 ==================================================================
 
-  variantes evaluadas             9,384
+  variantes evaluadas             9,145
   sin respuesta de VEP                0
-  ausentes de gnomAD (PM2)           23
-  raras (AF < 0.01)               219
-  comunes descartadas             9,165
+  ausentes de gnomAD (PM2)           21
+  raras (AF < 0.01)               179
+  comunes descartadas             8,966
 
   -> /home/user/mva/work/04_rare_candidates.tsv
