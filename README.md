@@ -1,7 +1,11 @@
 # Rare Disease, Real Kid — MVA Hackathon 2026
 
 A **blind, genome-wide variant triage pipeline** for a real case of Mosaic
-Variegated Aneuploidy (MVA). Track 1 — variant prediction.
+Variegated Aneuploidy (MVA), and a drug-repositioning search built on its result.
+
+* **Track 1** — variant prediction. Submitted, scored **100.0 / 100** (F-max 1.000,
+  full match at rank 1).
+* **Track 2** — from variant and mechanism to candidate medication.
 
 * Challenge: <https://huggingface.co/spaces/SageBio/rare-disease-real-kid-mva-hackathon-2026>
 * Dataset (gated): <https://huggingface.co/datasets/SageBio/mva-hackathon-2026-data>
@@ -165,6 +169,100 @@ Full stage-by-stage rationale: [docs/01_pipeline_flow.md](docs/01_pipeline_flow.
 
 ---
 
+## Track 2 — from mechanism to medication
+
+Track 1 ends at a gene. Track 2 asks the next question: **is there anything we
+could actually give this child?** Same discipline — numbered stages, every
+discard counted, evidence tables committed so the negative is auditable rather
+than asserted.
+
+```mermaid
+flowchart TD
+    T1(["<b>Track 1 result</b><br/>biallelic BUB1B<br/>p.Leu737Ter + p.Asn1002Lys"])
+
+    T1 --> T201["<b>t2-01</b> · Target network<br/><i>STRING physical subnetwork</i><br/>+ curated SAC core<br/>+ variant-class machinery"]
+    T201 --> N52(["<b>52 targets</b><br/>tiers 0–4"])
+
+    N52 --> T202["<b>t2-02</b> · Drug–gene evidence<br/><i>DGIdb v5 · Open Targets</i>"]
+    T202 --> N424(["<b>424</b> associations<br/>41 approved · 43 multi-source"])
+
+    N424 --> T203{"<b>t2-03</b> · Mechanistic filter<br/><i>evidence · DIRECTION · safety class</i>"}
+    T203 -->|"compensatory: 0"| NEG(["<b>no candidate survives</b><br/>21 harmful · 20 ambiguous · 2 untyped"])
+
+    T1 --> T204["<b>t2-04</b> · Variant-class branch<br/><i>PTC computed from MANE CDS</i><br/>readthrough + NMD"]
+    HPO2["<b>Patient HPO terms</b><br/><i>confidential</i>"] --> T204
+    T204 --> SCREEN{"<b>Safety screen</b><br/><i>liability × phenotype</i>"}
+    SCREEN --> PROP(["<b>Escin</b> — the only<br/>marketed, unconflicted<br/>candidate"])
+    SCREEN --> DEM(["gentamicin ↓ nephrocalcinosis<br/>amlexanox ↓ rhabdomyosarcoma"])
+
+    classDef data fill:#1a202c,stroke:#4a5568,color:#fff
+    classDef step fill:#2c5282,stroke:#2b6cb0,color:#fff
+    classDef count fill:#2d3748,stroke:#718096,color:#fff
+    classDef gate fill:#744210,stroke:#975a16,color:#fff
+    classDef good fill:#22543d,stroke:#276749,color:#fff
+    classDef muted fill:#4a5568,stroke:#718096,color:#fff
+
+    class T1,HPO2 data
+    class T201,T202,T204 step
+    class N52,N424 count
+    class T203,SCREEN gate
+    class PROP good
+    class NEG,DEM muted
+```
+
+### The result, stated honestly
+
+**No approved drug survives the mechanistic filter.** That is the finding, and
+its *shape* is the interesting part:
+
+| | |
+|---|---:|
+| Drug–gene associations retrieved | 424 |
+| Involving an approved drug | 41 — **all single-source** |
+| Backed by ≥ 2 distinct sources | 43 — **none approved** |
+| Of those 43, acting in the **compensatory** direction | **0** |
+| Network targets with no reported drug at all | 38 of 52 |
+
+The 43 well-evidenced associations collapse onto four genes — AURKB, CDK1, PLK1,
+TTK — and 41 of them are explicitly typed `inhibitor`. The pharmacology for this
+pathway is not missing. It is well developed and aimed in **exactly the direction
+that would harm this patient**, because oncology develops checkpoint inhibitors
+precisely to force missegregation and kill dividing cells — which is this disease,
+deliberately induced.
+
+The proposal therefore comes from the **variant class**, not the gene: one allele
+is a premature termination codon, which is addressable at the ribosome. After a
+safety screen against the child's own HPO terms, exactly one candidate is both
+marketed and unconflicted — **escin**. Expected effect size is small, and the
+report says so in its first section rather than its last.
+
+### Two components worth reusing
+
+* **Direction filter** — drops inhibitors that would worsen a loss-of-function
+  disease. Here it removes all 43 best-evidenced associations, a failure mode
+  naive repurposing walks straight into.
+* **Phenotype screen** — matches candidate liabilities against the patient's HPO
+  terms and *reorders* the ranking. It changed the answer twice: gentamicin has
+  the best readthrough evidence and is nephrotoxic in a child with
+  nephrocalcinosis; amlexanox is the best mechanistic fit and immunosuppressive
+  in a child with an active cancer predisposition.
+
+| Script | Purpose |
+|---|---|
+| `track2/t2_01_target_network.py` | mechanistic neighbourhood, 5 tiers, physical interactions only |
+| `track2/t2_02_drug_evidence.py` | drug–gene evidence across the network (DGIdb v5, Open Targets) |
+| `track2/t2_03_mechanism_filter.py` | evidence gate, direction of effect, safety class |
+| `track2/t2_04_readthrough_branch.py` | PTC context from the MANE CDS + HPO safety screen |
+
+Evidence tables: [results/track2_evidence/](results/track2_evidence/) — committed
+so the negative can be audited.
+Full report: [submissions/bralewild_track2_report.md](submissions/bralewild_track2_report.md)
+
+Runs in **under two minutes at zero cost** — one STRING call, three batched DGIdb
+calls, one Open Targets, one Ensembl.
+
+---
+
 ## Running it
 
 This is a plain Linux pipeline. Nothing is tied to a particular machine: the
@@ -183,6 +281,9 @@ bash pipeline/status.sh --progress
 
 # keep the data somewhere else
 MVA_BASE=/scratch/mva bash pipeline/run_all.sh
+
+# Track 2 - drug repositioning (needs Track 1 output; ~2 min, network only)
+bash pipeline/track2/t2_run_all.sh
 ```
 
 Every stage is **idempotent**: valid existing output is skipped.
