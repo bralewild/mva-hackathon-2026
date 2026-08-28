@@ -26,3 +26,10 @@ patient_hpo.tsv
 # Acceso directo local a los datos en WSL: es comodidad de esta maquina,
 # no codigo del proyecto. Para quien clone el repo seria una ruta rota.
 DATOS-EN-WSL.lnk
+
+# Reportes HTML de QC: son estadisticas agregadas del genoma DEL PACIENTE
+# (conteos por gen, por cromosoma, por tipo de variante). No aportan nada a la
+# reproducibilidad — cualquiera que corra el pipeline los regenera — y ante un
+# DUA estricto no vale la pena discutir si un agregado es reidentificable.
+results/*.html
+results/*.genes.txt
