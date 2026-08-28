@@ -238,6 +238,68 @@ finding did not depend on tolerating noise.
 
 ---
 
+## 6b. Looking for the disease's own namesake: a documented negative
+
+The condition is Mosaic Variegated **Aneuploidy**. Having identified its cause,
+we asked whether its *effect* — chromosomal instability itself — is measurable in
+the same patient, from the same file (stage 08).
+
+**Principle.** At a heterozygous SNV in a diploid cell, reads carrying each
+allele arrive 1:1, so the B-allele fraction centres on 0.50. If a fraction *f* of
+cells carries an extra copy of a chromosome, one allele is over-represented:
+d = |BAF − 0.5| = f / (2(2+f)), so f = 4d / (1 − 2d). Depth gives an orthogonal
+signal: a trisomic fraction raises coverage by (2+f)/2.
+
+**What we first saw, and why we did not report it.** Summarising each chromosome
+by the median deviation across its SNVs, eight autosomes appeared elevated —
+chr20, 22, 21 at an apparent 5–7 % mosaic fraction, with matching depth
+increases. It looked like a finding. It was not, for two reasons:
+
+1. **The statistic was broken.** At ~44× depth, BAF is a ratio of small integers;
+   fourteen chromosomes tied at exactly 0.0556, the MAD collapsed to zero, and
+   z-scores ran to 10¹⁰. Individual SNVs are also not independent evidence for a
+   whole-chromosome event: one mismapped region contributes tens of thousands of
+   correlated sites.
+2. **The pattern failed a discriminator.** A genuine whole-chromosome event is
+   *uniform* — every window is affected, because every aneuploid cell carries the
+   entire extra chromosome. A mapping artefact *concentrates* in particular
+   windows.
+
+**The rebuilt test.** Binning the genome into 10 Mb windows and treating the
+window as the unit of evidence (285 windows, 2,241,007 heterozygous SNVs):
+
+| chr | windows | excess \|BAF−0.5\| | windows elevated | depth | GC % |
+|---|---:|---:|---:|---:|---:|
+| 21 | 5 | 0.0394 | **40 %** | 1.33× | 40.9 |
+| 22 | 4 | 0.0304 | **50 %** | 1.16× | 47.7 |
+| 20 | 7 | 0.0201 | **29 %** | 1.06× | 44.1 |
+| 9 | 13 | 0.0181 | **38 %** | 1.07× | 42.3 |
+| 1 | 24 | 0.0071 | **17 %** | 1.01× | 41.7 |
+
+**Not one chromosome reaches the ≥ 80 % uniformity a real event requires.** The
+elevation concentrates in a minority of windows, on precisely the chromosomes
+carrying the genome's most difficult repeat structure — the acrocentric short
+arms of 21 and 22, the heterochromatic blocks of 9 and 16, the pericentromeric
+block of 1. A GC-content confounder check gives r = +0.475 between chromosome GC
+and BAF excess: moderate, and not excludable as a partial explanation.
+
+**Conclusion.** *No whole-chromosome mosaic aneuploidy is detectable above
+approximately 3 % cell fraction in this blood sample.* The floor is quantified,
+not asserted: a window-scale z of 3 corresponds to an excess of 0.0066.
+
+This is biologically unsurprising. Lymphocytes carrying severe aneuploidy
+proliferate poorly, and clinical cytogenetics measures aneuploid fractions in
+*cultured* lymphocytes, where they are enriched. Bulk blood WGS is a different
+measurement.
+
+We report it because a negative with a quantified detection floor is a result,
+and because the episode is the honest version of how the pipeline behaves: the
+first pass produced a plausible, exciting, and wrong finding, and a discriminator
+built into the method caught it. A pipeline that detects its own false positives
+is worth more than one that never fails in a demonstration.
+
+---
+
 ## 7. Orthogonal confirmation
 
 Independently of the blind pipeline, a targeted analysis of the three known MVA

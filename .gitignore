@@ -38,6 +38,7 @@ patient_hpo.tsv
 results/05_ranked_genes.tsv
 results/05_ranking_report.txt
 results/07_secondary_findings.txt
+results/08_mosaic_aneuploidy.txt
 results/*.html
 results/*.genes.txt
 

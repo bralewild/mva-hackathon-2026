@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 ==============================================================================
-08_make_submission.py - Generate the Track 1 submission CSV automatically
+09_make_submission.py - Generate the Track 1 submission CSV automatically
 
 INPUT  : $RESULTS/05_ranked_genes.tsv
          $WORK/04_rare_candidates.tsv

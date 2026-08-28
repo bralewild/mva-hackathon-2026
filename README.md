@@ -156,6 +156,8 @@ ranking is final.
 | `05_phenotype_rank.py` | HPO semantic-similarity ranking |
 | `06_validate_convergence.py` | post-ranking validation gate |
 | `07_secondary_findings.py` | ACMG SF v3.2 secondary-findings cross-check |
+| `08_mosaic_aneuploidy.py` | mosaic aneuploidy screen from B-allele fractions |
+| `09_make_submission.py` | submission CSV, generated automatically |
 | `selfcheck.sh` | preflight: tools, versions, inputs, network, repository hygiene |
 | `run_all.sh` · `status.sh` · `sync_results.sh` · `99_data_inventory.sh` | orchestration and auditing |
 

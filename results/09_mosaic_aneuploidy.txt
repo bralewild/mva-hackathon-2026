@@ -1,0 +1,86 @@
+====================================================================================================
+ 09 - MOSAIC ANEUPLOIDY SCREEN (B-allele fraction, from the VCF alone)
+====================================================================================================
+
+Heterozygous SNVs : 2,241,007   (PASS, biallelic, DP>=20, GQ>=20)
+Windows           : 285 of 10,000,000 bp, >= 2,000 sites each
+Autosomes         : 22
+
+Noise scale is taken from the spread of WINDOW values, not from SNV counts:
+a single mismapped region contributes tens of thousands of correlated sites,
+so SNVs are not independent evidence for a whole-chromosome event.
+
+  baseline mean |BAF-0.5| : 0.06633
+  robust sigma (window)   : 0.00221
+  baseline depth          : 44x
+
+chr       wins   mean dev     excess       z  uniform    depth  mosaic     GC%  window deviations
+----------------------------------------------------------------------------------------------------
+21           5    0.10570    0.03937    17.8     40%    1.33x  17.1%    40.9     @ @@               <<<
+22           4    0.09672    0.03039    13.8     50%    1.16x  12.9%    47.7      @@                <<<
+20           7    0.08643    0.02009     9.1     29%    1.06x   8.4%    44.1      @@ =              <<<
+9           13    0.08444    0.01811     8.2     38%    1.07x   7.5%    42.3      *@---    - -      <<<
+16           8    0.08033    0.01399     6.3     50%    1.05x   5.8%    44.8      = @= =   ==       <<<
+14          10    0.07870    0.01236     5.6     20%    1.09x   5.1%    40.9      -@**              <<<
+17           9    0.07775    0.01141     5.2     33%    1.07x   4.7%    45.5       *-@ -      -     <<<
+7           16    0.07370    0.00737     3.3     38%    1.00x   3.0%    40.7     -**--@ -   -    -  <<<
+1           24    0.07342    0.00709     3.2     17%    1.01x   2.9%    41.7      #@@#-    .        <<<
+10          14    0.07259    0.00626     2.8     43%    1.01x   2.5%    41.6      -@ . +          
+19           6    0.07247    0.00614     2.8     50%    1.05x   2.5%    48.4         @==         =
+2           25    0.07102    0.00468     2.1     16%    1.01x   1.9%    40.2      .@*.            
+15           9    0.07046    0.00413     1.9     22%    1.02x   1.7%    42.2      -*-@ -          
+12          14    0.06881    0.00247     1.1     29%    1.01x   1.0%    40.8      @::@  :    :    
+18           8    0.06852    0.00219     1.0     12%    1.01x   0.9%    39.8     =@ @==           
+6           17    0.06811    0.00177     0.8     18%    1.00x   0.7%    39.6      -@@...  .       
+4           19    0.06787    0.00153     0.7     16%    0.99x   0.6%    38.2      -@*---          
+11          14    0.06764    0.00130     0.6     14%    0.99x   0.5%    41.6       *@=*   :  :    
+3           20    0.06740    0.00107     0.5     20%    1.00x   0.4%    39.7     .#@#-   .-       
+5           18    0.06666    0.00033     0.1     17%    1.00x   0.1%    39.5      +@+# -      .   
+13          10    0.06647    0.00014     0.1     30%    1.00x   0.1%    38.5     -*@-  - --       
+8           15    0.06634    0.00001     0.0     13%    1.00x   0.0%    40.2      =@-.. .  .      
+
+====================================================================================================
+ CONFOUNDER CHECK: GC CONTENT
+====================================================================================================
+
+  correlation( chromosome GC% , BAF excess )   r = +0.475
+  correlation( chromosome GC% , depth ratio )  r = +0.345
+
+  MODERATE correlation with GC content. GC bias contributes and cannot
+  be excluded as at least a partial explanation.
+
+====================================================================================================
+ INTERPRETATION
+====================================================================================================
+
+  PATCHY elevation (< 80% of windows) - concentrated in part of the
+  chromosome, which is what mapping artefacts look like, not aneuploidy:
+
+    chr21   excess 0.03937   only 40% of windows elevated
+    chr22   excess 0.03039   only 50% of windows elevated
+    chr20   excess 0.02009   only 29% of windows elevated
+    chr9    excess 0.01811   only 38% of windows elevated
+    chr16   excess 0.01399   only 50% of windows elevated
+    chr14   excess 0.01236   only 20% of windows elevated
+    chr17   excess 0.01141   only 33% of windows elevated
+    chr7    excess 0.00737   only 38% of windows elevated
+    chr1    excess 0.00709   only 17% of windows elevated
+
+## Detection floor
+
+  A window-scale z of 3 corresponds to an excess of 0.00662,
+  i.e. a mosaic fraction of roughly 3%. Below that, nothing is called.
+
+## Limits
+
+  - Blood only. Aneuploid fractions vary widely by tissue in MVA.
+  - BAF cannot separate trisomy from copy-neutral LOH; depth breaks the tie
+    only for genuine gains.
+  - No matched normal samples were available, so there is no external control
+    for chromosome-specific technical bias. The uniformity test and the GC
+    correlation are internal substitutes, not replacements.
+  - Whole-chromosome screen; segmental events are not resolved.
+  - A screening statistic, not a karyotype.
+
+  -> /home/user/mva/work/09_baf_by_chrom.tsv
+  -> /home/user/mva/work/09_baf_windows.tsv
