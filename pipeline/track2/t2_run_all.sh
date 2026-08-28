@@ -13,16 +13,16 @@ D="$(cd "$(dirname "$0")" && pwd)"
 source "$D/../00_config.sh"
 
 log "===== T2-01 target network ====="
-python "$D/t2_01_target_network.py" > /dev/null
+python3 "$D/t2_01_target_network.py" > /dev/null
 
 log "===== T2-02 drug-gene evidence ====="
-python "$D/t2_02_drug_evidence.py" > /dev/null
+python3 "$D/t2_02_drug_evidence.py" > /dev/null
 
 log "===== T2-03 mechanistic filter ====="
-python "$D/t2_03_mechanism_filter.py" > /dev/null
+python3 "$D/t2_03_mechanism_filter.py" > /dev/null
 
 log "===== T2-04 readthrough branch ====="
-python "$D/t2_04_readthrough_branch.py" > /dev/null
+python3 "$D/t2_04_readthrough_branch.py" > /dev/null
 
 log "===== mirroring results ====="
 bash "$D/../sync_results.sh" > /dev/null

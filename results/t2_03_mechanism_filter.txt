@@ -3,51 +3,62 @@
 ========================================================================================
 
 The disease is a LOSS of BubR1 function. A drug is only a candidate if it
-pushes the mechanism in the opposing direction. Direction is not a detail
-here - it decides whether a drug would help or make the lesion worse.
+pushes the mechanism in the opposing direction, or acts on the variant class.
 
 ## Funnel
 
-  associations recorded                   668
-  with an approved drug                   125
-  ... of which carry a direction           15  (12%)
+  associations recorded                   424
+  with an approved drug                    41
+  ... backed by >= 2 sources                0
+  ... carrying a resolvable direction       2  (5% of approved)
+  approved-drug score range            0.01 - 3.53
 
-  dropped - single source / low score     114
-  dropped - acute cytotoxic only            1
-  dropped - direction unknown               7
+  dropped - single source / low score      41
+  dropped - acute cytotoxic only            0
+  dropped - direction unknown               0
   dropped - direction HARMFUL               0
-  dropped - no directional argument         3
+  dropped - direction AMBIGUOUS             0
+  dropped - no directional argument         0
   --------------------------------------------
   SURVIVING CANDIDATES                      0
 
+## Did the direction filter do any work?
+
+  Verdicts assigned across ALL 41 approved associations, independent of
+  the evidence gate - this is what direction alone would have decided:
+
+    UNKNOWN           39
+    HARMFUL            1
+    READTHROUGH        1
+
+  Of those, 0 reached the direction filter after the evidence gate.
+  The filter dropped 0 association(s) as HARMFUL.
+
+  STATED PLAINLY: in this run the direction filter removed nothing that
+  the evidence gate had not already removed. It identified 1 harmful
+  associations overall, but all of them failed the evidence gate first.
+  The direction logic is therefore a PROPOSED contribution demonstrated
+  on no surviving data, not a component that changed this result.
+
+## Genes with no drug association at all
+
+  38 of 52 network targets have no reported drug association.
+
+  BUB1B, BUB3, CDC20, MAD2L1, KNL1, ANAPC1, ANAPC10, ANAPC2, ANAPC4, ANAPC7, CDC16, CDC23, CDC26, CDC27, FZR1, PPP2R5A, ANAPC11, ESPL1, UBE2C, ANAPC13, ANAPC15, ANAPC5, SKA1, SKA2, SKA3, ANAPC16, CENPF, BOD1, SPDL1, EIF4A3, ETF1, GSPT1, GSPT2, SMG5, SMG6, SMG7, UPF2, UPF3B
+
 ## No candidate survives
 
-  Target-based repurposing does not produce a usable candidate for this
-  lesion, and the reason is structural rather than accidental:
+  With 41 approved associations, 0 backed by >= 2 sources and 2 carrying
+  a resolvable direction, no association is both well-evidenced and
+  directionally useful.
 
-  1. BubR1 itself has no drug. The Mitotic Checkpoint Complex and the
-     entire APC/C are a pharmacological desert - 43 of 61 network members
-     have no reported drug association at all.
+  This is a statement about what these databases contain for this
+  network, not a proof that no drug could help. In particular:
 
-  2. The direction that would help is the direction nobody has drugs for.
-     Inhibiting CDC20 or the APC/C would substitute for the lost BubR1
-     restraint on anaphase. Those are exactly the nodes with zero drugs.
-
-  3. The direction that IS available is the harmful one. Inhibitors of
-     BUB1, TTK, AURKB, PLK1 and CDK1 exist because oncology wants to push
-     cancer cells past a checkpoint. In a child whose checkpoint is
-     already failing, that is the wrong way round.
-
-  4. What remains is single-source text mining. Every approved-drug
-     association in this network is backed by exactly one source, with
-     scores of 0.01-0.60 - associations like PLK1-erythromycin or
-     PLK1-lansoprazole are not pharmacology.
-
-  This negative is the argument for the next stage. A therapy for this
-  variant has to bypass the pathway entirely rather than act within it.
-
-## What was dropped, and why - the harmful ones are worth naming
-
-  (none reached this filter - they were dropped earlier for weak evidence)
+  - only approved drugs were considered; clinical-stage compounds for
+    TTK, PLK1, AURKB and CDK1 exist and were excluded by that filter
+  - only DGIdb was queried; ChEMBL and Open Targets were not
+  - signature-based repurposing (LINCS / Connectivity Map) was not run
+    at all, and it is the standard approach when no target is druggable
 
   -> /home/user/mva/work/t2_03_filtered.tsv

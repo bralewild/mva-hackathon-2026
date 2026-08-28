@@ -7,41 +7,58 @@ INPUT  : $WORK/t2_02_drug_evidence.tsv
 OUTPUT : $WORK/t2_03_filtered.tsv
          $RESULTS/t2_03_mechanism_filter.txt
 
-PURPOSE
--------
 t2_02 recorded what the databases say. This stage decides what any of it is
-worth, against three filters applied in order. Every drop is counted.
+worth. Every drop is counted, and every statement in the output is computed
+from the data rather than asserted.
 
-  1. EVIDENCE     a single text-mining source is not pharmacology
-  2. DIRECTION    the direction of effect must oppose the lesion, not follow it
-  3. SAFETY CLASS drugs whose only use is acute cytotoxic chemotherapy are not
-                  candidates for chronic therapy in a child
+WHAT CHANGED, AND WHY (adversarial review, 2026-08-28)
+------------------------------------------------------
+The previous version had four defects, all of which pushed toward its own
+conclusion. They are listed here rather than quietly fixed, because the report
+built an argument on the output they produced.
 
-THE DIRECTION FILTER - THE PART THAT MATTERS
---------------------------------------------
+1. THE DIRECTION MATCHER COULD NOT SEE ACTIVATORS.
+   ACTIVATING_WORDS contained "activator"; DGIdb emits the literal "ACTIVATING".
+   "activator" is not a substring of "activating", while "inhibitor" IS a
+   substring of "inhibitory". The filter recognised inhibitors and silently
+   reclassified activators as unknown - and unknown is a drop. Verified against
+   the data: 194 INHIBITORY vs 1 ACTIVATING, so the practical impact was one
+   association, but the asymmetry was real and it biased the result.
+
+2. THE NARRATIVE WAS HARDCODED PROSE, NOT COMPUTED.
+   The "no candidate survives" explanation - including "every approved-drug
+   association is backed by exactly one source" - was an authored string emitted
+   whenever the survivor set was empty. That claim is FALSE: 20 of 125 approved
+   associations have two or more sources. All summary statements are now
+   f-strings over computed values.
+
+3. THE NEGATIVE WAS UNFALSIFIABLE.
+   A total API outage produced an empty input, the same "no candidate survives"
+   narrative, and exit code 0. The stage now refuses to interpret an input that
+   is too small to interpret.
+
+4. DIRECTION CLASSIFICATIONS WERE WRONG ON SEVERAL NODES.
+   CDK1 and PLK1 were called harmful-if-inhibited. CDK1 inhibition blocks
+   mitotic ENTRY, and a cell that never enters mitosis cannot missegregate;
+   CDK1 also phosphorylates APC/C subunits to permit CDC20 binding, so
+   inhibiting it reduces APC/C-CDC20 activity - the compensatory direction.
+   PLK1 inhibition causes SAC-dependent prometaphase arrest, not checkpoint
+   weakening. FZR1 (Cdh1) is the G1 APC/C activator, not the anaphase one, so
+   inhibiting it does nothing to restrain anaphase. These are now AMBIGUOUS,
+   which is an honest verdict rather than a convenient one.
+
+THE DIRECTION FILTER - WHAT IT IS FOR
+-------------------------------------
 The disease is a LOSS of BubR1 function: the spindle assembly checkpoint is too
-weak, so anaphase proceeds before chromosomes are correctly attached.
+weak, so anaphase proceeds before chromosomes are correctly attached. BubR1's
+job is to inhibit CDC20, which activates the APC/C.
 
-BubR1's job is to INHIBIT CDC20, which activates the APC/C. So:
-
-    node                     effect of INHIBITING it      verdict
-    ----------------------   --------------------------   ---------------
-    CDC20, APC/C subunits    restrains anaphase onset     COMPENSATORY
-                             - substitutes for the
-                               function that was lost
-    BUB1, BUB3, MAD2L1,      weakens the checkpoint       HARMFUL
-    KNL1, TTK, AURKB,        further
-    PLK1, CDK1, CENPE
-    others                   no directional argument      NEUTRAL
-
-Almost every drug in these databases is an inhibitor, because inhibitors are
-what the pharmaceutical industry builds. For a loss-of-function disease that
-makes target-based repurposing structurally difficult: the useful direction is
-the one nobody has drugs for.
-
-This filter is the reason the readthrough branch (t2_04) exists. It does not act
-on the pathway at all - it acts on the ribosome, sidestepping both the
-undruggability of BubR1 and the direction problem.
+An important caveat the previous version did not state: BubR1's inhibition is
+CONDITIONAL and attachment-responsive, while a drug is constitutive. Restoring
+restraint pharmacologically is not the same as restoring checkpoint FIDELITY -
+constitutive APC/C inhibition produces mitotic arrest, slippage and
+tetraploidy, which is why oncology develops these agents. "Compensatory" here
+means "opposes the direction of the lesion", not "corrects the defect".
 ==============================================================================
 """
 import csv
@@ -57,37 +74,83 @@ OUT_TXT = os.path.join(RESULTS, "t2_03_mechanism_filter.txt")
 
 MIN_SCORE = 0.10
 MIN_SOURCES = 2
+MIN_ROWS_TO_INTERPRET = 50      # below this the input is broken, not informative
 
-# Inhibiting these substitutes for the lost BubR1 restraint on anaphase.
+# Inhibiting these opposes the direction of the lesion.
 COMPENSATORY_IF_INHIBITED = {
-    "CDC20", "FZR1", "UBE2C", "ESPL1",
-    "ANAPC1", "ANAPC2", "ANAPC4", "ANAPC5", "ANAPC7", "ANAPC10", "ANAPC11",
-    "ANAPC13", "ANAPC15", "ANAPC16", "CDC16", "CDC23", "CDC26", "CDC27",
+    "CDC20": "the node BubR1 itself inhibits",
+    "UBE2C": "APC/C E2; blocking it slows APC/C output",
+    "ESPL1": "separase; blocking cohesin cleavage directly opposes premature "
+             "chromatid separation - though non-selective inhibition causes its "
+             "own missegregation",
+    "ANAPC1": "APC/C subunit", "ANAPC2": "APC/C subunit",
+    "ANAPC4": "APC/C subunit", "ANAPC7": "APC/C subunit",
+    "ANAPC10": "APC/C subunit", "ANAPC11": "APC/C subunit",
+    "CDC16": "APC/C subunit", "CDC23": "APC/C subunit",
+    "CDC26": "APC/C subunit", "CDC27": "APC/C subunit",
 }
 # Inhibiting these weakens an already-failing checkpoint.
 HARMFUL_IF_INHIBITED = {
-    "BUB1", "BUB3", "MAD1L1", "MAD2L1", "KNL1", "TTK", "AURKB", "PLK1",
-    "CDK1", "CCNB1", "CCNB2", "CENPE", "CENPF", "NEK2", "NDC80", "NUF2",
-    "ZWINT", "SGO1", "SKA1", "SKA3", "CDCA8", "CENPA", "SPDL1", "ZWILCH",
-    "KIF2C", "KIF20A", "KIF4A", "DLGAP5", "ASPM", "NUSAP1",
+    "BUB1": "MCC component", "BUB3": "MCC component",
+    "MAD1L1": "MAD2 template", "MAD2L1": "MCC component",
+    "KNL1": "kinetochore scaffold for BUB1/BUB3",
+    "TTK": "MPS1, apex of checkpoint signalling",
+    "AURKB": "error correction at kinetochores",
+    "CENPE": "kinetochore motor, BubR1-associated",
+    "PPP2CA": "PP2A opposes Aurora B; recruited by the BubR1 KARD motif",
+    "PPP2R5A": "PP2A-B56, BubR1's own phosphatase partner",
+    "PTTG1": "securin; inhibiting it releases separase early",
 }
-INHIBITORY_WORDS = ("inhibitor", "antagonist", "blocker", "negative", "suppressor",
-                    "inverse agonist", "inhibition")
-ACTIVATING_WORDS = ("agonist", "activator", "positive", "inducer", "potentiator")
+# Genuinely two-sided - and saying so is the honest verdict.
+AMBIGUOUS = {
+    "CDK1": "inhibition blocks mitotic ENTRY (a cell that does not divide cannot "
+            "missegregate) and reduces APC/C-CDC20 activation, but also disrupts "
+            "normal mitosis",
+    "CCNB1": "CDK1 partner; same two-sided argument",
+    "PLK1": "inhibition causes SAC-dependent prometaphase arrest rather than "
+            "checkpoint weakening",
+    "FZR1": "Cdh1 activates APC/C in G1, not at anaphase; inhibiting it does not "
+            "restrain anaphase onset",
+}
+# Tier 4: the variant-class route. Direction logic here is about the PTC, not
+# the checkpoint, so it is evaluated separately.
+READTHROUGH_RELEVANT = {
+    "ETF1": "eRF1; inhibiting termination promotes readthrough of the PTC",
+    "GSPT1": "eRF3a; degrading it promotes readthrough",
+    "GSPT2": "eRF3b paralogue",
+    "UPF1": "inhibiting NMD raises the PTC transcript available for readthrough",
+    "UPF2": "NMD core", "UPF3B": "NMD core",
+    "SMG1": "NMD kinase", "SMG5": "NMD", "SMG6": "NMD endonuclease", "SMG7": "NMD",
+    "EIF4A3": "exon junction complex; marks the PTC as premature",
+    "RPL3": "ribosomal; modulates readthrough", "RPS15": "ribosomal decoding site",
+}
 
-# Drugs whose only role is acute cytotoxic chemotherapy: not chronic-therapy
-# candidates for a child, whatever the database says.
+# Matched against the lowercased concatenation of interaction_type and
+# directionality. Written to match DGIdb's enum literals INHIBITORY / ACTIVATING
+# as well as free-text interaction types.
+INHIBITORY_WORDS = ("inhibit", "antagonis", "blocker", "negative", "suppress",
+                    "inverse agonist")
+ACTIVATING_WORDS = ("activat", "agonist", "positive", "inducer", "potentiator")
+
 CYTOTOXIC = {
     "CARBOPLATIN", "CISPLATIN", "OXALIPLATIN", "PACLITAXEL", "DOCETAXEL",
     "TOPOTECAN", "IRINOTECAN", "IDARUBICIN", "DOXORUBICIN", "DAUNORUBICIN",
-    "EPIRUBICIN", "ETOPOSIDE", "VINCRISTINE", "VINBLASTINE", "VINORELBINE",
-    "CYCLOPHOSPHAMIDE", "IFOSFAMIDE", "GEMCITABINE", "CYTARABINE",
+    "EPIRUBICIN", "ETOPOSIDE", "TENIPOSIDE", "VINCRISTINE", "VINBLASTINE",
+    "VINORELBINE", "CYCLOPHOSPHAMIDE", "IFOSFAMIDE", "GEMCITABINE", "CYTARABINE",
     "FLUOROURACIL", "METHOTREXATE", "MITOMYCIN", "BLEOMYCIN", "DACTINOMYCIN",
+    "AMSACRINE", "PIXANTRONE", "VALRUBICIN", "MELPHALAN", "BUSULFAN",
+    "TEMOZOLOMIDE", "PEMETREXED", "FLUDARABINE", "BORTEZOMIB",
 }
 
 
 def direction_of(interaction_type, directionality):
-    t = (interaction_type + " " + directionality).lower()
+    """Resolve direction. The structured directionality field wins over free text."""
+    d = (directionality or "").lower()
+    if any(w in d for w in INHIBITORY_WORDS):
+        return "inhibits"
+    if any(w in d for w in ACTIVATING_WORDS):
+        return "activates"
+    t = (interaction_type or "").lower()
     if any(w in t for w in INHIBITORY_WORDS):
         return "inhibits"
     if any(w in t for w in ACTIVATING_WORDS):
@@ -96,23 +159,30 @@ def direction_of(interaction_type, directionality):
 
 
 def verdict_for(gene, direction):
-    """Is this drug pushing the mechanism the right way?"""
+    """Is this drug pushing the mechanism in the opposing direction?"""
+    if gene in READTHROUGH_RELEVANT:
+        if direction == "inhibits":
+            return "READTHROUGH", READTHROUGH_RELEVANT[gene]
+        if direction == "activates":
+            return "HARMFUL", "enhancing termination or NMD works against readthrough"
+        return "UNKNOWN", "no direction recorded for a variant-class target"
     if direction == "unknown":
         return "UNKNOWN", "no interaction direction is recorded"
+    if gene in AMBIGUOUS:
+        return "AMBIGUOUS", AMBIGUOUS[gene]
     if gene in COMPENSATORY_IF_INHIBITED:
         if direction == "inhibits":
-            return "COMPENSATORY", "restrains anaphase; substitutes for lost BubR1 restraint"
+            return "COMPENSATORY", COMPENSATORY_IF_INHIBITED[gene]
         return "HARMFUL", "activating this releases anaphase further"
     if gene in HARMFUL_IF_INHIBITED:
         if direction == "inhibits":
-            return "HARMFUL", "weakens an already-failing checkpoint"
+            return "HARMFUL", HARMFUL_IF_INHIBITED[gene]
         return "COMPENSATORY", "strengthening this could partly offset the lesion"
     return "NEUTRAL", "no directional argument for this node"
 
 
 def is_cytotoxic(name):
-    n = name.upper()
-    return any(c in n for c in CYTOTOXIC)
+    return any(c in (name or "").upper() for c in CYTOTOXIC)
 
 
 def main():
@@ -120,30 +190,42 @@ def main():
         sys.exit("missing " + IN_TSV + " - run t2_02_drug_evidence.py first")
 
     rows = list(csv.DictReader(open(IN_TSV), delimiter="\t"))
-    stats = {"total": len(rows)}
+
+    # Refuse to interpret an input too small to be informative. Without this, an
+    # API outage produced an empty file, the full "no candidate survives"
+    # narrative, and exit code 0.
+    if len(rows) < MIN_ROWS_TO_INTERPRET:
+        sys.exit("ABORT: only {} associations in {}. Expected at least {}. "
+                 "This looks like an upstream failure, not a negative result. "
+                 "Re-run t2_02 and check API availability."
+                 .format(len(rows), IN_TSV, MIN_ROWS_TO_INTERPRET))
 
     approved = [r for r in rows if r["approved"] == "True"]
-    stats["approved"] = len(approved)
+    if not approved:
+        sys.exit("ABORT: no approved-drug associations at all. Check the "
+                 "'approved' field serialisation in t2_02.")
 
     kept, drops = [], {"weak_evidence": [], "harmful_direction": [],
-                       "unknown_direction": [], "cytotoxic_only": [], "neutral": []}
+                       "unknown_direction": [], "cytotoxic_only": [],
+                       "neutral": [], "ambiguous": []}
 
     for r in approved:
         score = float(r["score"] or 0)
         nsrc = int(r["n_sources"] or 0)
-        if score < MIN_SCORE or nsrc < MIN_SOURCES:
-            drops["weak_evidence"].append(r)
-            continue
-        if is_cytotoxic(r["drug"]):
-            drops["cytotoxic_only"].append(r)
-            continue
         d = direction_of(r.get("interaction_type", ""), r.get("directionality", ""))
         v, why = verdict_for(r["gene"], d)
         r["direction"], r["verdict"], r["reason"] = d, v, why
+
+        if score < MIN_SCORE or nsrc < MIN_SOURCES:
+            drops["weak_evidence"].append(r); continue
+        if is_cytotoxic(r["drug"]):
+            drops["cytotoxic_only"].append(r); continue
         if v == "HARMFUL":
             drops["harmful_direction"].append(r)
         elif v == "UNKNOWN":
             drops["unknown_direction"].append(r)
+        elif v == "AMBIGUOUS":
+            drops["ambiguous"].append(r)
         elif v == "NEUTRAL":
             drops["neutral"].append(r)
         else:
@@ -157,74 +239,93 @@ def main():
         for r in kept:
             w.writerow({c: r.get(c, "") for c in cols})
 
-    # How many approved associations even carry a direction?
-    with_dir = sum(1 for r in approved
-                   if direction_of(r.get("interaction_type", ""), r.get("directionality", "")) != "unknown")
+    # ---- everything below is computed, not asserted ----
+    multi_src = [r for r in approved if int(r["n_sources"] or 0) >= MIN_SOURCES]
+    with_dir = [r for r in approved
+                if direction_of(r.get("interaction_type", ""), r.get("directionality", "")) != "unknown"]
+    genes_all = sorted({r["gene"] for r in rows})
+    genes_appr = sorted({r["gene"] for r in approved})
+    scores = [float(r["score"] or 0) for r in approved]
+    # What direction would have done on its own, ignoring the evidence gate:
+    dir_alone = {}
+    for r in approved:
+        v = r["verdict"]
+        dir_alone[v] = dir_alone.get(v, 0) + 1
 
     L = ["=" * 88,
          " T2-03 - MECHANISTIC FILTER",
          "=" * 88, "",
          "The disease is a LOSS of BubR1 function. A drug is only a candidate if it",
-         "pushes the mechanism in the opposing direction. Direction is not a detail",
-         "here - it decides whether a drug would help or make the lesion worse.",
+         "pushes the mechanism in the opposing direction, or acts on the variant class.",
          "",
          "## Funnel", "",
-         "  associations recorded                {:>6,}".format(stats["total"]),
-         "  with an approved drug                {:>6,}".format(stats["approved"]),
-         "  ... of which carry a direction       {:>6,}  ({:.0%})".format(
-             with_dir, with_dir / stats["approved"] if stats["approved"] else 0),
+         "  associations recorded                {:>6,}".format(len(rows)),
+         "  with an approved drug                {:>6,}".format(len(approved)),
+         "  ... backed by >= {} sources           {:>6,}".format(MIN_SOURCES, len(multi_src)),
+         "  ... carrying a resolvable direction  {:>6,}  ({:.0%} of approved)".format(
+             len(with_dir), len(with_dir) / len(approved)),
+         "  approved-drug score range            {:.2f} - {:.2f}".format(
+             min(scores) if scores else 0, max(scores) if scores else 0),
          "",
          "  dropped - single source / low score  {:>6,}".format(len(drops["weak_evidence"])),
          "  dropped - acute cytotoxic only       {:>6,}".format(len(drops["cytotoxic_only"])),
          "  dropped - direction unknown          {:>6,}".format(len(drops["unknown_direction"])),
          "  dropped - direction HARMFUL          {:>6,}".format(len(drops["harmful_direction"])),
+         "  dropped - direction AMBIGUOUS        {:>6,}".format(len(drops["ambiguous"])),
          "  dropped - no directional argument    {:>6,}".format(len(drops["neutral"])),
          "  " + "-" * 44,
          "  SURVIVING CANDIDATES                 {:>6,}".format(len(kept)),
-         ""]
+         "",
+         "## Did the direction filter do any work?", "",
+         "  Verdicts assigned across ALL {} approved associations, independent of".format(len(approved)),
+         "  the evidence gate - this is what direction alone would have decided:", ""]
+    for v in sorted(dir_alone, key=lambda k: -dir_alone[k]):
+        L.append("    {:<14} {:>5}".format(v, dir_alone[v]))
+    n_harm = dir_alone.get("HARMFUL", 0)
+    L += ["",
+          "  Of those, {} reached the direction filter after the evidence gate.".format(
+              len(drops["harmful_direction"]) + len(drops["unknown_direction"])
+              + len(drops["ambiguous"]) + len(drops["neutral"]) + len(kept)),
+          "  The filter dropped {} association(s) as HARMFUL.".format(len(drops["harmful_direction"]))]
+    if not drops["harmful_direction"]:
+        L += ["",
+              "  STATED PLAINLY: in this run the direction filter removed nothing that",
+              "  the evidence gate had not already removed. It identified {} harmful".format(n_harm),
+              "  associations overall, but all of them failed the evidence gate first.",
+              "  The direction logic is therefore a PROPOSED contribution demonstrated",
+              "  on no surviving data, not a component that changed this result."]
+
+    L += ["", "## Genes with no drug association at all", ""]
+    from_targets = os.path.join(WORK, "t2_01_targets.tsv")
+    if os.path.exists(from_targets):
+        allt = [r["gene"] for r in csv.DictReader(open(from_targets), delimiter="\t")]
+        nod = [g for g in allt if g not in genes_all]
+        L.append("  {} of {} network targets have no reported drug association.".format(
+            len(nod), len(allt)))
+        L.append("")
+        L.append("  " + ", ".join(nod))
 
     if kept:
-        L += ["## Candidates", "",
-              "  {:<9}{:<32}{:<14}{:<14}{}".format("GENE", "DRUG", "DIRECTION", "VERDICT", "WHY")]
-        for r in kept:
-            L.append("  {:<9}{:<32}{:<14}{:<14}{}".format(
-                r["gene"], r["drug"][:31], r["direction"], r["verdict"], r["reason"]))
+        L += ["", "## Surviving candidates", "",
+              "  {:<9}{:<30}{:<12}{:<14}{}".format("GENE", "DRUG", "DIRECTION", "VERDICT", "WHY")]
+        for r in sorted(kept, key=lambda x: -float(x["score"] or 0)):
+            L.append("  {:<9}{:<30}{:<12}{:<14}{}".format(
+                r["gene"], r["drug"][:29], r["direction"], r["verdict"], r["reason"][:60]))
     else:
-        L += ["## No candidate survives", "",
-              "  Target-based repurposing does not produce a usable candidate for this",
-              "  lesion, and the reason is structural rather than accidental:",
+        L += ["", "## No candidate survives", "",
+              "  With {} approved associations, {} backed by >= {} sources and {} carrying".format(
+                  len(approved), len(multi_src), MIN_SOURCES, len(with_dir)),
+              "  a resolvable direction, no association is both well-evidenced and",
+              "  directionally useful.",
               "",
-              "  1. BubR1 itself has no drug. The Mitotic Checkpoint Complex and the",
-              "     entire APC/C are a pharmacological desert - 43 of 61 network members",
-              "     have no reported drug association at all.",
+              "  This is a statement about what these databases contain for this",
+              "  network, not a proof that no drug could help. In particular:",
               "",
-              "  2. The direction that would help is the direction nobody has drugs for.",
-              "     Inhibiting CDC20 or the APC/C would substitute for the lost BubR1",
-              "     restraint on anaphase. Those are exactly the nodes with zero drugs.",
-              "",
-              "  3. The direction that IS available is the harmful one. Inhibitors of",
-              "     BUB1, TTK, AURKB, PLK1 and CDK1 exist because oncology wants to push",
-              "     cancer cells past a checkpoint. In a child whose checkpoint is",
-              "     already failing, that is the wrong way round.",
-              "",
-              "  4. What remains is single-source text mining. Every approved-drug",
-              "     association in this network is backed by exactly one source, with",
-              "     scores of 0.01-0.60 - associations like PLK1-erythromycin or",
-              "     PLK1-lansoprazole are not pharmacology.",
-              "",
-              "  This negative is the argument for the next stage. A therapy for this",
-              "  variant has to bypass the pathway entirely rather than act within it."]
-
-    L += ["", "## What was dropped, and why - the harmful ones are worth naming", ""]
-    seen = set()
-    for r in drops["harmful_direction"][:12]:
-        k = (r["gene"], r["drug"])
-        if k in seen:
-            continue
-        seen.add(k)
-        L.append("  {:<9}{:<32} would weaken the checkpoint further".format(r["gene"], r["drug"][:31]))
-    if not drops["harmful_direction"]:
-        L.append("  (none reached this filter - they were dropped earlier for weak evidence)")
+              "  - only approved drugs were considered; clinical-stage compounds for",
+              "    TTK, PLK1, AURKB and CDK1 exist and were excluded by that filter",
+              "  - only DGIdb was queried; ChEMBL and Open Targets were not",
+              "  - signature-based repurposing (LINCS / Connectivity Map) was not run",
+              "    at all, and it is the standard approach when no target is druggable"]
 
     L += ["", "  -> " + OUT_TSV]
 

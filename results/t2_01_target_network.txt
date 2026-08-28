@@ -2,12 +2,14 @@
  T2-01 - CANDIDATE TARGET NETWORK
 ========================================================================================
 
-Entry point : BUB1B (the Track 1 result - an input here, not a leaked answer)
-STRING      : confidence >= 0.9, 60 partners retrieved
-Targets     : 61
+Entry point   : BUB1B (the Track 1 result - an input, not a leaked answer)
+Variant class : nonsense - drives tier 4
+STRING        : physical subnetwork, score >= 0.9, limit 40 -> 31 partners
+Targets       : 52
 
-Tier is mechanistic DISTANCE from the lesion, not importance. A drug
-acting further from the lesion needs a stronger argument to be credible.
+Tier is mechanistic DISTANCE from the lesion, not importance.
+Tier 4 is not further away - it is a different route to the same lesion,
+reachable because of the variant CLASS rather than the gene.
 
 
 tier 0 - the mutated gene
@@ -21,70 +23,75 @@ tier 1 - the Mitotic Checkpoint Complex
   BUB1      STRING 0.999   MCC; kinetochore kinase, recruits BubR1
   BUB3      STRING 0.999   MCC; scaffolds BUB1/BUB1B at kinetochores
   CDC20     STRING 0.999   the direct target of MCC inhibition; APC/C activator
-  KNL1      STRING 0.999   kinetochore scaffold recruiting BUB1/BUB3
-  MAD1L1    STRING 0.999   MAD2 template at unattached kinetochores
   MAD2L1    STRING 0.999   MCC; co-inhibitor of CDC20 with BubR1
+  KNL1      STRING 0.997   kinetochore scaffold recruiting BUB1/BUB3
+  MAD1L1    STRING   -     MAD2 template at unattached kinetochores
 
-tier 2 - APC/C and checkpoint kinases
--------------------------------------
+tier 2 - APC/C, separase and checkpoint kinases
+-----------------------------------------------
 
   ANAPC1    STRING 0.999   APC/C subunit
   ANAPC10   STRING 0.999   APC/C subunit
   ANAPC2    STRING 0.999   APC/C subunit
   ANAPC4    STRING 0.999   APC/C subunit
   ANAPC7    STRING 0.999   APC/C subunit
-  AURKB     STRING 0.999   corrects erroneous attachments; checkpoint kinase
   CCNB1     STRING 0.999   cyclin B1, CDK1 partner, APC/C substrate
   CDC16     STRING 0.999   APC/C subunit
   CDC23     STRING 0.999   APC/C subunit
+  CDC26     STRING 0.999   APC/C subunit
   CDC27     STRING 0.999   APC/C subunit
   CDK1      STRING 0.999   master mitotic kinase driving entry into mitosis
-  CENPE     STRING 0.999   kinetochore motor; activates BubR1 kinase activity
-  CENPF     STRING 0.999   kinetochore component, BubR1-associated
-  NEK2      STRING 0.999   centrosome separation, mitotic fidelity
-  PLK1      STRING 0.999   mitotic kinase, kinetochore-microtubule attachment
-  TTK       STRING 0.999   MPS1 kinase, apex of checkpoint signalling
+  FZR1      STRING 0.998   Cdh1; the G1 APC/C activator (not the anaphase one)
+  CENPE     STRING 0.989   kinetochore motor; BubR1-associated
+  PLK1      STRING 0.967   mitotic kinase, kinetochore-microtubule attachment
+  AURKB     STRING 0.953   corrects erroneous attachments; checkpoint kinase
+  PPP2R5A   STRING 0.902   PP2A-B56; recruited by the BubR1 KARD motif
+  ANAPC11   STRING   -     APC/C subunit
+  ESPL1     STRING   -     separase; executes sister chromatid separation
+  PPP2CA    STRING   -     PP2A catalytic; opposes Aurora B at kinetochores
+  PTTG1     STRING   -     securin; inhibits separase until anaphase
+  TTK       STRING   -     MPS1 kinase, apex of checkpoint signalling
+  UBE2C     STRING   -     APC/C E2 enzyme
 
-tier 3 - other high-confidence interactors
-------------------------------------------
+tier 3 - additional physical interactors
+----------------------------------------
 
-  ANAPC11   STRING 0.999   high-confidence STRING interactor of BUB1B
-  ANAPC13   STRING 0.999   high-confidence STRING interactor of BUB1B
-  ANAPC15   STRING 0.999   high-confidence STRING interactor of BUB1B
-  ANAPC16   STRING 0.999   high-confidence STRING interactor of BUB1B
-  ANAPC5    STRING 0.999   high-confidence STRING interactor of BUB1B
-  BIRC5     STRING 0.999   high-confidence STRING interactor of BUB1B
-  CCNA2     STRING 0.999   high-confidence STRING interactor of BUB1B
-  CCNB2     STRING 0.999   high-confidence STRING interactor of BUB1B
-  CDC26     STRING 0.999   high-confidence STRING interactor of BUB1B
-  CDCA8     STRING 0.999   high-confidence STRING interactor of BUB1B
-  ESPL1     STRING 0.999   high-confidence STRING interactor of BUB1B
-  FZR1      STRING 0.999   high-confidence STRING interactor of BUB1B
-  NDC80     STRING 0.999   high-confidence STRING interactor of BUB1B
-  NUF2      STRING 0.999   high-confidence STRING interactor of BUB1B
-  NUSAP1    STRING 0.999   high-confidence STRING interactor of BUB1B
-  PPP2CA    STRING 0.999   high-confidence STRING interactor of BUB1B
-  PPP2R5A   STRING 0.999   high-confidence STRING interactor of BUB1B
-  PPP2R5C   STRING 0.999   high-confidence STRING interactor of BUB1B
-  PTTG1     STRING 0.999   high-confidence STRING interactor of BUB1B
-  SGO1      STRING 0.999   high-confidence STRING interactor of BUB1B
-  SKA1      STRING 0.999   high-confidence STRING interactor of BUB1B
-  SKA3      STRING 0.999   high-confidence STRING interactor of BUB1B
-  TOP2A     STRING 0.999   high-confidence STRING interactor of BUB1B
-  UBE2C     STRING 0.999   high-confidence STRING interactor of BUB1B
-  ZWINT     STRING 0.999   high-confidence STRING interactor of BUB1B
-  CENPA     STRING 0.997   high-confidence STRING interactor of BUB1B
-  DLGAP5    STRING 0.997   high-confidence STRING interactor of BUB1B
-  KIF11     STRING 0.997   high-confidence STRING interactor of BUB1B
-  ASPM      STRING 0.996   high-confidence STRING interactor of BUB1B
-  BRCA2     STRING 0.996   high-confidence STRING interactor of BUB1B
-  KIF2C     STRING 0.996   high-confidence STRING interactor of BUB1B
-  TRIM33    STRING 0.996   high-confidence STRING interactor of BUB1B
-  MXI1      STRING 0.994   high-confidence STRING interactor of BUB1B
-  KIF20A    STRING 0.992   high-confidence STRING interactor of BUB1B
-  KIF4A     STRING 0.992   high-confidence STRING interactor of BUB1B
-  MELK      STRING 0.984   high-confidence STRING interactor of BUB1B
-  SPDL1     STRING 0.958   high-confidence STRING interactor of BUB1B
-  ZWILCH    STRING 0.953   high-confidence STRING interactor of BUB1B
+  ANAPC13   STRING 0.999   physical STRING interactor of BUB1B
+  ANAPC15   STRING 0.999   physical STRING interactor of BUB1B
+  ANAPC5    STRING 0.999   physical STRING interactor of BUB1B
+  SKA1      STRING 0.999   physical STRING interactor of BUB1B
+  SKA2      STRING 0.999   physical STRING interactor of BUB1B
+  SKA3      STRING 0.999   physical STRING interactor of BUB1B
+  ANAPC16   STRING 0.998   physical STRING interactor of BUB1B
+  CENPF     STRING 0.972   physical STRING interactor of BUB1B
+  BOD1      STRING 0.900   physical STRING interactor of BUB1B
+  SPDL1     STRING 0.900   physical STRING interactor of BUB1B
+
+tier 4 - actionable by VARIANT CLASS (translation termination and NMD)
+----------------------------------------------------------------------
+
+  EIF4A3    STRING   -     exon junction complex; marks the PTC as premature
+  ETF1      STRING   -     eRF1; recognises the stop codon - the direct target of readthrough
+  GSPT1     STRING   -     eRF3a; termination GTPase, target of molecular-glue degraders
+  GSPT2     STRING   -     eRF3b paralogue
+  RPL3      STRING   -     large ribosomal subunit; readthrough modulation
+  RPS15     STRING   -     small subunit near the decoding site
+  SMG1      STRING   -     NMD kinase, phosphorylates UPF1
+  SMG5      STRING   -     NMD; UPF1 dephosphorylation
+  SMG6      STRING   -     NMD endonuclease
+  SMG7      STRING   -     NMD; recruits deadenylation machinery
+  UPF1      STRING   -     NMD helicase; degrades the PTC transcript that readthrough needs
+  UPF2      STRING   -     NMD core factor
+  UPF3B     STRING   -     NMD core factor
+
+## Note on network construction
+
+  The physical subnetwork is used deliberately. STRING's COMBINED score
+  saturates on co-expression and text-mining for mitotic genes, and in the
+  first version of this pipeline it pulled BRCA2, TOP2A and BIRC5 into a
+  spindle-checkpoint drug search. Those genes then supplied the only
+  well-evidenced drugs in the entire result - olaparib, etoposide,
+  trastuzumab - none of which has anything to do with BubR1 dosage, and all
+  of which distorted the summary statistics.
 
   -> /home/user/mva/work/t2_01_targets.tsv

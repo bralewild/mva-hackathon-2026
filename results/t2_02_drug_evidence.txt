@@ -2,13 +2,13 @@
  T2-02 - DRUG-GENE EVIDENCE ACROSS THE TARGET NETWORK
 ========================================================================================
 
-Targets queried              : 61
-Targets with any association : 18
-Targets with NO association  : 43
+Targets queried              : 52
+Targets with any association : 14
+Targets with NO association  : 38
 
-Associations returned        : 668
-  with an approved drug      : 125
-  with a declared interaction type : 195  (29%)
+Associations returned        : 424
+  with an approved drug      : 41
+  with a declared interaction type : 171  (40%)
 
 Open Targets tractability for BUB1B:
   Database Ubiquitination, Druggable Family, High-Quality Ligand, Literature, UniProt Ubiquitination
@@ -29,13 +29,13 @@ APPROVED DRUGS ACROSS THE NETWORK (top 30 by score)
   GENE     DRUG                              TYPE                SCORE   SRC
   MAD1L1   CARBOPLATIN                       -                    0.60     1
   MAD1L1   PACLITAXEL PROTEIN-BOUND          -                    0.45     1
+  PTTG1    ETANERCEPT                        -                    3.53     1
+  PPP2CA   CANTHARIDIN                       inhibitor            2.94     1
   CDK1     CINNARIZINE                       -                    0.11     1
   CDK1     CLOFIBRATE                        -                    0.09     1
   CDK1     SERTRALINE HYDROCHLORIDE          -                    0.06     1
   AURKB    COPANLISIB                        -                    0.06     1
-  NEK2     PAZOPANIB                         -                    0.06     1
   AURKB    BELUMOSUDIL                       -                    0.06     1
-  NEK2     PALBOCICLIB                       -                    0.05     1
   CDK1     FENOFIBRATE MICRONIZED            -                    0.05     1
   PLK1     SUCCIMER                          -                    0.04     1
   CDK1     CLOTRIMAZOLE                      -                    0.03     1
@@ -60,7 +60,7 @@ APPROVED DRUGS ACROSS THE NETWORK (top 30 by score)
 
 Targets with no reported drug association:
 
-  BUB1B, BUB3, CDC20, KNL1, MAD2L1, ANAPC1, ANAPC10, ANAPC2, ANAPC4, ANAPC7, CDC16, CDC23, CDC27, CENPF, ANAPC11, ANAPC13, ANAPC15, ANAPC16, ANAPC5, CCNB2, CDC26, CDCA8, ESPL1, FZR1, NDC80, NUF2, NUSAP1, PPP2R5A, PPP2R5C, SGO1, SKA1, SKA3, UBE2C, ZWINT, CENPA, DLGAP5, ASPM, KIF2C, TRIM33, KIF20A, KIF4A, SPDL1, ZWILCH
+  BUB1B, BUB3, CDC20, MAD2L1, KNL1, ANAPC1, ANAPC10, ANAPC2, ANAPC4, ANAPC7, CDC16, CDC23, CDC26, CDC27, FZR1, PPP2R5A, ANAPC11, ESPL1, UBE2C, ANAPC13, ANAPC15, ANAPC5, SKA1, SKA2, SKA3, ANAPC16, CENPF, BOD1, SPDL1, EIF4A3, ETF1, GSPT1, GSPT2, SMG5, SMG6, SMG7, UPF2, UPF3B
 
   -> /home/user/mva/work/t2_02_drug_evidence.tsv
 

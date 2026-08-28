@@ -100,7 +100,7 @@ def query_dgidb(genes):
                     "score": float(it.get("interactionScore") or 0.0),
                     "interaction_type": ",".join(types) or "",
                     "directionality": ",".join(dirs) or "",
-                    "n_sources": len(srcs),
+                    "n_sources": len(set(srcs)),   # DISTINCT sources - a repeated sourceDbName is not corroboration
                     "sources": ";".join(sorted(set(srcs)))[:120],
                     "n_publications": len(it.get("publications") or []),
                 })
