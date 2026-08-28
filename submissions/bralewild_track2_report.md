@@ -61,9 +61,8 @@ One point has to be stated explicitly because it is easy to assume otherwise:
 **human BubR1 is widely characterised as a pseudokinase**, with no demonstrable
 catalytic activity, and its kinase domain is dispensable for checkpoint function.
 Attributing p.Asn1002Lys's effect to "reduced enzymatic activity" would be
-inventing a mechanism. What can be said is that it is a
-full-length protein carrying a substitution in that domain, of **unknown**
-functional consequence.
+inventing a mechanism. What can be said is that it is a full-length protein
+carrying a substitution in that domain, of **unknown** functional consequence.
 
 | Allele | Change | What is established | What is not |
 |---|---|---|---|
@@ -115,13 +114,19 @@ than an absent one. Neither confound is resolvable from published data.
 Track 1 stage 08 screened for mosaic aneuploidy from B-allele fractions at
 2,241,007 heterozygous SNVs across 285 windows.
 
-An initial pass flagged eight autosomes, chr21 at an apparent 17 % mosaic
-fraction. A uniformity test rejected it: a true whole-chromosome event affects
-every window, and the signal concentrated in a minority — on the acrocentric and
-heterochromatic chromosomes where mapping is hardest. But the rejection is not
-clean, and the report says so:
+The committed windowed analysis flags **nine autosomes** as patchily elevated.
+Its strongest, chr21, carries an excess of 0.03937 at z = 17.8 — an apparent
+**17.1 % mosaic fraction**, the single largest signal in the screen. A uniformity
+test rejected it: a true whole-chromosome event affects every window, and this
+one concentrated in a minority, on the acrocentric and heterochromatic
+chromosomes where mapping is hardest. (An earlier, per-chromosome-median pass
+produced smaller apparent fractions and a broken variance estimate; it was
+discarded and rebuilt, and Track 1 §6b documents that episode.) But the
+rejection is not clean, and it should be read with three limits:
 
-- the uniformity test for chr21 ran on **5 windows**, which is little power;
+- the uniformity test for chr21 ran on **5 windows** — 40 % of them elevated,
+  against the ≥ 80 % a genuine whole-chromosome event requires. Rejecting on
+  five observations is weak, not clean;
 - the GC-content confounder check returned **r = +0.475**, which the pipeline
   itself reports as *"GC bias contributes and cannot be excluded"*;
 - MVA aneuploidy is **variegated** — different chromosomes in different cells —
@@ -463,8 +468,9 @@ Amlexanox is the best mechanistic fit and its TBK1/IKKε inhibition suppresses
 innate immune and type-I interferon signalling in a child with an active cancer
 predisposition syndrome.
 
-**A ranking by mechanism alone would have proposed gentamicin, then amlexanox.
-Both are unusable in this patient, and it takes a phenotype file to see it.**
+**Ranked by mechanism alone the order is amlexanox, escin, gentamicin. The two
+that head that list on evidence — amlexanox first, gentamicin third — are both
+unusable in this child, and it takes a phenotype file to see it.**
 
 ---
 
@@ -526,10 +532,10 @@ loss-of-function variant in an undruggable target
 Two components are worth reusing. The **direction filter** drops inhibitors that
 would worsen a loss-of-function disease — a silent failure mode of naive
 repurposing, and here not a hypothetical one: it removes **all 43** of the
-best-evidenced associations in the result (§3.3), every one of them an inhibitor
-of a checkpoint gene in a checkpoint-deficiency disease. The **phenotype screen** changed
-the answer twice here and needs nothing but the HPO file every rare disease case
-already has.
+best-evidenced associations in the result (§3.3) — 41 of them explicitly typed
+inhibitors of a checkpoint gene, in a checkpoint-deficiency disease. The
+**phenotype screen** changed the answer twice here and needs nothing but the HPO
+file every rare disease case already has.
 
 **One half of the direction filter is already gene-agnostic.** For the mutated
 gene itself the rule needs no curation — *activating a deficient product is
@@ -561,10 +567,11 @@ open.
    are the gating pharmacological question and remain open.
 6. **The class's clinical record is poor** (§4.4).
 7. **Phase was never proven**; if *cis*, this collapses.
-8. **The search was partial**: DGIdb only, approved drugs only, no
-   signature-based repurposing, no aneuploidy-selective compounds (§3.7). The
-   positive control (§3.5) shows the gate works on the mutated gene; it does not
-   show it would work two nodes out, which is what BUB1B required.
+8. **The drug–target search was partial**: DGIdb only, approved drugs only, no
+   ChEMBL or Open Targets `knownDrugs` ablation, no aneuploidy-selective
+   compounds (§3.7). The positive control (§3.5) shows the gate works on the
+   mutated gene; it does not show it would work two nodes out, which is what
+   BUB1B required.
 9. **DGIdb does not carry biologics.** Enzyme replacement therapy for Gaucher
    is absent from it entirely — a systematic blind spot of any repurposing
    search built on drug–target interaction databases.
@@ -593,8 +600,8 @@ reversal query and compound classification of §3.6; the zero-candidate result.
 the curated candidate set; the direction classifications
 in `t2_03`. **No database query returns escin or amlexanox as readthrough agents
 — their activity is a primary-literature property, not a drug–target
-annotation.** The corrected pipeline searched the right biology, recovered
-ataluren and ELX-02 as a positive control, and still did not surface them. That
+annotation.** The corrected pipeline searched the right biology, recovering
+ataluren and ELX-02 unprompted, and still did not surface them. That
 is now a demonstrated limitation of database-driven repurposing rather than an
 assertion about it.
 
@@ -609,9 +616,9 @@ activity was the relevant function. An adversarial review of the first draft is
 what surfaced them; its findings are recorded in the repository history.
 
 **Public or proprietary?** — Public only. STRING v12, DGIdb v5, Open Targets,
-Ensembl REST, OMIM, PubMed/Europe PMC, EMA and FDA public records, the Human
-Phenotype Ontology. Only gene symbols and genomic coordinates were transmitted —
-no subject identifier.
+Ensembl REST, **LINCS L1000 via Enrichr, and L1000CDS²**, OMIM, PubMed/Europe
+PMC, EMA and FDA public records, the Human Phenotype Ontology. Only gene symbols
+and genomic coordinates were transmitted — no subject identifier.
 
 **Proprietary sources** — none.
 
@@ -620,8 +627,11 @@ consequence type of both alleles, BubR1's stoichiometric role in the MCC, the
 published dose–response, and phenotype coherence. Explicitly *not* from kinase
 activity, which BubR1 is not established to have.
 
-**Time and effort** — the pipeline runs in **under two minutes at zero cost**
-(one STRING call, three batched DGIdb calls, one Open Targets, one Ensembl). The
+**Time and effort** — the pipeline runs at **zero cost**: stages t2-01 to t2-05
+take under two minutes (one STRING call, four batched DGIdb calls, one Open
+Targets, one Ensembl), and t2-06 adds a first-run download of ~29 MB of LINCS
+libraries, cached thereafter, plus nine L1000CDS² queries — about 13 s once
+cached. The
 substantive effort was mechanistic reading, verification, and a four-reviewer
 adversarial audit of the first draft that invalidated several of its central
 claims.
@@ -696,8 +706,7 @@ direction filter and the phenotype screen each address a failure mode naive
 repurposing walks into, and each changed the answer here rather than sitting
 unexercised. Putting the ribosome in the network gives the search a way
 to see the class of answer being proposed, which it demonstrates by recovering
-ataluren and ELX-02 unprompted. The whole pipeline runs in under two minutes at
-zero cost.
+ataluren and ELX-02 unprompted. The whole pipeline runs at zero cost, in minutes.
 
 **Limitations, stated plainly.** No readthrough agent has been tested on *BUB1B*.
 The expected effect is small: single-digit readthrough against a deficit of an
@@ -751,6 +760,18 @@ Protocol approved by **WCG IRB #20252010**. Released under **CC BY 4.0**.
   mammalian genes. *Nucleic Acids Res* 2014.
 - Tang Y.-C. *et al.* Identification of aneuploidy-selective antiproliferation
   compounds. *Cell* 2011 — cited, and not pursued (§3.7).
+- Lamb J. *et al.* The Connectivity Map: using gene-expression signatures to
+  connect small molecules, genes, and disease. *Science* 2006.
+- Subramanian A. *et al.* A next generation connectivity map: L1000 platform and
+  the first 1,000,000 profiles. *Cell* 2017.
+- Duan Q. *et al.* L1000CDS²: LINCS L1000 characteristic direction signatures
+  search engine. *npj Systems Biology and Applications* 2016 — the reversal
+  engine used in §3.6.
+- Kuleshov M. V. *et al.* Enrichr: a comprehensive gene set enrichment analysis
+  web server 2016 update. *Nucleic Acids Research* 2016 — LINCS library access.
+- Mackenzie K. J. *et al.* cGAS surveillance of micronuclei links genome
+  instability to innate immunity. *Nature* 2017 — why the knockout signature is
+  an interferon signature.
 - EMA / CHMP public assessment record, Translarna (ataluren), 2024.
 - German Commission E monograph, *Aesculus hippocastanum* seed extract, 1984 /
   1994.

@@ -266,15 +266,28 @@ increases. It looked like a finding. It was not, for two reasons:
    windows.
 
 **The rebuilt test.** Binning the genome into 10 Mb windows and treating the
-window as the unit of evidence (285 windows, 2,241,007 heterozygous SNVs):
+window as the unit of evidence (285 windows, 2,241,007 heterozygous SNVs).
 
-| chr | windows | excess \|BAF−0.5\| | windows elevated | depth | GC % |
-|---|---:|---:|---:|---:|---:|
-| 21 | 5 | 0.0394 | **40 %** | 1.33× | 40.9 |
-| 22 | 4 | 0.0304 | **50 %** | 1.16× | 47.7 |
-| 20 | 7 | 0.0201 | **29 %** | 1.06× | 44.1 |
-| 9 | 13 | 0.0181 | **38 %** | 1.07× | 42.3 |
-| 1 | 24 | 0.0071 | **17 %** | 1.01× | 41.7 |
+Note that the rebuilt apparent fractions are **larger**, not smaller — chr21 goes
+from 5–7 % to 17.1 %. That is expected and is not a contradiction: the first pass
+took a median across every SNV on a chromosome, which drags a locally
+concentrated artefact toward the genome-wide baseline, while the windowed
+statistic measures the affected windows on their own terms. A better statistic
+made the artefact look *bigger*, which is precisely why the uniformity
+discriminator, and not the effect size, is what settles it:
+
+| chr | windows | excess \|BAF−0.5\| | z | **apparent mosaic** | windows elevated | depth | GC % |
+|---|---:|---:|---:|---:|---:|---:|---:|
+| 21 | 5 | 0.0394 | 17.8 | **17.1 %** | **40 %** | 1.33× | 40.9 |
+| 22 | 4 | 0.0304 | 13.8 | 12.9 % | **50 %** | 1.16× | 47.7 |
+| 20 | 7 | 0.0201 | 9.1 | 8.4 % | **29 %** | 1.06× | 44.1 |
+| 9 | 13 | 0.0181 | 8.2 | 7.5 % | **38 %** | 1.07× | 42.3 |
+| 1 | 24 | 0.0071 | 3.2 | 2.9 % | **17 %** | 1.01× | 41.7 |
+
+The *apparent mosaic* column is what the BAF excess would imply **if** the
+elevation were real. It is printed rather than hidden: chr21's 17.1 % is the
+largest signal in the screen, and a report that rejects it should show what it
+is rejecting.
 
 **Not one chromosome reaches the ≥ 80 % uniformity a real event requires.** The
 elevation concentrates in a minority of windows, on precisely the chromosomes
