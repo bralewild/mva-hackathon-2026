@@ -33,3 +33,8 @@ DATOS-EN-WSL.lnk
 # DUA estricto no vale la pena discutir si un agregado es reidentificable.
 results/*.html
 results/*.genes.txt
+
+# El reporte de metodos tambien contiene las coordenadas causales.
+# Se sube al formulario del challenge (privado) y se agrega al repo
+# despues del cierre, igual que el CSV.
+submissions/bralewild_*
