@@ -86,16 +86,27 @@ git ls-files | grep -E '\.(vcf|bam|cram|fastq|docx)$|patient_hpo'
 ### Repository visibility — the operative rule
 
 The repository **contains the causal gene and coordinates** in its README,
-documentation and mirrored result files. Selectively redacting them would leave
-an incomplete artefact that reads poorly to a reviewer.
+documentation, submission files and convergence report. Selectively redacting
+them would leave an incomplete artefact that reads poorly to a reviewer.
 
-**Therefore the protection is visibility, not redaction:**
+**The repository is public**, published at the point of submission.
 
-> **The repository stays `PRIVATE` until the moment of submission.**
+Two considerations were weighed:
 
-Publishing early would hand the answer to competing teams while the leaderboard
-is still open. This is a strategic decision, not a legal requirement — the
-embargo explicitly permits publishing code at any time (see §5).
+* *Against publishing early* — while the leaderboard is open, a public
+  repository exposes the method to competing teams.
+* *For publishing early* — the challenge form requires a public repository URL,
+  four teams already hold a perfect score (so the answer itself is not a
+  secret), and submitting early verifies the CSV format while five attempts
+  remain. Discovering a format defect on 24 October, with hours left, would be
+  far more costly.
+
+The second argument won. Note that this is a **strategic** decision, not a legal
+one: the embargo explicitly permits publishing code at any time (see §5).
+
+What is never published is raw patient data and the variant-level tables listing
+the hundreds of other coordinates examined. That line is permanent and is
+enforced by `.gitignore`, not by repository visibility.
 
 ---
 

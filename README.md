@@ -339,12 +339,15 @@ proband_id,chrom_1,pos_1,ref_1,alt_1,chrom_2,pos_2,ref_2,alt_2,epcr,finding_type
 * `epcr` in `(0, 1]`, rows sorted by EPCR descending, max 10 rows
 * `finding_type`: `primary` or `secondary`
 
-Prediction files and the methods report are **not committed** while the
-competition is open — the challenge requires a public repository, and publishing
-the causal coordinates early would hand the answer to other teams. The
-repository demonstrates the **method**; the answer goes directly to the (private)
-submission form. Both will be added after close. See
-[submissions/README.md](submissions/README.md).
+The prediction CSV and the methods report live in
+[submissions/](submissions/). The Official Rules release submissions under
+CC BY 4.0, and a repository with its results redacted reads as incomplete.
+
+What stays out permanently is raw patient data and the variant-level tables
+listing the hundreds of other coordinates the pipeline examined — those fall
+under the Data Use Agreement, not under competitive strategy. The two concerns
+are kept separate on purpose; see [docs/02_compliance.md](docs/02_compliance.md)
+§2–3.
 
 ---
 
