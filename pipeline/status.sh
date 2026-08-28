@@ -9,7 +9,7 @@
 # ==============================================================================
 source "$(dirname "$0")/00_config.sh"
 set +o pipefail
-SNPEFF_DIR=$(ls -d "$HOME"/micromamba/envs/bio/share/snpeff-*/ 2>/dev/null | head -1)
+SNPEFF_DIR=$(snpeff_dir 2>/dev/null || echo "")
 
 # $3 = minimum size in bytes for a stage to count as complete.
 # Needed because an empty bgzip file is 28 bytes and would pass a plain `test -s`.

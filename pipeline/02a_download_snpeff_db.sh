@@ -19,7 +19,7 @@
 # ==============================================================================
 source "$(dirname "$0")/00_config.sh"
 
-SNPEFF_DIR=$(ls -d "$HOME"/micromamba/envs/bio/share/snpeff-*/ | head -1)
+SNPEFF_DIR=$(snpeff_dir) || { log "ERROR: snpEff not found on PATH. Install it, or set SNPEFF_HOME."; exit 1; }
 URL="https://snpeff-public.s3.amazonaws.com/databases/v5_4/snpEff_v5_4_${SNPEFF_DB}.zip"
 ZIP="/tmp/snpEff_v5_4_${SNPEFF_DB}.zip"
 

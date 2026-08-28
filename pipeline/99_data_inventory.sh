@@ -16,7 +16,7 @@
 source "$(dirname "$0")/00_config.sh"
 set +o pipefail
 OUT="$RESULTS/99_data_inventory.txt"
-SNPEFF_DIR=$(ls -d "$HOME"/micromamba/envs/bio/share/snpeff-*/ 2>/dev/null | head -1)
+SNPEFF_DIR=$(snpeff_dir 2>/dev/null || echo "")
 
 sz() { [ -e "$1" ] && du -sh "$1" 2>/dev/null | cut -f1 || echo "-"; }
 
@@ -53,7 +53,7 @@ echo "    [$( sz "${SNPEFF_DIR}data" )]  ${SNPEFF_DIR}data"
 [ -d "${SNPEFF_DIR}data" ] && ls "${SNPEFF_DIR}data" 2>/dev/null | sed 's/^/        DB: /'
 echo "    [$( sz "$REF" )]  $REF    (genome reference, if downloaded)"
 echo "    [$( sz "$ANNOT" )]  $ANNOT    (HPO ontology and annotations)"
-echo "    [$( sz "$HOME/micromamba" )]  $HOME/micromamba    (software environment)"
+echo "    [$( sz "$(dirname "$(dirname "${SNPEFF_DIR:-/nonexistent}")")" )]  software environment (conda/micromamba prefix)"
 echo
 echo "  REMOTE (APIs - nothing stored):"
 echo "    Ensembl REST   https://rest.ensembl.org           gene coordinates"

@@ -29,7 +29,7 @@ import json
 import os
 import sys
 
-BASE = os.path.expanduser("~/mva")
+from _paths import BASE  # honours MVA_BASE; see pipeline/_paths.py
 IN_TSV = BASE + "/work/04_annotated_candidates.tsv"
 CACHE = BASE + "/work/04_vep_cache.jsonl"
 

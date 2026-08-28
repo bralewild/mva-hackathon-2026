@@ -34,7 +34,7 @@ import csv
 import os
 import sys
 
-BASE = os.path.expanduser("~/mva")
+from _paths import BASE  # honours MVA_BASE; see pipeline/_paths.py
 RANK = BASE + "/results/05_ranked_genes.tsv"
 RARE = BASE + "/work/04_rare_candidates.tsv"
 OUT = BASE + "/results/06_convergence_report.txt"

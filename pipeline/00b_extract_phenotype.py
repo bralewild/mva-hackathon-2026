@@ -24,7 +24,7 @@ import re
 import sys
 import zipfile
 
-RAW = os.path.expanduser("~/mva/data/raw")
+from _paths import RAW  # honours MVA_BASE; see pipeline/_paths.py
 DOCX = RAW + "/Challenge_Clinical_Phenotype_1.docx"
 OUT = RAW + "/patient_hpo.tsv"
 

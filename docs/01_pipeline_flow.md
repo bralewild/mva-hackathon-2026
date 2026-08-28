@@ -422,17 +422,24 @@ identifier of any kind.
 
 ```bash
 # full pipeline
-wsl -d Ubuntu-24.04 -- bash -lc \
-  "bash /mnt/c/Users/user/Documents/real-kid-mva-hackathon/pipeline/run_all.sh"
+bash pipeline/run_all.sh
 
 # status only
-wsl -d Ubuntu-24.04 -- bash -lc \
-  "bash /mnt/c/Users/user/Documents/real-kid-mva-hackathon/pipeline/status.sh"
+bash pipeline/status.sh
+
+# keep the data somewhere else
+MVA_BASE=/scratch/mva bash pipeline/run_all.sh
 ```
 
-**Always use `bash -lc`.** A non-login shell does not read `/etc/profile`, so the
-`bio` environment is not on `PATH` and every command fails with *command not
-found*.
+Nothing is tied to a particular machine: the project root is derived from the
+scripts' own location and the data root defaults to `~/mva`.
+
+**On Windows via WSL**, always use a login shell — a non-login shell reads
+neither `/etc/profile` nor `.bashrc`, so the tool environment is not on `PATH`:
+
+```bash
+wsl -d Ubuntu-24.04 -- bash -lc "bash /mnt/c/path/to/repo/pipeline/run_all.sh"
+```
 
 ---
 

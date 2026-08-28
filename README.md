@@ -156,6 +156,7 @@ ranking is final.
 | `05_phenotype_rank.py` | HPO semantic-similarity ranking |
 | `06_validate_convergence.py` | post-ranking validation gate |
 | `07_secondary_findings.py` | ACMG SF v3.2 secondary-findings cross-check |
+| `selfcheck.sh` | preflight: tools, versions, inputs, network, repository hygiene |
 | `run_all.sh` · `status.sh` · `sync_results.sh` · `99_data_inventory.sh` | orchestration and auditing |
 
 Full stage-by-stage rationale: [docs/01_pipeline_flow.md](docs/01_pipeline_flow.md)
@@ -164,35 +165,91 @@ Full stage-by-stage rationale: [docs/01_pipeline_flow.md](docs/01_pipeline_flow.
 
 ## Running it
 
-Scripts execute inside WSL. **Always use a login shell** (`bash -lc`): a
-non-login shell does not read `/etc/profile`, so the `bio` environment is not on
-`PATH` and everything fails with *command not found*.
+This is a plain Linux pipeline. Nothing is tied to a particular machine: the
+project root is derived from the scripts' own location, and the data root
+defaults to `~/mva`.
 
 ```bash
-# full pipeline
-wsl -d Ubuntu-24.04 -- bash -lc \
-  "bash /mnt/c/Users/user/Documents/real-kid-mva-hackathon/pipeline/run_all.sh"
+# verify the environment, inputs and repository first
+bash pipeline/selfcheck.sh
+
+# full pipeline (runs the self-check automatically)
+bash pipeline/run_all.sh
 
 # pipeline status
-wsl -d Ubuntu-24.04 -- bash -lc \
-  "bash /mnt/c/Users/user/Documents/real-kid-mva-hackathon/pipeline/status.sh --progress"
+bash pipeline/status.sh --progress
+
+# keep the data somewhere else
+MVA_BASE=/scratch/mva bash pipeline/run_all.sh
 ```
 
 Every stage is **idempotent**: valid existing output is skipped.
+
+<details>
+<summary><b>Running from Windows via WSL</b> (how this analysis was actually performed)</summary>
+
+The pipeline was developed and run on WSL2 / Ubuntu 24.04. From a Windows shell:
+
+```bash
+wsl -d Ubuntu-24.04 -- bash -lc "bash /mnt/c/path/to/repo/pipeline/run_all.sh"
+```
+
+**Always use a login shell** (`bash -lc`). A non-login, non-interactive shell
+reads neither `/etc/profile` nor `.bashrc`, so the `bio` environment is not on
+`PATH` and every command fails with *command not found*. This is the single most
+common way to break the pipeline on WSL.
+
+Keep the data on ext4 (`~/mva`) rather than under `/mnt/c`: I/O across the 9p
+bridge is 5–10× slower, which is irrelevant for a 300 MB VCF and very relevant
+for a 40 GB CRAM.
+
+</details>
 
 **Anyone re-running this pipeline must supply their own authorised copy of the
 dataset.** No patient data is included here by design — `00b` extracts the HPO
 terms from the original confidential document, which each participant must
 obtain through the gated Hugging Face dataset.
 
-### Environment
+### Requirements
 
-WSL2 · Ubuntu 24.04 · micromamba environment `bio`:
-bcftools / samtools / htslib 1.24 · bwa · minimap2 · whatshap · bedtools ·
-seqkit · snpEff 5.4c (`GRCh38.115`) · nextflow · bbmap · Python 3.12 ·
-OpenJDK 21.
+Any Linux host — native, WSL, container or cloud VM.
 
-Compute: local only, Intel i9-14900HX (24 c / 32 t), 32 GB RAM. No cloud cost.
+| | Minimum | Notes |
+|---|---|---|
+| CPU | 4 cores | 8+ recommended; annotation is the long step |
+| RAM | 16 GB | `JAVA_MEM` defaults to 12 g for snpEff |
+| Disk | ~40 GB free | 0.3 GB VCF · 0.8 GB snpEff DB · 0.6 GB annotated VCF · working space |
+| Network | yes | Ensembl VEP REST, NCBI, HPO, snpEff database |
+| Time | ~1.5 h | ~1 h annotation + ~20 min VEP + minutes for the rest |
+
+**Software** — `bcftools` ≥ 1.18, `samtools`, `htslib` (`tabix`, `bgzip`),
+`snpEff` 5.4+, Java 21+ (snpEff 5.4 is compiled for it), Python 3.10+ (standard
+library only), `curl`, `unzip`.
+
+Reference environment (conda/mamba):
+
+```bash
+micromamba create -n bio -c conda-forge -c bioconda \
+  bcftools samtools htslib snpeff "openjdk>=21" python=3.12
+```
+
+**Data** — a personal authorised copy of the gated dataset. Place
+`WGS_EX2312012_HGWCNDSX7.vcf.gz`, its `.tbi` and
+`Challenge_Clinical_Phenotype_1.docx` in `$MVA_BASE/data/raw`
+(default `~/mva/data/raw`). Nothing else is bundled: stage `00b` derives the HPO
+terms from the document itself.
+
+**Configuration** — all optional:
+
+| Variable | Default | Purpose |
+|---|---|---|
+| `MVA_BASE` | `~/mva` | data root |
+| `MVA_THREADS` | `nproc` | parallelism |
+| `MVA_JAVA_MEM` | `12g` | snpEff heap |
+| `SNPEFF_HOME` | auto-detected | if `snpEff` is not on `PATH` |
+
+This analysis was run on WSL2 / Ubuntu 24.04, Intel i9-14900HX (24 c / 32 t),
+32 GB RAM, entirely local — no cloud cost.
 
 ---
 

@@ -46,7 +46,7 @@ import time
 import urllib.error
 import urllib.request
 
-BASE = os.path.expanduser("~/mva")
+from _paths import BASE  # honours MVA_BASE; see pipeline/_paths.py
 IN_TSV = BASE + "/work/03_candidates.tsv"
 OUT_ALL = BASE + "/work/04_annotated_candidates.tsv"
 OUT_RARE = BASE + "/work/04_rare_candidates.tsv"

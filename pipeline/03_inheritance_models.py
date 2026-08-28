@@ -33,7 +33,7 @@ import gzip
 import os
 import sys
 
-BASE = os.path.expanduser("~/mva")
+from _paths import BASE  # honours MVA_BASE; see pipeline/_paths.py
 IN_VCF = BASE + "/work/02_annotated.vcf.gz"
 OUT_TSV = BASE + "/work/03_candidates.tsv"
 OUT_SUM = BASE + "/results/03_inheritance_summary.txt"

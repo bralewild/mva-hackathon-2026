@@ -12,6 +12,9 @@ set -euo pipefail
 D="$(cd "$(dirname "$0")" && pwd)"
 source "$D/00_config.sh"
 
+log "===== 00 preflight self-check ====="
+bash "$D/selfcheck.sh" > /dev/null || { log "preflight failed - run: bash pipeline/selfcheck.sh"; exit 1; }
+
 log "===== 01 QC baseline ====="
 bash "$D/01_qc_baseline.sh" > /dev/null
 

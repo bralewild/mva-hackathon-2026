@@ -40,7 +40,7 @@ import os
 import sys
 import urllib.request
 
-BASE = os.path.expanduser("~/mva")
+from _paths import BASE  # honours MVA_BASE; see pipeline/_paths.py
 ANNOT = BASE + "/data/annot"
 IN_TSV = BASE + "/work/04_rare_candidates.tsv"
 HPO_PT = BASE + "/data/raw/patient_hpo.tsv"
