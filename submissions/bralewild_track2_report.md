@@ -57,11 +57,11 @@ Its essential role is **stoichiometric**: BubR1, BUB3 and MAD2L1 sequester CDC20
 and prevent it from activating the anaphase-promoting complex until every
 chromosome is correctly attached.
 
-A correction worth making explicitly, because an earlier draft of this analysis
-got it wrong: **human BubR1 is widely characterised as a pseudokinase**, with no
-demonstrable catalytic activity, and its kinase domain is dispensable for
-checkpoint function. Attributing p.Asn1002Lys's effect to "reduced enzymatic
-activity" would be inventing a mechanism. What can be said is that it is a
+One point has to be stated explicitly because it is easy to assume otherwise:
+**human BubR1 is widely characterised as a pseudokinase**, with no demonstrable
+catalytic activity, and its kinase domain is dispensable for checkpoint function.
+Attributing p.Asn1002Lys's effect to "reduced enzymatic activity" would be
+inventing a mechanism. What can be said is that it is a
 full-length protein carrying a substitution in that domain, of **unknown**
 functional consequence.
 
@@ -128,10 +128,10 @@ clean, and the report says so:
   so a uniform whole-chromosome model may be the wrong detector entirely.
 
 **The honest statement is that this screen is inconclusive**, not that
-mosaicism is absent. An earlier draft also argued that blood is the wrong tissue
-because aneuploid lymphocytes are "enriched in culture"; that is
-self-contradictory, and MVA is in fact routinely diagnosed by karyotype on
-cultured peripheral blood lymphocytes. Ex vivo work should use fibroblasts for
+mosaicism is absent. Nor is blood the wrong tissue: MVA is routinely diagnosed by
+karyotype on cultured peripheral blood lymphocytes. What defeats bulk WGS here is
+*averaging* — a karyotype scores one cell at a time, so a variegated mosaic is
+counted cell by cell rather than diluted into a population mean. Ex vivo work should use fibroblasts for
 reasons of assay control, not because blood is uninformative.
 
 ---
@@ -234,8 +234,9 @@ records no direction at all. Three different reasons, none of them
 | BUB1, BUB3, MAD2L1, KNL1, TTK, AURKB, CENPE, PP2A | weakens an already-failing checkpoint | harmful |
 | **CDK1, CCNB1, PLK1, FZR1** | **two-sided** | **ambiguous** |
 
-The ambiguous row is a correction to our own first version, which called CDK1 and
-PLK1 harmful-if-inhibited. CDK1 inhibition blocks mitotic *entry* — a cell that
+The ambiguous row is the one that is easy to get wrong, and calling CDK1 and
+PLK1 harmful-if-inhibited would be both simpler and incorrect. CDK1 inhibition
+blocks mitotic *entry* — a cell that
 does not divide cannot missegregate — and CDK1 also phosphorylates APC/C subunits
 to permit CDC20 binding, so inhibiting it reduces APC/C–CDC20 activity, the
 compensatory direction. PLK1 inhibition causes SAC-dependent prometaphase arrest,
@@ -468,8 +469,8 @@ CFTR, PAH and GBA1. That part ports to any loss-of-function gene as written.
 **An honest scope statement for the rest**: the code is not gene-agnostic.
 `t2_01`'s curated core, `t2_03`'s network direction sets and `t2_04`'s candidate
 list are specific to this pathway and this variant class. What generalises is the *pattern*; porting it to
-another gene means rewriting those three knowledge bases. Claiming otherwise —
-as an earlier draft did — is contradicted by the files a reviewer can open.
+another gene means rewriting those three knowledge bases. Any broader claim
+would be contradicted by the files a reviewer can open.
 
 ---
 
