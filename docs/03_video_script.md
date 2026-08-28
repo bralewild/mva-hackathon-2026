@@ -1,211 +1,129 @@
-# 3-Minute Pitch Video — script and slides
+# 3-Minute Pitch Video — narration and slides
 
 **Deliverable:** required for Track 2, recommended for Track 1 ([02_compliance.md](02_compliance.md) §7).
-**Runtime:** 2:58 at 150 wpm — never let it pass 3:00.
-**Script length:** 443 spoken words. Slide timings below are derived from the
-per-slide counts, not estimated.
+**Slides:** published deck — open full screen, press `N` to hide the timing chrome before you record.
+**Runtime:** 2:57 at 150 wpm. Never let it pass 3:00.
 
 The panel scores **rigour 35 % · impact 25 % · innovation 25 % · scalability 15 %**.
-Every beat below is mapped to one of those. Nothing is in this script that does
-not earn a rubric point.
+Every beat is mapped to one of those. Nothing here does not earn a rubric point.
+
+> **On sounding human.** This narration is written to be *spoken*, not read — contractions,
+> short sentences, natural breaks. The earlier draft was report prose, which is why it would
+> have sounded robotic no matter who read it. The emotional weight is carried by the honesty
+> (slides 4 and 8), not by adjectives: with rigour at 35 %, sentiment costs credibility and
+> loses both halves at once.
 
 ---
 
-## Recording notes
+## Recording
 
-**Use your own voice.** A synthetic presenter costs credibility on a rubric that
-weights rigour highest, and a panel that reads a report about verifying claims
-will notice. An accent is not a defect; unclear audio is. Record in a small room
-with soft furnishings, phone or headset microphone 15–20 cm off-axis from your
-mouth so plosives miss it.
+**Use your own voice.** A synthetic presenter costs credibility on a rubric that weights
+rigour highest. An accent is not a defect; unclear audio is. Small room, soft furnishings,
+microphone 15–20 cm off-axis from your mouth so plosives miss it.
 
-**Record audio and slides separately.** Read the script in one pass, re-record
-individual paragraphs if needed, then time the slides to the audio. Trying to do
-both at once is what makes people rush the ending.
+**Record audio and slides separately**, then align. Doing both at once is what makes people
+rush the ending. In the deck: `←` `→` to move, **`N`** hides the timing chrome, **`S`** shows
+these notes on screen, **`F`** full screen.
 
-**Speak slower than feels natural.** The word budget already assumes 150 wpm. If
-you finish at 2:30, that is better than finishing at 3:10 and being cut off.
+**Speak slower than feels natural.** Finishing at 2:40 beats finishing at 3:10 and being cut.
 
-**Show the terminal at least once.** Real output on screen while you talk is
-worth more than any diagram.
+**Show the terminal once** if you can — real output while you talk is worth more than any diagram.
 
 ---
 
-## Slide 1 — Title · 0:00–0:09
-
-> **Rare Disease, Real Kid — MVA Hackathon 2026**
-> A blind genome-wide search, and what it found
-> `bralewild` · github.com/bralewild/mva-hackathon-2026
+## Slide 1 — Title — a boy, and a question · 0:00–0:11
 
 **Say:**
 
-> One child. Five million variants. I wanted to know whether a pipeline could
-> reach the diagnosis without being told what to look for.
+> This is about a boy whose cancer arrived before his diagnosis did.
+> Five million variants in his genome — and nobody allowed to tell the pipeline where to look.
 
-*(23 words · 9 s)*
-
----
-
-## Slide 2 — The design decision · 0:09–0:38
-
-> **The temptation:** we know it's MVA → look at BUB1B, CEP57, TRIP13 → find it
-> **The problem:** that method helps no future patient
->
-> **So: nothing downstream of stage 01 knew the disease name, the gene list, or
-> the inheritance pattern.**
-
-**Say:**
-
-> Here is the temptation. We already know this is Mosaic Variegated Aneuploidy.
-> Three genes cause it. Check those three, find the variant, done.
->
-> But a method that only works when you already know the answer helps no future
-> patient. And reusability is the stated goal of this hackathon.
->
-> So I ran it blind. No gene list. No disease name. No inheritance hint. Every
-> stage saw only the VCF and the patient's phenotype terms.
-
-*(73 words · 29 s)*
+*(28 words · 11 s · the human stake)*
 
 ---
 
-## Slide 3 — The funnel · 0:38–0:56
-
-> `5,012,204` → `9,145` → `179 rare` → `140 genes ranked`
-> **BUB1B — rank 1 · margin 22.8 % · 5 of 5 convergence criteria**
-> `NM_001211.6:c.2210T>G` p.Leu737Ter + `c.3006T>G` p.Asn1002Lys
->
-> **Scored 100.0 / 100 · F-max 1.000 · full match at rank 1**
+## Slide 2 — The design decision · 0:11–0:33
 
 **Say:**
 
-> BUB1B came out first, by a twenty-three percent margin, with a compound
-> heterozygous pair — a stop codon and a missense. The disease-name check ran
-> only *after* the ranking was closed, so it could not have steered it.
->
-> It scored one hundred out of one hundred.
+> Here's the temptation. We already know this is Mosaic Variegated Aneuploidy. Three genes cause it. Check those three, done.
+> But a method that only works when you already know the answer helps nobody's child.
+> So I ran it blind. No gene list. No disease name. No inheritance hint. Every stage saw the VCF and his symptoms.
 
-*(45 words · 18 s)*
+*(56 words · 22 s · innovation, scalability)*
 
 ---
 
-## Slide 4 — The pipeline caught itself · 0:56–1:26
-
-> **First pass:** eight autosomes "mosaic" at 5–7 % — a plausible, exciting finding
-> **The discriminator:** a real whole-chromosome event is *uniform*; an artefact *concentrates*
-> **Result:** no chromosome reached 80 % uniformity → **finding withdrawn,
-> reported as inconclusive rather than as a discovery**
->
-> Also caught: 201 SERPINA1 "variants" at 13–20 % VAF — pseudogene mismapping
+## Slide 3 — The result · 0:33–0:51
 
 **Say:**
 
-> This is the part worth seeing.
->
-> The first mosaicism pass produced a beautiful finding: eight chromosomes,
-> five to seven percent mosaic. It was wrong. A real whole-chromosome event
-> affects every window uniformly; a mapping artefact concentrates in a few. Not
-> one chromosome passed that test, so it went into the report as inconclusive —
-> not as a result.
->
-> A pipeline that detects its own false positives is worth more than one that
-> never fails in a demonstration.
+> BUB1B came out first. Twenty-three percent clear of the runner-up, with a compound heterozygous pair — a stop codon and a missense.
+> And the disease-name check ran only after the ranking was closed, so it couldn't have steered anything.
+> It scored a hundred out of a hundred.
 
-*(76 words · 30 s)*
+*(46 words · 18 s · rigour, impact)*
 
 ---
 
-## Slide 5 — Track 2: the search · 1:26–1:48
-
-> **52 targets** — checkpoint complex, APC/C, and the ribosome
-> **424** drug–gene associations · **41 approved** — *all single-source*
-> **43 well-evidenced** — *none approved* — AURKB, CDK1, PLK1, TTK
->
-> ### Acting in the compensatory direction: **0**
+## Slide 4 — The part worth seeing · 0:51–1:24
 
 **Say:**
 
-> Track 2 asks: is there anything we could actually give this child?
->
+> Here's the part I'd want you to see.
+> The first mosaicism pass gave me a beautiful finding. Eight chromosomes. It looked real. It wasn't.
+> A true whole-chromosome event shows up in every window; an artefact bunches into a few. Not one passed — so it went into the report as inconclusive, not a discovery.
+> A pipeline that catches its own false positives is worth more than one that never fails in a demo. And a family may one day read what it says.
+
+*(82 words · 33 s · **rigour**)*
+
+---
+
+## Slide 5 — Track 2 — is there anything we could give him? · 1:24–1:45
+
+**Say:**
+
+> Track two asks the next question. Is there anything we could actually give him?
 > I pulled every reported drug for the pathway. Nothing survived.
->
-> But look at the *shape* of that negative. The forty-three best-evidenced drugs
-> collapse onto four checkpoint genes, and forty-one of them are inhibitors. Not
-> one acts in the direction that would help.
+> But look at the shape of that negative. The forty-three best-evidenced drugs land on four checkpoint genes — and forty-one are inhibitors. Not one pushes the direction that would help.
 
-*(54 words · 22 s)*
+*(53 words · 21 s · rigour, innovation)*
 
 ---
 
-## Slide 6 — Three searches, all pointing the wrong way · 1:48–2:14
-
-> Oncology develops checkpoint inhibitors **precisely to force missegregation**
-> and kill dividing cells. **That is this disease, deliberately induced.**
->
-> Connectivity Map — needs no drug target — returned **vincristine**.
-> A spindle poison already in his chemotherapy. For his spindle defect.
->
-> **Three independent searches. All aimed the wrong way.**
+## Slide 6 — Three searches, all aimed the wrong way · 1:45–2:09
 
 **Say:**
 
-> And that is not an accident. Oncology develops checkpoint inhibitors precisely
-> to force missegregation and kill dividing cells — this child's disease, induced
-> on purpose.
->
-> So I ran the standard alternative too. Connectivity Map needs no drug target at
-> all. It returned vincristine — a spindle poison already in his chemotherapy —
-> as a therapy for his spindle defect.
->
-> Three independent searches. All aimed the wrong way.
+> That's no accident. Oncology builds checkpoint inhibitors precisely to force missegregation and kill dividing cells — his disease, induced on purpose.
+> So I ran the standard alternative. Connectivity Map needs no drug target at all.
+> It handed me vincristine, a spindle poison already in his chemotherapy, as a treatment for his spindle defect.
+> Three searches. Every one aimed the wrong way.
 
-*(64 words · 26 s)*
+*(60 words · 24 s · **innovation**)*
 
 ---
 
-## Slide 7 — So the proposal comes from the variant class · 2:14–2:36
-
-> One allele is a **premature stop codon** — addressable at the ribosome, not the gene
->
-> Safety screen vs. the child's own HPO terms:
-> | | |
-> |---|---|
-> | gentamicin | best readthrough evidence — **nephrotoxic** vs nephrocalcinosis |
-> | amlexanox | best mechanistic fit — **immunosuppressive** vs rhabdomyosarcoma |
-> | **escin** | marketed · no phenotype conflict · **the only proposable candidate** |
+## Slide 7 — Screened against his own phenotype · 2:09–2:30
 
 **Say:**
 
-> So the proposal comes from the variant class instead. One allele is a
-> premature stop codon, and that is addressable at the ribosome.
->
-> Then I screened the candidates against the child's own phenotype terms — and it
-> changed the answer twice. The two best-known agents are both contraindicated
-> by his own record. One candidate survives.
+> So the proposal comes from the variant class instead. One allele is a premature stop codon, and that you can act on at the ribosome.
+> Then I screened the candidates against his own symptoms. It changed the answer twice. The two best-known agents are ruled out by his own record. One survives.
 
-*(54 words · 22 s)*
+*(52 words · 21 s · innovation, impact)*
 
 ---
 
-## Slide 8 — What generalises · 2:36–2:58
-
-> **Direction filter** — drops drugs that would worsen a loss-of-function disease
-> **Phenotype screen** — needs only the HPO file every rare-disease case already has
->
-> Expected effect size is **small**. The decisive experiment is **cheap**.
->
-> `github.com/bralewild/mva-hackathon-2026`
+## Slide 8 — What generalises · 2:30–2:57
 
 **Say:**
 
-> Two pieces generalise: a filter for direction of effect, and a screen against
-> the patient's own phenotype.
->
-> I am not claiming a cure. The expected effect is small, and I say so in the
-> report's first paragraph. But the experiment that would settle it is cheap —
-> and this child deserves someone to run it.
+> Two pieces generalise: a filter for direction of effect, and a screen against the patient's own phenotype.
+> I'm not claiming a cure. The expected effect is small — and that sentence sits in the report's first paragraph, not buried in the last. A family deserves the ceiling before the hope.
+> But the experiment that would settle it costs almost nothing. And this child deserves someone to run it.
 
-*(54 words · 22 s)*
+*(67 words · 27 s · **scalability**, impact)*
 
 ---
 
@@ -213,33 +131,35 @@ worth more than any diagram.
 
 | Slide | Words | Seconds | Rubric |
 |---|---:|---:|---|
-| 1 Title | 23 | 9 | — |
-| 2 Blind design | 73 | 29 | innovation, scalability |
-| 3 Result | 45 | 18 | rigour, impact |
-| 4 Self-caught error | 76 | 30 | **rigour** |
-| 5 Track 2 search | 54 | 22 | rigour, innovation |
-| 6 Three searches converge | 64 | 26 | **innovation** |
-| 7 Phenotype screen | 54 | 22 | innovation, impact |
-| 8 Generalises + close | 54 | 22 | **scalability**, impact |
-| **Total** | **443** | **178** | |
+| 1 Title | 28 | 11 | the human stake |
+| 2 The design decision | 56 | 22 | innovation, scalability |
+| 3 The result | 46 | 18 | rigour, impact |
+| 4 The part worth seeing | 82 | 33 | **rigour** |
+| 5 Track 2 | 53 | 21 | rigour, innovation |
+| 6 Three searches, all aimed the wrong way | 60 | 24 | **innovation** |
+| 7 Screened against his own phenotype | 52 | 21 | innovation, impact |
+| 8 What generalises | 67 | 27 | **scalability**, impact |
+| **Total** | **444** | **177** | |
 
-**443 words → 2:58 at 150 wpm**, inside the 3:00 limit with margin. These counts and every slide timing above are derived from the script blocks, not typed by hand. If you edit a line, re-derive them.
+**444 words → 2:57 at 150 wpm.** Every count and timing on this page is generated from the
+deck's own narration data, not typed by hand — edit the deck, regenerate this.
 
-**Never cut slides 4, 6 or 7** — they carry rigour and innovation, which are 60 % of the score.
+**Never cut slides 4, 6 or 8.** Slide 4 is the rigour beat, 6 is the innovation beat, and 8
+is where the honesty about effect size lands. Those are 60 % of the score and the whole
+human argument.
 
 ---
 
 ## Compliance
 
-- No patient identifiers, no raw data, no screenshots of the clinical document
-  may appear on screen. The HPO terms named aloud (nephrocalcinosis,
-  rhabdomyosarcoma) appear in the challenge's own public case description.
-- Upload unlisted to YouTube or Vimeo; a private link is acceptable, a
-  login-walled one is not.
-- Include the acknowledgement in the video description, not on a slide — it
-  costs 15 seconds you do not have:
+- No patient identifiers, no raw data, no screenshots of the clinical document on screen.
+  The HPO terms named aloud (nephrocalcinosis, rhabdomyosarcoma) are in the challenge's own
+  public case description; the deck names neither the child nor any family member.
+- Upload unlisted to YouTube or Vimeo. A private link is acceptable; a login-walled one is not.
+- Put the acknowledgement in the video description, not on a slide — it costs 15 seconds you
+  do not have:
 
-  > This work was made possible through the Hackathon, organized by Sage
-  > Bionetworks in partnership with the MVA Society, Hugging Face, and BEACON,
-  > with prize sponsorship from AWS and Anthropic. We are deeply grateful to the
-  > child and their family who generously contributed their data and their story.
+  > This work was made possible through the Hackathon, organized by Sage Bionetworks in
+  > partnership with the MVA Society, Hugging Face, and BEACON, with prize sponsorship from
+  > AWS and Anthropic. We are deeply grateful to the child and their family who generously
+  > contributed their data and their story.
