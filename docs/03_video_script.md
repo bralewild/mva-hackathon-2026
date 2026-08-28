@@ -221,9 +221,13 @@ worth more than any diagram.
 | 8 Generalises + close | 64 | 26 | **scalability**, impact |
 | **Total** | **445** | **178** | |
 
-**445 words → 2:58 at 150 wpm.** These counts and every slide timing above are derived from the script blocks, not typed by hand. If you edit a line, re-derive them.
+**445 words → 2:58 at 150 wpm.** These counts and every slide timing above are
+derived from the script blocks, not typed by hand. If you edit a line,
+re-derive them.
 
-If you run long on the day, cut in this order: slide 3's *"Four filters"* line, then slide 8's *"Neither needs anything…"* sentence. **Never cut slides 4, 6 or 7** — they carry rigour and innovation, which are 60 % of the score.
+If you run long on the day, cut in this order: slide 3's *"Four filters"*
+line, then slide 8's *"Neither needs anything…"* sentence. **Never cut slides
+4, 6 or 7** — they carry rigour and innovation, which are 60 % of the score.
 
 ---
 
