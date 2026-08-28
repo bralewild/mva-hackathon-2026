@@ -436,10 +436,9 @@ The mechanism is unambiguous loss of function. BubR1 inhibits CDC20, holding the
 anaphase-promoting complex inactive until every chromosome is correctly
 attached. Losing it lets anaphase proceed early, producing missegregation,
 mosaic aneuploidy, chromosomal instability, and the cancer predisposition that
-presented here as rhabdomyosarcoma. Critically the relationship is
-dosage-dependent with a published threshold: aneuploidy appears below roughly
-50 % residual BUB1B expression. That converts an abstract mechanism into a
-measurable target.
+presented here as rhabdomyosarcoma. The relationship is dosage-dependent with a
+published threshold: aneuploidy appears below roughly 50 % residual expression.
+That makes the mechanism measurable.
 
 We first asked the obvious question computationally. A pipeline built the
 mechanistic neighbourhood of the lesion — 61 targets across the checkpoint
