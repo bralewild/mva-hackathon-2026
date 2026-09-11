@@ -16,7 +16,8 @@ name, a candidate gene list, or the organisers' compound-heterozygous hint —
 ranked **BUB1B** first among 140 candidate genes, with a 22.8 % score margin
 over the runner-up.
 
-**Predicted causal pair (GRCh38, biallelic *BUB1B*, MVA type 1, MIM 257300):**
+**Predicted causal pair (GRCh38, *BUB1B*, MVA type 1, MIM 257300) — predicted
+compound heterozygous; phase is presumed, not proven (§8):**
 
 | | Variant 1 | Variant 2 |
 |---|---|---|

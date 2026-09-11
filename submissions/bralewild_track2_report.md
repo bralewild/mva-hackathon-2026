@@ -1,8 +1,10 @@
-# Track 2 — Drug Repositioning for biallelic *BUB1B*
+# Track 2 — Drug Repositioning for *BUB1B*-associated MVA
 
 **Participant:** `bralewild` (individual)
-**Builds on Track 1:** biallelic *BUB1B* — `NM_001211.6:c.2210T>G` (p.Leu737Ter)
-and `c.3006T>G` (p.Asn1002Lys), scored 100/100, F-max 1.000
+**Builds on Track 1:** two *BUB1B* variants consistent with compound
+heterozygosity — `NM_001211.6:c.2210T>G` (p.Leu737Ter) and `c.3006T>G`
+(p.Asn1002Lys), scored 100/100, F-max 1.000. **Phase is presumed, not proven**
+(§6, step 1).
 **Code:** `pipeline/track2/` · evidence tables in `results/track2_evidence/`
 **Date:** 2026-08-28
 
@@ -59,7 +61,7 @@ all, together with the experiment that would falsify it (§6).
 
 ## 2. Mechanism
 
-### 2.1 Direction of effect: loss of function
+### 2.1 Direction of effect: a loss / hypomorphic mechanism
 
 *BUB1B* encodes BubR1, a core component of the mitotic checkpoint complex (MCC).
 Its essential role is **stoichiometric**: BubR1, BUB3 and MAD2L1 sequester CDC20
@@ -606,7 +608,7 @@ open.
    search built on drug–target interaction databases.
 10. **The signature analysis has its own limits** (§3.6): LINCS knockdown in
    immortalised, mostly p53-mutant, already-aneuploid cancer lines is not a
-   child's biallelic hypomorphic state; a 96 h knockdown models chronic partial
+   child's partial-loss state; a 96 h knockdown models chronic partial
    loss poorly; reproducibility across cell lines peaks at 4 of 8; and the
    compound taxonomy is keyword-based, so its percentages are floors.
 11. **The mosaicism screen is inconclusive**, not negative (§2.3).
@@ -703,7 +705,7 @@ claims.
 ## 10. Method abstract
 
 Mosaic Variegated Aneuploidy has no established treatment. Starting from the
-Track 1 result — biallelic *BUB1B*, p.Leu737Ter and p.Asn1002Lys — this work asks
+Track 1 result — two *BUB1B* variants, p.Leu737Ter and p.Asn1002Lys — this work asks
 whether any available medicine could plausibly act on it.
 
 The mechanism is consistent with loss or hypomorphic function of BubR1 — and
