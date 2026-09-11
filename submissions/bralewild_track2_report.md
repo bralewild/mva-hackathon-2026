@@ -651,8 +651,26 @@ and genomic coordinates were transmitted — no subject identifier.
 
 **Proprietary sources** — none.
 
-**AI / LLM assistance** — Anthropic, Claude Code (Claude Opus 5),
-`⟨PLAN OR TIER⟩`, `⟨DATA-HANDLING SETTING⟩`.
+**AI / LLM assistance** — Anthropic, Claude Code (Claude Opus 5), **Max 5×
+consumer subscription**, **model-improvement sharing enabled** — conversations
+and coding sessions may be used to train Anthropic's models. No other AI
+provider or assistant was used at any stage.
+
+Because that setting is enabled, what did and did not reach the assistant is
+stated precisely rather than generally.
+
+**Never transmitted:** the VCF, the alignment files, the clinical document, and
+every variant-level derived table — the hundreds of other coordinates the
+pipeline examined. These were held on ext4 inside WSL, outside the project tree,
+and `.gitignore` blocks the file classes independently (§3 of
+`docs/02_compliance.md`). The separation is architectural, not procedural.
+
+**Did reach it:** gene symbols and public-database responses; the pipeline's
+aggregate output; the **causal variant**, which is the published finding in the
+CC BY 4.0 submission the rules require; and the **HPO terms**, which appear in
+the challenge's own public case description. Nothing in that set is restricted
+by the Data Use Agreement, and nothing in it is re-identifying beyond what the
+family has already made public.
 
 Used for pipeline implementation, literature triage, report drafting, and an
 adversarial audit of the first draft. Every quantitative claim in this report is
