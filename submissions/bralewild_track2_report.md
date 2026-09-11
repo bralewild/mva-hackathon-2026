@@ -653,8 +653,7 @@ and genomic coordinates were transmitted — no subject identifier.
 
 **AI / LLM assistance** — Anthropic, Claude Code (Claude Opus 5), **Max 5×
 consumer subscription**, **model-improvement sharing enabled** — conversations
-and coding sessions may be used to train Anthropic's models. No other AI
-provider or assistant was used at any stage.
+and coding sessions may be used to train Anthropic's models.
 
 Because that setting is enabled, what did and did not reach the assistant is
 stated precisely rather than generally.
