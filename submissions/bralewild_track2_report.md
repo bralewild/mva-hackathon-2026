@@ -10,7 +10,7 @@ and `c.3006T>G` (p.Asn1002Lys), scored 100/100, F-max 1.000
 
 ## 1. The proposal
 
-> **Three conventional searches taught us what not to do. The variant itself
+> **Two conventional searches taught us what not to do. The variant itself
 > showed us where to look.**
 
 Drug–target databases, and then signature reversal, both returned well-evidenced
@@ -748,8 +748,8 @@ cGAS–STING. **But those genes are the cell's defence against aneuploidy, not t
 lesion.** Reversing them means suppressing that defence: 51 % of the returned
 hits are contraindicated by class (178 antiproliferative, 16 immunosuppressive
 of 382, and that figure is a lower bound), vincristine among them — a spindle
-poison already in this child's protocol, offered as a therapy for his spindle
-defect. Connectivity Map's founding assumption does not hold for a chromosomal
+poison already in this child's protocol, returned as a signature-reversal hit
+for his spindle-checkpoint deficiency. Connectivity Map's founding assumption does not hold for a chromosomal
 instability syndrome.
 
 The proposal is therefore **escin**, a marketed triterpene saponin identified as
