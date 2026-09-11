@@ -14,7 +14,8 @@ Deliverables uploaded to the challenge submission forms.
 
 ## Track 2 — drug repositioning · **NOT YET SUBMITTED**
 
-> **One attempt only.** No resubmission, no correction after the fact.
+> **Three submissions allowed.** The panel reviews only the **latest** entry, so the
+> last upload must be the one intended for review.
 
 | File | Size | Purpose |
 |---|---|---|

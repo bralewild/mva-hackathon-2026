@@ -651,6 +651,19 @@ and genomic coordinates were transmitted — no subject identifier.
 
 **Proprietary sources** — none.
 
+**AI / LLM assistance** — Anthropic, Claude Code (Claude Opus 5),
+`⟨PLAN OR TIER⟩`, `⟨DATA-HANDLING SETTING⟩`.
+
+Used for pipeline implementation, literature triage, report drafting, and an
+adversarial audit of the first draft. Every quantitative claim in this report is
+computed by committed code and verified against the committed evidence tables
+(`results/track2_evidence/`); every mechanistic claim was checked against primary
+literature and cited. Several assistant-produced claims failed that check and
+were removed — that ataluren was EMA-approved, that amlexanox was marketed, that
+BubR1's kinase activity was mechanistically relevant, and a 50 % therapeutic
+ceiling that did not survive its own arithmetic (§2.2). The retractions are in
+the repository history.
+
 **How was the mechanism characterised?** — §2. Loss or hypomorphic function,
 from the consequence type of **allele 1** (nonsense, NMD-predicted, ClinVar
 Pathogenic/LP), BubR1's stoichiometric role in the MCC, the published

@@ -214,7 +214,7 @@ In addition:
 
 | | Track 1 | Track 2 |
 |---|---|---|
-| Submissions allowed | 6 | **1** |
+| Submissions allowed | 6 | **3** — the panel reviews only the **latest** |
 | Prediction CSV | Yes | — |
 | Written report | Yes | Yes |
 | Public GitHub repository | Yes | Yes |
@@ -224,8 +224,28 @@ In addition:
 > **Note on the video.** The Official Rules state generally that *"each team's
 > submission includes a written report, a GitHub repository, and a 3-minute
 > recorded pitch video"*, while the Track 1 submission tab asks only for
-> CSV + report + repository. Given the ambiguity, it is safer to have the video
-> ready.
+> CSV + report + repository. **The Track 2 form marks the pitch video URL as
+> required**, so the ambiguity applies to Track 1 only.
+
+### Corrections to this table, from reading the live Track 2 form
+
+This section previously recorded **one** Track 2 submission. The form states
+**three**, and that *"the panel will only review your latest entry."* That error
+propagated into advice given during this project — it is recorded here rather
+than quietly fixed, because a one-shot framing changes how much pre-submission
+verification is rational.
+
+Also from the live form, and not previously captured:
+
+- **AI/LLM disclosure is mandatory** (added 28 Aug 2026). *"If you used an LLM or
+  AI assistant, please record the provider, the plan or tier, and the relevant
+  data-handling setting in your methods description. A line is enough."*
+- The repository **may stay private during** the Hackathon but **must be public
+  once it ends**. This project chose public from the start (§6).
+- The form carries an optional **"Notes for judges"** free-text field.
+- Report filename convention `<username>_track2_report.md` — satisfied.
+- Only **one team member** may submit; duplicates are not reviewed. Not
+  applicable to an individual entry.
 
 ---
 
