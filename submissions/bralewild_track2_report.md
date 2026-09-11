@@ -10,6 +10,15 @@ and `c.3006T>G` (p.Asn1002Lys), scored 100/100, F-max 1.000
 
 ## 1. The proposal
 
+> **Three conventional searches taught us what not to do. The variant itself
+> showed us where to look.**
+
+Drug–target databases, and then signature reversal, both returned well-evidenced
+pharmacology pointed in the direction that would *harm* this child (§3). The
+candidate below does not come from either. It comes from the variant class — one
+allele is a premature stop codon, which is actionable at the ribosome regardless
+of whether the protein is druggable (§4).
+
 **Escin** (β-aescin), a marketed triterpene saponin, is the single candidate that
 is simultaneously (a) evidenced for translational readthrough, (b) currently
 available as a medicine, and (c) free of any liability contraindicated by this
@@ -86,21 +95,38 @@ expression, and detectable aneuploidy appeared below roughly 50 % (*Gradual
 reduction of BUBR1 protein levels results in premature sister-chromatid
 separation then in aneuploidy*, **Hum Genet 2008**, PMID 18932004).
 
-An earlier draft treated 50 % as a **threshold to be crossed**. That framing does
-not survive arithmetic, and the correction matters:
+Two framings of that 50 % figure have to be rejected, and the second is one this
+report made itself.
 
-> Normalise each allele to 50 points. Allele 1 contributes ≈ 0. Therefore
-> **a patient with one null allele cannot exceed 50 % even if the other allele
-> were perfect.** The ceiling *is* the figure. Obligate carriers sit at exactly
-> 50 % and are healthy — so "become a healthy carrier" is the maximum a perfect
-> therapy could achieve, and single-digit readthrough moves perhaps 2–3 points
-> toward it.
+**It is not a threshold to be crossed.** What the data shows is a continuous
+gradient: severity of premature chromatid separation tracks residual expression,
+with no cliff to step over.
 
-What survives is the **gradient**, not the cliff. Severity of premature chromatid
-separation tracks residual expression continuously, so a small increase predicts
-a small improvement — measurable in cells, not obviously meaningful in a child.
-That is a weaker claim than the one this analysis started with, and it is the one
-the data supports.
+**Nor is it a ceiling on therapy.** An earlier draft argued that with one null
+allele the patient cannot exceed 50 %, so the healthy-carrier level was the most
+a perfect therapy could achieve. That does not survive its own arithmetic.
+Normalise each allele to 50 points; let allele 2 contribute *X*, and let
+readthrough act on allele 1 with efficiency *e* producing a product of
+functionality *f*:
+
+> total = *X* + 50·*e*·*f*
+
+The 50 % figure bounds the **untreated** state. The moment readthrough works at
+all, allele 1 stops contributing zero and the bound is gone. Arguing otherwise
+assumed away the very mechanism being proposed.
+
+**What actually bounds the expectation is the product `e·f`, and both terms are
+poor.** Published in-cell readthrough efficiencies for this class are
+single-digit percent, so *e* is small. The product is not BubR1-Leu737 but a
+Trp/Cys/Arg substitution of unmeasured activity (§4.2), so *f* is **unknown and
+could be zero**. And NMD degrades the PTC transcript before readthrough can act
+on it (§4.3), shrinking the substrate that *e* applies to. Small × unknown ×
+reduced is the honest expectation, and it needs no ceiling argument to reach.
+
+One half of the carrier observation does survive, and it is the encouraging
+half: **obligate carriers sit near 50 % and are healthy**, so the therapeutic
+target is modest rather than full restoration. That is a reason to test the
+hypothesis, not a reason to believe it.
 
 Two caveats on transferring even the gradient: HeLa is p53-null, hypotriploid and
 already chromosomally unstable, so it is a poor reporter for a threshold in a
@@ -476,27 +502,30 @@ unusable in this child, and it takes a phenotype file to see it.**
 
 ## 6. What would falsify this
 
-In order, each step gating the next:
+In order, each step gating the next. **The cheapest test is the one that can
+invalidate everything, so it runs first** — an earlier draft listed it fifth
+while calling it "the first thing to check", which is not a running order.
 
-1. **Quantify *BUB1B* transcript** in patient-derived fibroblasts. Readthrough
+1. **Resolve phase — the stop/go gate.** The compound-heterozygous configuration
+   is presumed, not proven (Track 1 §8). Parental testing or long-read
+   sequencing settles it for very little money. **If the variants are in *cis*,
+   the mechanism and this entire proposal collapse, and nothing below is worth
+   funding.** Spending on functional assays before answering this would be
+   indefensible.
+2. **Quantify *BUB1B* transcript** in patient-derived fibroblasts. Readthrough
    response tracks transcript abundance and NMD efficiency varies by allele. If
    the PTC transcript is absent, readthrough has no substrate and the hypothesis
    dies here.
-2. **Measure baseline BubR1 protein**, and — critically — **measure allele 2's
-   residual function**. The entire dose–response argument is unquantified without
-   it. If p.Asn1002Lys is functionally null, restoring allele 1 lands at best at
-   the carrier level, and that is the ceiling.
-3. **Test readthrough ex vivo**: escin, with gentamicin as the mechanistic
+3. **Measure baseline BubR1 protein**, and — critically — **measure allele 2's
+   residual function**. This is the *X* in §2.2 and it is currently unmeasured;
+   without it, no quantitative statement about achievable rescue is possible.
+4. **Test readthrough ex vivo**: escin, with gentamicin as the mechanistic
    benchmark. Primary readout full-length BubR1 — but see §4.2: full-length is
    not the same as functional.
-4. **Functional readout**: premature chromatid separation rate and aneuploidy in
+5. **Functional readout**: premature chromatid separation rate and aneuploidy in
    treated versus untreated patient fibroblasts. **This is the decisive
-   experiment.** Protein restoration without functional rescue is a negative
-   result and should be reported as one.
-5. **Resolve phase.** The compound-heterozygous configuration is presumed, not
-   proven (Track 1 §8). Parental testing or long-read sequencing settles it, and
-   it is cheap. If the variants are in *cis*, the mechanism and this entire
-   proposal collapse — that makes it the first thing to check, not a caveat.
+   experiment**, and it is the one that measures *f*. Protein restoration
+   without functional rescue is a negative result and should be reported as one.
 
 ### What clinical benefit could look like — and what it cannot
 
@@ -622,9 +651,12 @@ and genomic coordinates were transmitted — no subject identifier.
 
 **Proprietary sources** — none.
 
-**How was the mechanism characterised?** — §2. Loss of function, from the
-consequence type of both alleles, BubR1's stoichiometric role in the MCC, the
-published dose–response, and phenotype coherence. Explicitly *not* from kinase
+**How was the mechanism characterised?** — §2. Loss or hypomorphic function,
+from the consequence type of **allele 1** (nonsense, NMD-predicted, ClinVar
+Pathogenic/LP), BubR1's stoichiometric role in the MCC, the published
+dose–response, and phenotype coherence. **Allele 2 is a full-length missense
+whose residual function is unresolved**, and the mechanism statement is
+deliberately not derived from it. Explicitly *not* from kinase
 activity, which BubR1 is not established to have.
 
 **Time and effort** — the pipeline runs at **zero cost**: stages t2-01 to t2-05
@@ -644,7 +676,12 @@ Mosaic Variegated Aneuploidy has no established treatment. Starting from the
 Track 1 result — biallelic *BUB1B*, p.Leu737Ter and p.Asn1002Lys — this work asks
 whether any available medicine could plausibly act on it.
 
-The lesion is unambiguous loss of function. BubR1 stoichiometrically inhibits
+The mechanism is consistent with loss or hypomorphic function of BubR1 — and
+the strength of that statement matters. One allele is a clear predicted
+loss-of-function nonsense variant; the residual function of the second, a
+full-length missense, is **experimentally unresolved**. Calling the lesion
+*unambiguous* loss of function, as an earlier draft did, claimed more than the
+second allele supports. BubR1 stoichiometrically inhibits
 CDC20, holding the anaphase-promoting complex inactive until chromosomes are
 correctly attached; losing it produces premature chromatid separation,
 missegregation, mosaic aneuploidy, chromosomal instability and the cancer
@@ -709,9 +746,10 @@ to see the class of answer being proposed, which it demonstrates by recovering
 ataluren and ELX-02 unprompted. The whole pipeline runs at zero cost, in minutes.
 
 **Limitations, stated plainly.** No readthrough agent has been tested on *BUB1B*.
-The expected effect is small: single-digit readthrough against a deficit of an
-entire gene copy, and with one null allele the ceiling is the healthy-carrier
-level. Readthrough at UGA inserts tryptophan, cysteine or arginine — the product
+The expected effect is small, and bounded by a product of two poor terms:
+single-digit readthrough efficiency multiplied by the unmeasured functionality
+of a Trp/Cys/Arg substitution, acting on a transcript NMD has already degraded.
+Readthrough at UGA inserts tryptophan, cysteine or arginine — the product
 is a novel missense protein, not restored BubR1, so full-length protein on a blot
 is not evidence of rescue. Allele 2's residual function is unmeasured. No
 exposure calculation was performed. And ataluren, the only purpose-built agent
